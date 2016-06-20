@@ -6,7 +6,7 @@ Modified for Unreal Engine: Scott Bishel
 
 http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 
-Currently the project is compiled in Unreal 4.9.2.
+Currently the project is compiled in Unreal 4.9.2. (Although a bit messy)
 
 TODO
 
