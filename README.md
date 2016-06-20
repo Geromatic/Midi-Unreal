@@ -9,5 +9,7 @@ http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 Currently the project is compiled in Unreal 4.9.2.
 
 TODO
--Code Conversion to Unreal(80%)
--Plugin (complete [Will Upload once [Code Conversion] is complete])
+
+Code Conversion to Unreal(80%)
+
+Plugin (complete [Will Upload once [Code Conversion] is complete])
