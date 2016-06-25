@@ -1,0 +1,16 @@
+// Copyright -> Scott Bishel
+
+#include "MidiPrivatePCH.h"
+#include "Lyrics.h"
+
+Lyrics::Lyrics(long tick, long delta, string lyric)
+	: TextualMetaEvent(tick, delta, MetaEvent::LYRICS, lyric)
+{
+}
+
+void Lyrics::setLyric(string t) {
+	TextualMetaEvent::setText(t);
+}
+string Lyrics::getLyric() {
+	return TextualMetaEvent::getText();
+}
