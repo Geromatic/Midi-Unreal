@@ -14,6 +14,3 @@ Donations appreciated @ www.paypal.me/Bishel
 
 //-------------------------------------------
 
-(reference taken from https://github.com/LeffelMania/android-midi-lib)
-
-
