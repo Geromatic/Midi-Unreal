@@ -10,9 +10,11 @@ Plugin Available
 
 Donations appreciated @ www.paypal.me/Bishel
 
-### Installation
+### Installation (Blueprints made in 4.9.2)
 
 ###### May Require C++ project for cooked build or to update to your own version
+
+
 
 Place Plugins folder in your Unreal project
 
