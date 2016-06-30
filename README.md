@@ -18,6 +18,6 @@ Donations appreciated @ www.paypal.me/Bishel
 
 
 
-Place Plugins folder in your Unreal project
+Place MidiAsset folder in your Plugins folder in youe Unreal project
 
 Place Content folder in your Unreal project and overwrite folder or place the contents inside in your own Content folder
