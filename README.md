@@ -16,4 +16,4 @@ Donations appreciated @ www.paypal.me/Bishel
 
 Place Plugins folder in your Unreal project
 
-Place Content folder in your Unreal project and overwrite folder or place the contents inside in your own Content Folder
+Place Content folder in your Unreal project and overwrite folder or place the contents inside in your own Content folder
