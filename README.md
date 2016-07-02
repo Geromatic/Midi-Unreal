@@ -1,6 +1,8 @@
 # Midi-Unreal
 Midi for Unreal Engine
 
+This library was originally created for processing MIDI, so issues may arise on Writing/Modifying Midi Functions /Methods"
+
 This code provides an interface to read, manipulate, and write MIDI files. "Playback" is supported as a real-time event dispatch system.(Leffelman)
 
 Original Credit goes to Alex Leffelman who created the Android Midi Lib - https://github.com/leffelmania/android-midi-lib
