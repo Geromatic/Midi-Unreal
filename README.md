@@ -12,8 +12,6 @@ http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 
 Plugin Available 
 
-Donations appreciated @ www.paypal.me/Bishel
-
 ### Installation (Blueprints made in 4.9.2)
 
 ###### May Require C++ project for cooked build or to update to your own version
