@@ -12,7 +12,7 @@
 	"SupportURL" : "mailto:scott.bishel@yahoo.com",
 	"EnabledByDefault" : true,
 	"CanContainContent" : false,
-	"IsBetaVersion" : false,
+	"IsBetaVersion" : true,
 	"Installed" : false,
 	"WhitelistPlatforms": [ "Win64", "Win32" ],
 	"Modules" :
