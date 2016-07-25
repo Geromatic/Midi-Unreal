@@ -22,6 +22,12 @@ Place MidiAsset folder in your Plugins folder in youe Unreal project
 
 Place Content folder in your Unreal project and overwrite folder or place the contents inside in your own Content folder
 
+###Showcase: [Blueprint]
+
+![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Overview.PNG)
+![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Blueprint.PNG)
+![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Library.PNG)
+![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Cue.PNG)
 
 ###Example Usage: [Beta-Untested/C++]
 ----
