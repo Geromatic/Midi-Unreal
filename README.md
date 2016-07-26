@@ -16,6 +16,7 @@ Windows: [Tested+Works]
 HTML5: [Works but Procedural Audio doesnt produce sound]
 Android(All): [Compiled success but Untested]
 iOS: [Unknown Status]
+AppleTV: [Unknown Status]
 Linus: [Needs Compile+Test]
 ```
 
