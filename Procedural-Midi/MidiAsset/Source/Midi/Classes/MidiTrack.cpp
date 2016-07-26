@@ -44,7 +44,6 @@ MidiTrack::MidiTrack(FBufferReader & input)
 	input.Serialize(buffer, 4);
 
 	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4)) {
-//		OutputDebugStringA("Track identifier did not match MTrk!");
 		UE_LOG(LogTemp, Warning, TEXT("Track identifier did not match MTrk!"));
 		return;
 	}
@@ -61,15 +60,12 @@ MidiTrack::MidiTrack(FBufferReader & input)
 
 		MidiEvent * E = MidiEvent::parseEvent(totalTicks, delta.getValue(), input);
 		if (E == NULL) {
-//			OutputDebugStringA("Event skipped!");
 			UE_LOG(LogTemp, Warning, TEXT("Event skipped!"));
 			continue;
 		}
 
 		if (VERBOSE) {
-			stringstream ss;
-			ss << (*E).ToString() << endl;
-			OutputDebugStringA(ss.str().c_str());
+			UE_LOG(LogTemp, Display, TEXT("%s"), (*E).ToString().c_str());
 		}
 
 		// Not adding the EndOfTrack event here allows the track to be edited
@@ -128,7 +124,7 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	}
 
 	if (mClosed) {
-		OutputDebugStringA("Error: Cannot add an event to a closed track.");
+		UE_LOG(LogTemp, Error, TEXT("Error: Cannot add an event to a closed track."));
 		return;
 	}
 
@@ -172,14 +168,16 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == (MetaEvent::END_OF_TRACK & 0XFF) ) {
 		if (next != NULL) {
-			throw ("Attempting to insert EndOfTrack before an existing event. Use closeTrack() when finished with MidiTrack.");
+			//throw ("Attempting to insert EndOfTrack before an existing event. Use closeTrack() when finished with MidiTrack.");
+			UE_LOG(LogTemp, Error, TEXT("Attempting to insert EndOfTrack before an existing event.  Use closeTrack() when finished with MidiTrack."));
+			return;
 		}
 		mClosed = true;
 	}
 }
 
 bool MidiTrack::removeEvent(MidiEvent * E) {
-;
+
 	MidiEvent * prev = NULL, *curr = NULL, *next = NULL;
 
 	for (int it = 0; it < mEvents.Num(); it++) {
@@ -226,7 +224,7 @@ void MidiTrack::closeTrack() {
 
 void MidiTrack::dumpEvents() {
 	for (int it = 0; it < mEvents.Num(); it++) {
-		//        OutputDebugStringA(*it);
+		UE_LOG(LogTemp, Display, TEXT("%s"), mEvents[it]->ToString().c_str());
 	}
 }
 
@@ -268,7 +266,7 @@ void MidiTrack::writeToFile(FMemoryWriter & output) {
 	for (int it = 0; it < mEvents.Num(); it++) {
 		MidiEvent * _event = mEvents[it];
 		if (VERBOSE) {
-			//			OutputDebugStringA("Writing: " + _event->ToString());
+			UE_LOG(LogTemp, Display, TEXT("Writing: %s"), _event->ToString().c_str());
 		}
 
 		_event->writeToFile(output, _event->requiresStatusByte(lastEvent));

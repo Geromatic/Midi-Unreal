@@ -171,6 +171,6 @@ string MidiEvent::ToString()
 {
 //	FString::Printf(TEXT("%d (%d): %s"), mTick, mDelta->getValue(), typeid(this).name());
 	std::stringstream ss;
-	ss << mTick << " (" << mDelta->getValue() << "): " << typeid(this).name();
+	ss << mTick << " (" << mDelta->getValue() << "): " /*<< typeid(this).name()*/;
 	return ss.str();
 }

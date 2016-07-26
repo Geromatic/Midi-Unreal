@@ -23,8 +23,10 @@ void SequenceNumber::writeToFile(FMemoryWriter& output) {
 	MetaEvent::writeToFile(output);
 
 	output.Serialize((char*)2, 1);
-	output.Serialize((char*)getMostSignificantBits(), 1);
-	output.Serialize((char*)getLeastSignificantBits(), 1);
+	int high = getMostSignificantBits();
+	int low = getLeastSignificantBits();
+	output.Serialize(&high, 1);
+	output.Serialize(&low, 1);
 }
 
 SequenceNumber * SequenceNumber::parseSequenceNumber(long tick, long delta, FBufferReader & input) {

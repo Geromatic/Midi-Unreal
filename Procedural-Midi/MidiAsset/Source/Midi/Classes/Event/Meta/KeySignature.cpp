@@ -38,8 +38,8 @@ void KeySignature::writeToFile(FMemoryWriter & output) {
 	MetaEvent::writeToFile(output);
 
 	output.Serialize((char*)2, 1);
-	output.Serialize((char*)mKey, 1);
-	output.Serialize((char*)mScale, 1);
+	output.Serialize(&mKey, 1);
+	output.Serialize(&mScale, 1);
 }
 
 KeySignature * KeySignature::parseKeySignature(long tick, long delta, FBufferReader & input) {

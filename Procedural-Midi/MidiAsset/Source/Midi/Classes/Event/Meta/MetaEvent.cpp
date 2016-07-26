@@ -42,7 +42,7 @@ void MetaEvent::writeToFile(FMemoryWriter & output, bool writeType) {
 void MetaEvent::writeToFile(FMemoryWriter & output) {
 	MidiEvent::writeToFile(output, true);
 	output.Serialize((unsigned char*)0xFF, 1);
-	output.Serialize((char*)mType, 1);
+	output.Serialize(&mType, 1);
 }
 
 MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & input) {
@@ -139,6 +139,6 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 	case KEY_SIGNATURE:
 		return KeySignature::parseKeySignature(tick, delta, input);
 	}
-	OutputDebugStringA("Completely broken in MetaEvent.parseMetaEvent()");
+	UE_LOG(LogTemp, Error, TEXT("Completely broken in MetaEvent.parseMetaEvent()"));
 	return NULL;
 }

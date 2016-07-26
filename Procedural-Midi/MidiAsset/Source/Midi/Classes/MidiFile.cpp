@@ -173,7 +173,6 @@ void MidiFile::initFromBuffer(char buffer[])
 {
 	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4))
 	{
-//		OutputDebugStringA("File identifier not MThd. Exiting");
 		UE_LOG(LogTemp, Warning, TEXT("File identifier not MThd. Exiting"));
 		mType = 0;
 		mTrackCount = 0;

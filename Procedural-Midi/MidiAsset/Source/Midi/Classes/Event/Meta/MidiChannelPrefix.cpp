@@ -24,7 +24,7 @@ void MidiChannelPrefix::writeToFile(FMemoryWriter & output) {
 	MetaEvent::writeToFile(output);
 
 	output.Serialize((char*)1, 1);
-	output.Serialize((char*)mChannel, 1);
+	output.Serialize(&mChannel, 1);
 }
 
 MidiChannelPrefix * MidiChannelPrefix::parseMidiChannelPrefix(long tick, long delta, FBufferReader & input) {

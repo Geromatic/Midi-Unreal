@@ -15,6 +15,8 @@
 
 #include "MidiAsset.h"
 
+#include "Util/MidiProcessor.h"
+
 // Sets default values for this component's properties
 UMidiComponent::UMidiComponent()
 {
@@ -32,7 +34,6 @@ UMidiComponent::~UMidiComponent() {
 	if (mMidiFile)
 		delete mMidiFile;
 	mMidiFile = NULL;
-
 }
 
 

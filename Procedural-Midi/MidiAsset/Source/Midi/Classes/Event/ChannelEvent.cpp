@@ -119,12 +119,12 @@ void ChannelEvent::writeToFile(FMemoryWriter & output, bool writeType){
 
 	if (writeType) {
 		int typeChannel = (mType << 4) + mChannel;
-		output.Serialize((char*)typeChannel, 1);
+		output.Serialize(&typeChannel, 1);
 	}
 
-	output.Serialize((char*)mValue1, 1);
+	output.Serialize(&mValue1, 1);
 	if (mType != PROGRAM_CHANGE && mType != CHANNEL_AFTERTOUCH) {
-		output.Serialize((char*)mValue2, 1);
+		output.Serialize(&mValue2, 1);
 	}
 }
 ChannelEvent * ChannelEvent::parseChannelEvent(long tick, long delta, int type, int channel, FBufferReader & input) {

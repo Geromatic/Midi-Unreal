@@ -64,11 +64,11 @@ void SmpteOffset::writeToFile(FMemoryWriter & output) {
 	MetaEvent::writeToFile(output);
 
 	output.Serialize((char*)5, 1);
-	output.Serialize((char*)mHours, 1);
-	output.Serialize((char*)mMinutes, 1);
-	output.Serialize((char*)mSeconds, 1);
-	output.Serialize((char*)mFrames, 1);
-	output.Serialize((char*)mSubFrames, 1);
+	output.Serialize(&mHours, 1);
+	output.Serialize(&mMinutes, 1);
+	output.Serialize(&mSeconds, 1);
+	output.Serialize(&mFrames, 1);
+	output.Serialize(&mSubFrames, 1);
 }
 
 SmpteOffset * SmpteOffset::parseSmpteOffset(long tick, long delta, FBufferReader & input) {

@@ -60,7 +60,7 @@ void SystemExclusiveEvent::writeToFile(FMemoryWriter & output, bool writeType) {
 	MidiEvent::writeToFile(output, writeType);
 
 	if (writeType) {
-		output.Serialize((char*)mType, 1);
+		output.Serialize(&mType, 1);
 	}
 	output.Serialize(mLength->getBytes(), mLength->getByteCount());
 	output.Serialize(mData, sizeof(&mData));

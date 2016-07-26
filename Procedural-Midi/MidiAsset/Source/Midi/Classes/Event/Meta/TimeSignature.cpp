@@ -47,10 +47,10 @@ void TimeSignature::writeToFile(FMemoryWriter & output) {
 	MetaEvent::writeToFile(output);
 
 	output.Serialize((char*)4, 1);
-	output.Serialize((char*)mNumerator, 1);
-	output.Serialize((char*)mDenominator, 1);
-	output.Serialize((char*)mMeter, 1);
-	output.Serialize((char*)mDivision, 1);
+	output.Serialize(&mNumerator, 1);
+	output.Serialize(&mDenominator, 1);
+	output.Serialize(&mMeter, 1);
+	output.Serialize(&mDivision, 1);
 }
 
 TimeSignature * TimeSignature::parseTimeSignature(long tick, long delta, FBufferReader & input) {
@@ -105,6 +105,6 @@ string TimeSignature::ToString() {
 //	FString::Printf(TEXT("%s %d/%d"), MetaEvent::ToString(), mNumerator, getRealDenominator());
 
 	std::stringstream ss;
-	ss << MetaEvent::ToString() << " " << mNumerator + "/" << getRealDenominator();
+	ss << MetaEvent::ToString() << " " << mNumerator << "/" << getRealDenominator();
 	return ss.str();
 }

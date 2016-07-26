@@ -8,19 +8,6 @@
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-long long milliseconds_now() {
-	static LARGE_INTEGER s_frequency;
-	static BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
-	if (s_use_qpc) {
-		LARGE_INTEGER now;
-		QueryPerformanceCounter(&now);
-		return (1000LL * now.QuadPart) / s_frequency.QuadPart;
-	}
-	else {
-		return GetTickCount();
-	}
-}
-
 MidiProcessor::MidiProcessor() {
 	mMidiFile = NULL;
 	mMetronome = NULL;
@@ -62,8 +49,7 @@ void MidiProcessor::load(MidiFile & input) {
 
 void MidiProcessor::start() {
 	if (mRunning) return;
-//	mLastMs = FPlatformTime::Cycles();
-	mLastMs = milliseconds_now();
+	mLastMs = FPlatformTime::Cycles();
 	mRunning = true;
 
 	mListener->onStart(mMsElapsed == 0);
@@ -125,9 +111,8 @@ void MidiProcessor::process() {
 	if (!mRunning)
 		return;
 
-//	uint32 now = FPlatformTime::Cycles();
-	long long now = milliseconds_now();
-	long msElapsed = now - mLastMs;
+	uint32 now = FPlatformTime::Cycles();
+	long msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
 	if (msElapsed < PROCESS_RATE_MS) {
 		return;
 	}

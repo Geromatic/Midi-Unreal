@@ -16,12 +16,13 @@
 // Mathmatical Square Wave
 // f(x, p) = sin(x / period * 2.0 * M_PI)>=0.0 ? 1.0:-1.0;
 
-_inline float Sin_Wave(float frequency, float time) {
-	return sin((2 * PI*frequency)*time);
+
+float Sin_Wave(float frequency, float time) {
+	return FMath::Sin((2 * PI*frequency)*time);
 }
 
-_inline float Square_Wave(float x, float period) {
-	return sin(x / period * 2.0 * PI) >= 0.0 ? 1.0 : -1.0;
+float Square_Wave(float x, float period) {
+	return FMath::Sin(x / period * 2.0 * PI) >= 0.0 ? 1.0 : -1.0;
 }
 
 // Mathmatical Saw Wave
