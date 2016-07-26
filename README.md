@@ -12,12 +12,12 @@ http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 
 Plugin Supports:
 ```
-Windows: [Tested+Works] 
+Windows(32/64): [Tested+Works] 
 HTML5: [Works but Procedural Audio doesnt produce sound]
-Android(All): [Compiled success but Untested]
+Android(All): [Packaged success but Untested]
 iOS: [Unknown Status]
 AppleTV: [Unknown Status]
-Linus: [Needs Compile+Test]
+Linus: [Needs Package+Test]
 ```
 
 ### Installation (Blueprints made in 4.9.2)
