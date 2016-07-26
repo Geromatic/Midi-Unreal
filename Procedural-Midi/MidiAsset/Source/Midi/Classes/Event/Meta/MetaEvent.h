@@ -30,7 +30,7 @@ public:
 	static MetaEvent * parseMetaEvent(long tick, long delta, FBufferReader & input);
 
 protected:
-	static class MetaEventData
+	class MetaEventData
 	{
 	public:
 		int type;
