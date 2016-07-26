@@ -10,7 +10,14 @@ Modified for Unreal Engine: Scott Bishel
 
 http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 
-Plugin Available 
+Plugin Supports:
+```
+Windows: [Tested+Works] 
+HTML5: [Works but Procedural Audio doesnt produce sound]
+Android(All): [Compiled success but Untested]
+iOS: [Unknown Status]
+Linus: [Needs Compile+Test]
+```
 
 ### Installation (Blueprints made in 4.9.2)
 
