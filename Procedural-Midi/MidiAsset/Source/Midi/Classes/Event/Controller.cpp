@@ -4,26 +4,26 @@
 #include "Controller.h"
 
 
-CController::CController(long tick, int channel, int controllerType, int value)
+Controller::Controller(long tick, int channel, int controllerType, int value)
 	: ChannelEvent(tick, ChannelEvent::CONTROLLER, channel, controllerType, value)
 {
 }
 
-CController::CController(long tick, long delta, int channel, int controllerType, int value)
+Controller::Controller(long tick, long delta, int channel, int controllerType, int value)
 	: ChannelEvent(tick, delta, ChannelEvent::CONTROLLER, channel, controllerType, value)
 {
 }
 
-int CController::getControllerType() {
+int Controller::getControllerType() {
 	return mValue1;
 }
-int CController::getValue() {
+int Controller::getValue() {
 	return mValue2;
 }
 
-void CController::setControllerType(int t) {
+void Controller::setControllerType(int t) {
 	mValue1 = t;
 }
-void CController::setValue(int v) {
+void Controller::setValue(int v) {
 	mValue2 = v;
 }

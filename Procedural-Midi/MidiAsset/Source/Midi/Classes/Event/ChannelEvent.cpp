@@ -144,7 +144,7 @@ ChannelEvent * ChannelEvent::parseChannelEvent(long tick, long delta, int type, 
 	case NOTE_AFTERTOUCH:
 		return new NoteAfterTouch(tick, delta, channel, val1, val2);
 	case CONTROLLER:
-		return new CController(tick, delta, channel, val1, val2);
+		return new Controller(tick, delta, channel, val1, val2);
 	case PROGRAM_CHANGE:
 		return new ProgramChange(tick, delta, channel, val1);
 	case CHANNEL_AFTERTOUCH:

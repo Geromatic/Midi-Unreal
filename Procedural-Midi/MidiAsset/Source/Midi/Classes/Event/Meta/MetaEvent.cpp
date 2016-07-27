@@ -101,7 +101,7 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 
 		switch (type) {
 		case TEXT_EVENT:
-			return new CText(tick, delta, text);
+			return new Text(tick, delta, text);
 		case COPYRIGHT_NOTICE:
 			return new CopyrightNotice(tick, delta, text);
 		case TRACK_NAME:

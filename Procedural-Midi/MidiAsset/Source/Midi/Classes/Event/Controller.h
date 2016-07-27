@@ -7,11 +7,11 @@
 /**
  * 
  */
-class MIDI_API CController : public ChannelEvent
+class MIDI_API Controller : public ChannelEvent
 {
 public:
-	CController(long tick, int channel, int controllerType, int value);
-	CController(long tick, long delta, int channel, int controllerType, int value);
+	Controller(long tick, int channel, int controllerType, int value);
+	Controller(long tick, long delta, int channel, int controllerType, int value);
 
 	int getControllerType();
 	int getValue();

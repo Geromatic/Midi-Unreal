@@ -68,23 +68,9 @@ void SystemExclusiveEvent::writeToFile(FMemoryWriter & output, bool writeType) {
 
 int SystemExclusiveEvent::CompareTo(MidiEvent *other) {
 
-	if (this->mTick < other->getTick())
-	{
-		return -1;
-	}
-	if (this->mTick > other->getTick())
-	{
-		return 1;
-	}
-
-	if (this->mDelta->getValue() > other->getDelta())
-	{
-		return -1;
-	}
-	if (this->mDelta->getValue() < other->getDelta())
-	{
-		return 1;
-	}
+	int value = MidiEvent::CompareTo(other);
+	if (value != 0)
+		return value;
 
 	if (other->getType() == this->getType()) {
 		string curr = mData;

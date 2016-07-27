@@ -7,10 +7,10 @@
 /**
  * 
  */
-class MIDI_API CText : public TextualMetaEvent
+class MIDI_API Text : public TextualMetaEvent
 {
 public:
-	CText(long tick, long delta, string text);
+	Text(long tick, long delta, string text);
 
 	void setText(string t);
 	string getText();

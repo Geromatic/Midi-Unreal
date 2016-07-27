@@ -87,7 +87,6 @@ int MidiEvent::sChannel = -1;
 
 MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
 
-//	int64 pos = input.Tell();
 	bool reset = false;
 	
 	int id = 0;
@@ -114,7 +113,6 @@ MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
 		return new SystemExclusiveEvent(sId, tick, delta, data);
 	}
 	else {
-//		OutputDebugStringA("Unknown Status Type: " + sId);
 		UE_LOG(LogTemp, Warning, TEXT("Unknown Status Type: %d"), sId);
 
 		if (reset) {
