@@ -8,7 +8,7 @@ USoundNodeProceduralTest::USoundNodeProceduralTest(const FObjectInitializer& PCI
 	, Volume(0.5f)
 	, Frequency(100.0f)
 {
-	SoundWaveProcedural = NewObject<USoundWaveProceduralTest>(USoundWaveProceduralTest::StaticClass());
+	SoundWaveProcedural = USoundWaveProceduralTest::StaticClass()->GetDefaultObject<USoundWaveProceduralTest>();
 }
 
 int32 USoundNodeProceduralTest::GetMaxChildNodes() const
