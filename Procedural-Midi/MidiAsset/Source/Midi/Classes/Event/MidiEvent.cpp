@@ -5,7 +5,7 @@
 
 #include "ChannelAftertouch.h"
 #include "ChannelEvent.h"
-#include "CController.h"
+#include "Controller.h"
 #include "NoteAftertouch.h"
 #include "NoteOff.h"
 #include "NoteOn.h"

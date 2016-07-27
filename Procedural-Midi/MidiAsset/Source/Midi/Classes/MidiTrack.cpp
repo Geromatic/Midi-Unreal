@@ -168,7 +168,6 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == (MetaEvent::END_OF_TRACK & 0XFF) ) {
 		if (next != NULL) {
-			//throw ("Attempting to insert EndOfTrack before an existing event. Use closeTrack() when finished with MidiTrack.");
 			UE_LOG(LogTemp, Error, TEXT("Attempting to insert EndOfTrack before an existing event.  Use closeTrack() when finished with MidiTrack."));
 			return;
 		}

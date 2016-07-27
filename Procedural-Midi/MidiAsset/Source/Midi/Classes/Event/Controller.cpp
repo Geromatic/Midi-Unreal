@@ -1,7 +1,7 @@
 // Copyright -> Scott Bishel
 
 #include "MidiPrivatePCH.h"
-#include "CController.h"
+#include "Controller.h"
 
 
 CController::CController(long tick, int channel, int controllerType, int value)

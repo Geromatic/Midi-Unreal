@@ -18,7 +18,7 @@
 #include "SequencerSpecificEvent.h"
 #include "SmpteOffset.h"
 #include "Tempo.h"
-#include "CText.h"
+#include "Text.h"
 #include "TrackName.h"
 
 MetaEvent::MetaEvent(long tick, long delta, int type, VariableLengthInt * length)
