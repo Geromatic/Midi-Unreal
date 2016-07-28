@@ -165,10 +165,64 @@ int MidiEvent::CompareTo(MidiEvent *other)
 	return 0;
 }
 
+string getMidiClassName(int type) {
+	switch (type) {
+	case ChannelEvent::NOTE_OFF:
+		return "Note Off";
+	case ChannelEvent::NOTE_ON:
+		return "Note On";
+	case ChannelEvent::NOTE_AFTERTOUCH:
+		return "Note Aftertouch";
+	case ChannelEvent::CONTROLLER:
+		return "Controller";
+	case ChannelEvent::PROGRAM_CHANGE:
+		return "Program Change";
+	case ChannelEvent::CHANNEL_AFTERTOUCH:
+		return "Channel Aftertouch";
+	case ChannelEvent::PITCH_BEND:
+		return "Pitch Bend";
+	}
+
+	switch (type) {
+	case MetaEvent::SEQUENCE_NUMBER:
+		return "Sequence Number";
+	case MetaEvent::MIDI_CHANNEL_PREFIX:
+		return "Midi Channel Prefix";
+	case MetaEvent::END_OF_TRACK:
+		return "End Of Track";
+	case MetaEvent::TEMPO:
+		return "Tempo";
+	case MetaEvent::SMPTE_OFFSET:
+		return "SMPTE Offset";
+	case MetaEvent::TIME_SIGNATURE:
+		return "Time Signature";
+	case MetaEvent::KEY_SIGNATURE:
+		return "Key Signature";
+	case MetaEvent::TEXT_EVENT:
+		return "Text Event";
+	case MetaEvent::COPYRIGHT_NOTICE:
+		return "Copyright Notice";
+	case MetaEvent::TRACK_NAME:
+		return "Track Name";
+	case MetaEvent::INSTRUMENT_NAME:
+		return "Insturument Name";
+	case MetaEvent::LYRICS:
+		return "Lyrics";
+	case MetaEvent::MARKER:
+		return "Marker";
+	case MetaEvent::CUE_POINT:
+		return "Cue Point";
+	case MetaEvent::SEQUENCER_SPECIFIC:
+		return "Sequencer Specific";
+	}
+	return "Unknown";
+}
+
 string MidiEvent::ToString()
 {
+
 //	FString::Printf(TEXT("%d (%d): %s"), mTick, mDelta->getValue(), typeid(this).name());
 	std::stringstream ss;
-	ss << mTick << " (" << mDelta->getValue() << "): " /*<< typeid(this).name()*/;
+	ss << mTick << " (" << mDelta->getValue() << "): " << getMidiClassName(mType);
 	return ss.str();
 }

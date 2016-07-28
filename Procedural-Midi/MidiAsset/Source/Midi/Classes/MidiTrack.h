@@ -9,7 +9,7 @@
  */
 class MIDI_API MidiTrack
 {
-	#define VERBOSE false
+	static const bool VERBOSE = false;
 public:
 	static const char IDENTIFIER[];
 

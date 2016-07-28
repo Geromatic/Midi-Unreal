@@ -8,7 +8,7 @@ GenericMetaEvent::GenericMetaEvent(long tick, long delta, int type, VariableLeng
 {
 	mData = data;
 
-//	OutputDebugStringA("Warning: GenericMetaEvent used because type (" + info.type + ") wasn't recognized or unexpected data length (" + info.length.getValue() + ") for type.");
+//	UE_LOG(LogTemp, Warning, TEXT("Warning: GenericMetaEvent used because type %d wasn't recognized or unexpected data length (%d) for the type.", type, length->setValue());
 }
 
 GenericMetaEvent::~GenericMetaEvent()

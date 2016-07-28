@@ -133,8 +133,11 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	const bool isAllowed = false;
 
 	if (isAllowed) {
-		//			    prev = mEvents.First(_event => _event.CompareTo(newEvent) == -1);
-		//                next = mEvents.Last(_event => _event.CompareTo(newEvent) == 1);
+		MidiEvent** first = mEvents.FindByPredicate([newEvent](MidiEvent*v) { return v->CompareTo(newEvent) == -1; });
+		int32 last = mEvents.FindLastByPredicate([newEvent](MidiEvent*v) { return v->CompareTo(newEvent) == 1; });
+
+		prev = (first != NULL ? first[0] : NULL);
+		next = (last != INDEX_NONE ? mEvents[last] : NULL);
 	}
 	else {
 		for (int it = 0; it < mEvents.Num(); it++) {
