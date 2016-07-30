@@ -27,13 +27,6 @@ MidiTrack::MidiTrack() {
 	mClosed = false;
 }
 
-// TODO Sort
-inline static bool ConstPredicate(MidiEvent& ip1, MidiEvent& ip2)
- {
-	 return ip1.CompareTo(&ip2) < 0;
- }
-
-
 MidiTrack::MidiTrack(FBufferReader & input)
 {
 	mSize = 0;
@@ -51,9 +44,28 @@ MidiTrack::MidiTrack(FBufferReader & input)
 	input.Serialize(buffer, 4);
 	mSize = MidiUtil::bytesToInt(buffer, 0, 4);
 
+	this->readTrackData(input);
+}
+MidiTrack::~MidiTrack()
+{
+	for (int i = 0; i < mEvents.Num(); i++)
+	{
+		delete mEvents[i];
+		mEvents[i] = NULL;
+	}
+}
+
+// TODO Sort
+inline static bool ConstPredicate(MidiEvent& ip1, MidiEvent& ip2)
+{
+	return ip1.CompareTo(&ip2) < 0;
+}
+
+void MidiTrack::readTrackData(FBufferReader & input)
+{
 	long totalTicks = 0;
 
-	while (true) {
+	while (!input.AtEnd()) {
 
 		VariableLengthInt delta(input);
 		totalTicks += delta.getValue();
@@ -70,21 +82,13 @@ MidiTrack::MidiTrack(FBufferReader & input)
 
 		// Not adding the EndOfTrack event here allows the track to be edited
 		// after being read in from file.
-		if (E->getType() == (MetaEvent::END_OF_TRACK & 0XFF) ) {
+		if (E->getType() == (MetaEvent::END_OF_TRACK & 0XFF)) {
 			break;
 		}
 		mEvents.Add(E);
 	}
 
-//	mEvents.Sort(ConstPredicate);
-}
-MidiTrack::~MidiTrack()
-{
-	for (int i = 0; i < mEvents.Num(); i++)
-	{
-		delete mEvents[i];
-		mEvents[i] = NULL;
-	}
+	//	mEvents.Sort(ConstPredicate);
 }
 
 TArray<MidiEvent*>& MidiTrack::getEvents() {

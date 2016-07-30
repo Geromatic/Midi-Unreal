@@ -29,6 +29,11 @@ public:
 
 	TArray<MidiEvent*>& getEvents();
 
+private:
+	void readTrackData(FBufferReader & input);
+
+public:
+
 	int getEventCount();
 	int getSize();
 
