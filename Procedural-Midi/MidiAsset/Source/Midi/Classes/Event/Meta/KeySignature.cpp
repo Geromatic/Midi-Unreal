@@ -65,7 +65,7 @@ int KeySignature::CompareTo(MidiEvent *other) {
 	}
 
 	if (mScale != o->mScale) {
-		return mKey < o->mScale ? -1 : 1;
+		return mScale < o->mScale ? -1 : 1;
 	}
 
 	return 0;
