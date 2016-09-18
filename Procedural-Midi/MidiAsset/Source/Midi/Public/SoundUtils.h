@@ -23,7 +23,7 @@ public:
 	* @param seconds - Duration
 	*/
 	UFUNCTION(BlueprintCallable, Category = "Midi|Audio")
-	static USoundWave* AudioNote(float amplitude = 16384.0f, float frequency = 440.0f, float seconds = 1.0f);
+	static USoundWave* AudioNote(float amplitude = 8192.0f, float frequency = 440.0f, float seconds = 1.0f);
 
 	/**
 	* Creates a continuous sin wave that can be used by the audio compoonent
