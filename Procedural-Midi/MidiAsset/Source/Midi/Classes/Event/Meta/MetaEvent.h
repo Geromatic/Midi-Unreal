@@ -8,12 +8,11 @@
 using namespace std;
 
 /**
- * 
+ * abstract class for meta events
  */
 class MIDI_API MetaEvent : public MidiEvent
 {
 protected:
-//	int mType;
 	VariableLengthInt * mLength;
 
 	MetaEvent(long tick, long delta, int type, VariableLengthInt * length);
@@ -44,7 +43,7 @@ protected:
 			data = new char[length->getValue()];
 			if (length->getValue() > 0)
 			{
-				input.Serialize(&type, length->getValue());
+				input.Serialize(&data, length->getValue());
 			}
 		}
 	};

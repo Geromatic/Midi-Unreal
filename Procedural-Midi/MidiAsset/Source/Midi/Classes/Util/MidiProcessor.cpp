@@ -24,12 +24,12 @@ MidiProcessor::~MidiProcessor()
 	mMetronome = NULL;
 }
 
-void MidiProcessor::load(MidiFile & input) {
+void MidiProcessor::load(MidiFile & file) {
 	if (mMetronome)
 		delete mMetronome;
 	mMetronome = NULL;
 
-	mMidiFile = &input;
+	mMidiFile = &file;
 
 	mRunning = false;
 	mTicksElapsed = 0;

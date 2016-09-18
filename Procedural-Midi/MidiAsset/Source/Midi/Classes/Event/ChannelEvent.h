@@ -14,7 +14,6 @@ class MIDI_API ChannelEvent : public MidiEvent
 	static TMap<int, int> mOrderMap;
 
 protected:
-//	int mType;
 	int mChannel;
 	int mValue1;
 	int mValue2;
@@ -24,8 +23,6 @@ protected:
 	ChannelEvent(long tick, long delta, int type, int channel, int param1, int param2);
 
 public:
-//	int getType();
-
 	void setChannel(int c);
 	int getChannel();
 

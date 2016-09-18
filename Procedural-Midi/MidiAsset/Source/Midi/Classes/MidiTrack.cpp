@@ -77,7 +77,7 @@ void MidiTrack::readTrackData(FBufferReader & input)
 		}
 
 		if (VERBOSE) {
-			UE_LOG(LogTemp, Display, TEXT("%s"), (*E).ToString().c_str());
+			UE_LOG(LogTemp, Display, TEXT("%s"), E->ToString().c_str());
 		}
 
 		// Not adding the EndOfTrack event here allows the track to be edited
@@ -134,26 +134,15 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 
 	MidiEvent * prev = NULL, *next = NULL;
 
-	const bool isAllowed = false;
+	for (int it = 0; it < mEvents.Num(); it++) {
+		next = mEvents[it];
 
-	if (isAllowed) {
-		MidiEvent** first = mEvents.FindByPredicate([newEvent](MidiEvent*v) { return v->CompareTo(newEvent) == -1; });
-		int32 last = mEvents.FindLastByPredicate([newEvent](MidiEvent*v) { return v->CompareTo(newEvent) == 1; });
-
-		prev = (first != NULL ? first[0] : NULL);
-		next = (last != INDEX_NONE ? mEvents[last] : NULL);
-	}
-	else {
-		for (int it = 0; it < mEvents.Num(); it++) {
-			next = mEvents[it];
-
-			if (next->getTick() > newEvent->getTick()) {
-				break;
-			}
-
-			prev = next;
-			next = NULL;
+		if (next->getTick() > newEvent->getTick()) {
+			break;
 		}
+
+		prev = next;
+		next = NULL;
 	}
 
 	mEvents.Add(newEvent);
@@ -245,7 +234,7 @@ void MidiTrack::recalculateSize() {
 
 		// If an event is of the same type as the previous event,
 		// no status char is written.
-		if (last != NULL && !(*E).requiresStatusByte(last)) {
+		if (last != NULL && !E->requiresStatusByte(last)) {
 			mSize--;
 		}
 		last = E;

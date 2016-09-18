@@ -80,7 +80,7 @@ bool MidiUtil::bytesEqual(char buf1[], char buf2[], int off, int len) {
 }
 
 char * MidiUtil::extractBytes(char buffer[], int off, int len) {
-
+	
 	char * ret = new char[len];
 
 	for (int i = 0; i < len; i++) {

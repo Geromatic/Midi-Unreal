@@ -30,5 +30,4 @@ private:
 public:
 	static std::string byteToHex(char b);
 	static std::string bytesToHex(char b[]);
-
 };

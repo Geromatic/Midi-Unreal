@@ -56,5 +56,5 @@ int SequenceNumber::CompareTo(MidiEvent *other) {
 }
 
 int SequenceNumber::getEventSize() {
-	return 5;//6;
+	return 5;
 }

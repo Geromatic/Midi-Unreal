@@ -5,11 +5,10 @@
 #include "ChannelEvent.h"
 
 /**
- * 
+ * SysEx events may not be properly handled by this library.
  */
 class MIDI_API SystemExclusiveEvent : public MidiEvent
 {
-	int mType;
 	VariableLengthInt * mLength;
 	char * mData;
 

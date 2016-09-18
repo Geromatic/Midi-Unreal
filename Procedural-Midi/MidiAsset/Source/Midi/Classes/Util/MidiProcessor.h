@@ -29,7 +29,7 @@ public:
 	MidiProcessor();
 	~MidiProcessor();
 
-	void load(MidiFile & input);
+	void load(MidiFile & file);
 
 	void start();
 	void stop();
@@ -49,4 +49,66 @@ private:
 	uint32 mLastMs;
 	int mCurrentTrack;
 	MidiEventListener* mListener;
+
+	class MidiTrackEventQueue
+	{
+	private:
+		MidiTrack* mTrack;
+		TArray<MidiEvent*>::TIterator mIterator;
+		TArray<MidiEvent*> mEventsToDispatch;
+		MidiEvent* mNext;
+
+	public:
+		MidiTrackEventQueue(MidiTrack* track): mIterator(track->getEvents().CreateIterator()), mNext(NULL)
+		{
+			mTrack = track;
+
+			if (mIterator)
+			{
+				mNext = *mIterator;
+			}
+		}
+
+		TArray<MidiEvent*>& getNextEventsUpToTick(double tick)
+		{
+			mEventsToDispatch.Empty();
+
+			while (mNext != NULL)
+			{
+
+				if (mNext->getTick() <= tick)
+				{
+					mEventsToDispatch.Add(mNext);
+
+					if (++mIterator)
+					{
+						mNext = *mIterator;
+					}
+					else
+					{
+						mNext = NULL;
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			return mEventsToDispatch;
+		}
+
+		bool hasMoreEvents()
+		{
+			return mNext != NULL;
+		}
+
+		void Reset() {
+			mIterator.Reset();
+			if (mIterator)
+			{
+				mNext = *mIterator;
+			}
+		}
+	};
 };

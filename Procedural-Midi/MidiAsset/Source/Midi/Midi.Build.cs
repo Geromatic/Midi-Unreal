@@ -1,10 +1,12 @@
 // Copyright -> Scott Bishel
 
 using UnrealBuildTool;
+using System.IO;
 
 public class Midi : ModuleRules
 {
-	public Midi(TargetInfo Target)
+
+    public Midi(TargetInfo Target)
 	{
 		
 		PublicIncludePaths.AddRange(
@@ -36,5 +38,5 @@ public class Midi : ModuleRules
 				"CoreUObject", "Engine", "Slate", "SlateCore", "MidiAsset"
 			}
 			);
-	}
+    }
 }

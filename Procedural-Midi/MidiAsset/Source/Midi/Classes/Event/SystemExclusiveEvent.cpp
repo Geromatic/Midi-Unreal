@@ -59,6 +59,7 @@ bool SystemExclusiveEvent::requiresStatusByte(MidiEvent* prevEvent) {
 void SystemExclusiveEvent::writeToFile(FMemoryWriter & output, bool writeType) {
 	MidiEvent::writeToFile(output, writeType);
 
+	// TODO
 	if (writeType) {
 		output.Serialize(&mType, 1);
 	}

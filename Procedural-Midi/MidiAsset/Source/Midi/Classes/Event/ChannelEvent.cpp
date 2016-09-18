@@ -34,10 +34,6 @@ ChannelEvent::ChannelEvent(long tick, long delta, int type, int channel, int par
 	mValue2 = param2 & 0xFF;
 }
 
-//int ChannelEvent::getType() {
-//	return mType;
-//}
-
 void ChannelEvent::setChannel(int c) {
 	if (c < 0) {
 		c = 0;
@@ -97,16 +93,7 @@ bool ChannelEvent::requiresStatusByte(MidiEvent * prevEvent) {
 	}
 
 	// check if previous event is [not] a ChannelEvent
-	switch (prevEvent->getType()) {
-	case NOTE_OFF:
-	case NOTE_ON:
-	case NOTE_AFTERTOUCH:
-	case CONTROLLER:
-	case PROGRAM_CHANGE:
-	case CHANNEL_AFTERTOUCH:
-	case PITCH_BEND:
-		break;
-	default:
+	if (!(prevEvent->getType() >= NOTE_OFF && prevEvent->getType() <= PITCH_BEND)) {
 		return true;
 	}
 

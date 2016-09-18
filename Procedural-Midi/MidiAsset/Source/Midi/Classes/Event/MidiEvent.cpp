@@ -215,6 +215,12 @@ string getMidiClassName(int type) {
 	case MetaEvent::SEQUENCER_SPECIFIC:
 		return "Sequencer Specific";
 	}
+	
+	if(type == 0xF0)
+		return "System Exclusive";
+	if(type == 0xF7)
+		return "System Exclusive(EOX)";
+	
 	return "Unknown";
 }
 

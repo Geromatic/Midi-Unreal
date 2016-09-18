@@ -6,7 +6,6 @@
 KeySignature::KeySignature(long tick, long delta, int key, int scale)
 	: MetaEvent(tick, delta, MetaEvent::KEY_SIGNATURE, new VariableLengthInt(2))
 {
-//	mKey = key;
 	this->setKey(key);
 	mScale = scale;
 }
