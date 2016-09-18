@@ -5,13 +5,20 @@
 
 #include "MidiUtils.h"
 #include "MidiFile.h"
-#include "Event/Meta/Tempo.h"
-#include "Event/Meta/TimeSignature.h"
-#include "Event/MidiEvent.h"
-#include "Event/ChannelEvent.h"
-#include "Event/NoteOn.h"
-#include "Event/NoteOff.h"
 #include "Util/MidiUtil.h"
+
+#include "Event/ChannelAftertouch.h"
+#include "Event/ChannelEvent.h"
+#include "Event/Controller.h"
+#include "Event/NoteAftertouch.h"
+#include "Event/NoteOff.h"
+#include "Event/NoteOn.h"
+#include "Event/PitchBend.h"
+#include "Event/ProgramChange.h"
+#include "Event/SystemExclusiveEvent.h"
+
+#include "Interface/ShortMessege.h"
+
 
 #include "MidiAsset.h"
 
@@ -96,6 +103,18 @@ void UMidiComponent::onEvent(MidiEvent* _event, int track) {
 	else if (_event->getType() == (ChannelEvent::NOTE_OFF & 0x0F)) {
 		NoteOff* note = static_cast<NoteOff*>(_event);
 		OnEvent.Broadcast(track, note->getNoteValue(), 0, _event->getTick());
+	}
+
+	// MIDI Interface data
+	if (_event->getType() >= ChannelEvent::NOTE_OFF && _event->getType() <= ChannelEvent::PITCH_BEND) {
+		TArray<uint8> data;
+		ShortMessage* shortMsg = static_cast<ShortMessage*>(_event);
+		data.Add(shortMsg->getStatus());
+		data.Add(shortMsg->getData1());
+		data.Add(shortMsg->getData2());
+		OnSend.Broadcast(data);
+	}
+	else if (_event->getType() == 0xF0 || _event->getType() == 0xF7) {
 	}
 }
 

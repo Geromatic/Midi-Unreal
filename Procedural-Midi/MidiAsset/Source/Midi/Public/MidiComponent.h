@@ -13,6 +13,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStart, bool, beginning);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStop, bool, finished);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FEventMidi, int32, track,int32, note,int32, velocity,int32, elapsed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventDevice, TArray<uint8>, msg);
 
 /*
 * A component that gives an actor the ability to manipulate a midi asset or to create
@@ -77,4 +78,10 @@ protected:
 	// Called when a Note On/Off is called
 	UPROPERTY(BlueprintAssignable, Category = "Midi")
 	FEventMidi OnEvent;
+
+	//called when any ChannelEvent Midi Message is called
+	UPROPERTY(BlueprintAssignable, Category = "Midi")
+	FEventDevice OnSend;
+
+
 };
