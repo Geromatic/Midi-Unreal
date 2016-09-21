@@ -31,6 +31,11 @@
 			"Name" : "MidiAssetEditor",
 			"Type" : "Editor",
 			"LoadingPhase" : "Default"
+		},
+		{
+			"Name" : "MidiInterface",
+			"Type" : "Runtime",
+			"LoadingPhase" : "Default"
 		}
 	]
 }
