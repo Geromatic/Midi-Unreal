@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "rtmidi_c.h"
 #include "RtMidi.h"
 
 #include "MidiInterfaceLibrary.generated.h"
