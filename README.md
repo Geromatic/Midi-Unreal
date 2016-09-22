@@ -14,7 +14,7 @@ Plugin Supports:
 ```
 Windows(32/64): [Packaged+Tested+Works] 
 HTML5: [Packaged+Works but Procedural Audio doesnt produce sound]
-Android(All): [Packaged success but untested]
+Android(All): [untested]
 iOS: [Unknown Status]
 AppleTV: [Unknown Status]
 Linus: [Needs Package+Test]
