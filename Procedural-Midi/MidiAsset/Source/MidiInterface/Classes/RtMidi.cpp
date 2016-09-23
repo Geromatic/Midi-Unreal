@@ -272,7 +272,7 @@ void MidiApi :: error( RtMidiError::Type type, std::string errorString )
   }
   else {
     std::cerr << '\n' << errorString << "\n\n";
-    throw RtMidiError( errorString, type );
+    /*throw*/ RtMidiError( errorString, type );
   }
 }
 
