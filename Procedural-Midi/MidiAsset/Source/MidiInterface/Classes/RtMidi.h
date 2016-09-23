@@ -36,7 +36,7 @@
 */
 /**********************************************************************/
 
-#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_WINRT)
+#if defined(PLATFORM_WINDOWS)
 	#define __WINDOWS_MM__
 #elif defined(PLATFORM_MAC) || defined(PLATFORM_IOS)
 	#define __MACOSX_CORE__
@@ -45,6 +45,8 @@
 	#endif
 #elif PLATFORM_LINUX
 	#define __LINUX_ALSA__
+#else
+	#define __RTMIDI_DUMMY__
 #endif
 
 /*!
@@ -56,7 +58,7 @@
 
 #define RTMIDI_VERSION "2.1.1"
 
-#include <exception>
+/*#include <exception>*/
 #include <iostream>
 #include <string>
 #include <vector>
@@ -71,7 +73,7 @@
 */
 /************************************************************************/
 
-class RtMidiError : public std::exception
+class RtMidiError/* : public std::exception*/
 {
  public:
   //! Defined RtMidiError types.
@@ -90,22 +92,22 @@ class RtMidiError : public std::exception
   };
 
   //! The constructor.
-  RtMidiError( const std::string& message, Type type = RtMidiError::UNSPECIFIED ) throw() : message_(message), type_(type) {}
+  RtMidiError( const std::string& message, Type type = RtMidiError::UNSPECIFIED ) /*throw()*/ : message_(message), type_(type) {}
  
   //! The destructor.
-  virtual ~RtMidiError( void ) throw() {}
+  virtual ~RtMidiError( void ) /*throw()*/ {}
 
   //! Prints thrown error message to stderr.
-  virtual void printMessage( void ) const throw() { std::cerr << '\n' << message_ << "\n\n"; }
+  virtual void printMessage( void ) const /*throw()*/ { std::cerr << '\n' << message_ << "\n\n"; }
 
   //! Returns the thrown error message type.
-  virtual const Type& getType(void) const throw() { return type_; }
+  virtual const Type& getType(void) const /*throw()*/ { return type_; }
 
   //! Returns the thrown error message string.
-  virtual const std::string& getMessage(void) const throw() { return message_; }
+  virtual const std::string& getMessage(void) const /*throw()*/ { return message_; }
 
   //! Returns the thrown error message as a c-style string.
-  virtual const char* what( void ) const throw() { return message_.c_str(); }
+  virtual const char* what( void ) const /*throw()*/ { return message_.c_str(); }
 
  protected:
   std::string message_;
@@ -139,7 +141,7 @@ class RtMidi
   };
 
   //! A static function to determine the current RtMidi version.
-  static std::string getVersion( void ) throw();
+  static std::string getVersion( void ) /*throw()*/;
 
   //! A static function to determine the available compiled MIDI APIs.
   /*!
@@ -147,7 +149,7 @@ class RtMidi
     the enumerated list values.  Note that there can be more than one
     API compiled for certain operating systems.
   */
-  static void getCompiledApi( std::vector<RtMidi::Api> &apis ) throw();
+  static void getCompiledApi( std::vector<RtMidi::Api> &apis ) /*throw()*/;
 
   //! Pure virtual openPort() function.
   virtual void openPort( unsigned int portNumber = 0, const std::string portName = std::string( "RtMidi" ) ) = 0;
@@ -244,10 +246,10 @@ class RtMidiIn : public RtMidi
             unsigned int queueSizeLimit = 100 );
 
   //! If a MIDI connection is still open, it will be closed by the destructor.
-  ~RtMidiIn ( void ) throw();
+  ~RtMidiIn ( void ) /*throw()*/;
 
   //! Returns the MIDI API specifier for the current instance of RtMidiIn.
-  RtMidi::Api getCurrentApi( void ) throw();
+  RtMidi::Api getCurrentApi( void ) /*throw()*/;
 
   //! Open a MIDI input connection given by enumeration number.
   /*!
@@ -372,10 +374,10 @@ class RtMidiOut : public RtMidi
              const std::string clientName = std::string( "RtMidi Output Client") );
 
   //! The destructor closes any open MIDI connections.
-  ~RtMidiOut( void ) throw();
+  ~RtMidiOut( void ) /*throw()*/;
 
   //! Returns the MIDI API specifier for the current instance of RtMidiOut.
-  RtMidi::Api getCurrentApi( void ) throw();
+  RtMidi::Api getCurrentApi( void ) /*throw()*/;
 
   //! Open a MIDI output connection.
   /*!
@@ -549,7 +551,7 @@ class MidiOutApi : public MidiApi
 //
 // **************************************************************** //
 
-inline RtMidi::Api RtMidiIn :: getCurrentApi( void ) throw() { return rtapi_->getCurrentApi(); }
+inline RtMidi::Api RtMidiIn :: getCurrentApi( void ) /*throw()*/ { return rtapi_->getCurrentApi(); }
 inline void RtMidiIn :: openPort( unsigned int portNumber, const std::string portName ) { rtapi_->openPort( portNumber, portName ); }
 inline void RtMidiIn :: openVirtualPort( const std::string portName ) { rtapi_->openVirtualPort( portName ); }
 inline void RtMidiIn :: closePort( void ) { rtapi_->closePort(); }
@@ -562,7 +564,7 @@ inline void RtMidiIn :: ignoreTypes( bool midiSysex, bool midiTime, bool midiSen
 inline double RtMidiIn :: getMessage( std::vector<unsigned char> *message ) { return ((MidiInApi *)rtapi_)->getMessage( message ); }
 inline void RtMidiIn :: setErrorCallback( RtMidiErrorCallback errorCallback, void *userData ) { rtapi_->setErrorCallback(errorCallback, userData); }
 
-inline RtMidi::Api RtMidiOut :: getCurrentApi( void ) throw() { return rtapi_->getCurrentApi(); }
+inline RtMidi::Api RtMidiOut :: getCurrentApi( void ) /*throw()*/ { return rtapi_->getCurrentApi(); }
 inline void RtMidiOut :: openPort( unsigned int portNumber, const std::string portName ) { rtapi_->openPort( portNumber, portName ); }
 inline void RtMidiOut :: openVirtualPort( const std::string portName ) { rtapi_->openVirtualPort( portName ); }
 inline void RtMidiOut :: closePort( void ) { rtapi_->closePort(); }

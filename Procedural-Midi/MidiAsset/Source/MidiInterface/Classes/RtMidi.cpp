@@ -64,12 +64,12 @@ RtMidi :: ~RtMidi()
   rtapi_ = 0;
 }
 
-std::string RtMidi :: getVersion( void ) throw()
+std::string RtMidi :: getVersion( void ) /*throw()*/
 {
   return std::string( RTMIDI_VERSION );
 }
 
-void RtMidi :: getCompiledApi( std::vector<RtMidi::Api> &apis ) throw()
+void RtMidi :: getCompiledApi( std::vector<RtMidi::Api> &apis ) /*throw()*/
 {
   apis.clear();
 
@@ -153,10 +153,10 @@ RtMidiIn :: RtMidiIn( RtMidi::Api api, const std::string clientName, unsigned in
   // API-specific definitions are passed to the compiler. But just in
   // case something weird happens, we'll throw an error.
   std::string errorText = "RtMidiIn: no compiled API support found ... critical error!!";
-  throw( RtMidiError( errorText, RtMidiError::UNSPECIFIED ) );
+  /*throw*/( RtMidiError( errorText, RtMidiError::UNSPECIFIED ) );
 }
 
-RtMidiIn :: ~RtMidiIn() throw()
+RtMidiIn :: ~RtMidiIn() /*throw()*/
 {
 }
 
@@ -221,10 +221,10 @@ RtMidiOut :: RtMidiOut( RtMidi::Api api, const std::string clientName )
   // API-specific definitions are passed to the compiler. But just in
   // case something weird happens, we'll thrown an error.
   std::string errorText = "RtMidiOut: no compiled API support found ... critical error!!";
-  throw( RtMidiError( errorText, RtMidiError::UNSPECIFIED ) );
+  /*throw*/( RtMidiError( errorText, RtMidiError::UNSPECIFIED ) );
 }
 
-RtMidiOut :: ~RtMidiOut() throw()
+RtMidiOut :: ~RtMidiOut() /*throw()*/
 {
 }
 
