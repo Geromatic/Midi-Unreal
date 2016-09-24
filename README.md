@@ -13,8 +13,8 @@ http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 Plugin Supports:
 ```
 Windows(32/64): [Packaged+Tested+Works] 
-HTML5: [---]
-Android(All): [---]
+HTML5: [Packaged+Tested+Works but no sound]
+Android(All): [Packaged+Untested]
 iOS: [Unknown Status]
 AppleTV: [Unknown Status]
 Linus: [Needs Package+Test]
