@@ -14,7 +14,7 @@
 	"CanContainContent" : false,
 	"IsBetaVersion" : true,
 	"Installed" : false,
-	"WhitelistPlatforms": [ "Win64", "Win32" ],
+	"WhitelistPlatforms": [ "Win64", "Win32", "Mac", "IOS", "Linux", "Android", "HTML5" ],
 	"Modules" :
 	[
 		{
