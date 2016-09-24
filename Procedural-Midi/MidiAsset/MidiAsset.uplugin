@@ -3,8 +3,8 @@
 	"Version" : 1,
 	"VersionName" : "1.0",
 	"FriendlyName" : "Midi Asset",
-	"Description" : "Adds The ability to import/read/write Midi files",
-	"Category" : "Editor",
+	"Description" : "A Plugin to add Midi capability such as importing, playing, and interfacing with Midi files.  It also includes connecting with external devices and procedural audio",
+	"Category" : "Audio",
 	"CreatedBy" : "Scott Bishel",
 	"CreatedByURL" : "",
 	"DocsURL" : "",
@@ -14,7 +14,7 @@
 	"CanContainContent" : false,
 	"IsBetaVersion" : true,
 	"Installed" : false,
-	"WhitelistPlatforms": [ "Win64", "Win32" ],
+	"WhitelistPlatforms": [ "Win64", "Win32", "Mac", "IOS", "Linux", "Android", "HTML5" ],
 	"Modules" :
 	[
 		{
