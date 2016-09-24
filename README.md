@@ -1,8 +1,6 @@
 # Midi-Unreal
 Midi for Unreal Engine
 
-This library was originally created for processing MIDI, so issues may arise on Writing/Modifying Midi Functions /Methods"
-
 This code provides an interface to read, manipulate, and write MIDI files. "Playback" is supported as a real-time event dispatch system.(Leffelman)
 
 Original Credit goes to Alex Leffelman who created the Android Midi Lib - https://github.com/leffelmania/android-midi-lib
@@ -12,12 +10,12 @@ http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 
 Plugin Supports:
 ```
-Windows(32/64): [Packaged+Tested+Works] 
+Windows(32/64): [Packaged+Tested+Works]
+Mac: [TBA]
 HTML5: [Packaged+Tested+Works but no sound]
 Android(All): [Packaged+Untested]
-iOS: [Unknown Status]
-AppleTV: [Unknown Status]
-Linus: [Needs Package+Test]
+iOS: [TBA]
+Linus: [TBA]
 ```
 
 ### Installation (Blueprints made in 4.9.2)
