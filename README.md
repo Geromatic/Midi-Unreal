@@ -8,17 +8,26 @@ Modified for Unreal Engine: Scott Bishel
 
 http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 
-Plugin Supports:
-```
-Windows(32/64): [Packaged+Tested+Works]
-Mac: [TBA]
-HTML5: [Packaged+Tested+Works but no sound]
-Android(All): [Packaged+Untested]
-iOS: [TBA]
-Linus: [TBA]
-```
+Features:
 
-### Installation (Blueprints made in 4.9.2)
+- Ability to import Midi files in Unreal
+- Load/Play Midi
+- Built in Midi Device Interface 
+- Choice between MIDI output device (ex. computer, synthesizer, etc) or generated audio playback [**]
+- Ability to connect external MIDI input device (ex. Midi Keyboard, Midi Fighter 64, any MIDI-equipped hardware) [**]
+
+** <b>[Shown in Demo Project on marketplace]</b>
+
+Plugin Supports:
+
+- Windows(32/64): [Packaged+Tested+Works]
+- Mac: [TBA]
+- HTML5: [Packaged+Tested+Works but no sound]
+- Android(All): [Packaged+Untested]
+- iOS: [TBA]
+- Linus: [TBA]
+
+### Installation (Blueprints made in 4.9.2) 
 
 ###### May Require C++ project for cooked build or to update to your own version
 
