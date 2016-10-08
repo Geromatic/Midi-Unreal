@@ -10,7 +10,7 @@ http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 
 Features:
 
-- Ability to import Midi files in Unreal
+- Ability to import [drag & drop] Midi files in Unreal
 - Load/Play Midi
 - Built in Midi Device Interface 
 - Choice between MIDI output device (ex. computer, synthesizer, etc) or generated audio playback [**]
@@ -20,6 +20,7 @@ Features:
 
 Plugin Supports:
 
+- supports all  platforms [beta]
 - Windows(32/64): [Packaged+Tested+Works]
 - Mac: [TBA]
 - HTML5: [Packaged+Tested+Works but no sound]
@@ -27,15 +28,11 @@ Plugin Supports:
 - iOS: [TBA]
 - Linus: [TBA]
 
-### Installation (Blueprints made in 4.9.2) 
-
-###### May Require C++ project for cooked build or to update to your own version
-
-
+### Installation [Github Version Only / C++ Project Required] (Blueprints made in 4.9.2)
 
 Place MidiAsset folder in your Plugins folder in youe Unreal project
 
-Place Content folder in your Unreal project and overwrite folder or place the contents inside in your own Content folder
+Place Content folder in your Unreal project
 
 ###Showcase: [Blueprint]
 
