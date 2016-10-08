@@ -36,11 +36,11 @@
 */
 /**********************************************************************/
 
-#if defined(PLATFORM_WINDOWS)
+#if PLATFORM_WINDOWS
 	#define __WINDOWS_MM__
-#elif defined(PLATFORM_MAC) || defined(PLATFORM_IOS)
+#elif PLATFORM_MAC || PLATFORM_IOS
 	#define __MACOSX_CORE__
-	#if defined(PLATFORM_IOS)
+	#if PLATFORM_IOS
 		#define TARGET_OS_IPHONE
 	#endif
 #elif PLATFORM_LINUX
