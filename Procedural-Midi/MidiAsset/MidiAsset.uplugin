@@ -35,8 +35,7 @@
 		{
 			"Name" : "MidiInterface",
 			"Type" : "Runtime",
-			"LoadingPhase" : "Default",
-			"WhitelistPlatforms": [ "Win64", "Win32", "Mac", "IOS", "Linux" ]
+			"LoadingPhase" : "Default"
 		}
 	]
 }
