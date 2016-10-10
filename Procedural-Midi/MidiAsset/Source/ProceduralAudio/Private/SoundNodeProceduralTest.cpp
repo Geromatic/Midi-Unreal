@@ -1,6 +1,6 @@
 // Copyright -> Scott Bishel
 
-#include "MidiPrivatePCH.h"
+#include "ProceduralAudioPrivatePCH.h"
 #include "SoundNodeProceduralTest.h"
 
 USoundNodeProceduralTest::USoundNodeProceduralTest(const FObjectInitializer& PCIP)

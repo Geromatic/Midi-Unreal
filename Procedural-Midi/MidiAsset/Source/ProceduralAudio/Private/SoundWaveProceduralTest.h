@@ -13,7 +13,7 @@
 ///		wind sounds etc.)
 //////////////////////////////////////////////////////////////////////////
 UCLASS()
-class MIDI_API USoundWaveProceduralTest : public USoundWave
+class PROCEDURALAUDIO_API USoundWaveProceduralTest : public USoundWave
 {
 	GENERATED_UCLASS_BODY()
 	
@@ -36,6 +36,16 @@ class MIDI_API USoundWaveProceduralTest : public USoundWave
 	virtual bool InitAudioResource(FName Format) override;
 
 private:
+
+
+
+	// Mathmatical Saw Wave;
+	typedef struct Saw_Data {
+		double _phasor = 0.0;
+		double _tolerance = 1.0;
+	}Saw_Data;
+
+	Saw_Data data;
 
 	// Time of the last sample that was copied to the PCMData buffer [s]
 	float Time;

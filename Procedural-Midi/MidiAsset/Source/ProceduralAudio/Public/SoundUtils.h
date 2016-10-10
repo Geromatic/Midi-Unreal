@@ -8,7 +8,7 @@
  * 
  */
 UCLASS()
-class MIDI_API USoundUtils : public UBlueprintFunctionLibrary
+class PROCEDURALAUDIO_API USoundUtils : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
@@ -22,7 +22,7 @@ public:
 	* @param frequency - Pitch[Hz]
 	* @param seconds - Duration
 	*/
-	UFUNCTION(BlueprintCallable, Category = "Midi|Audio")
+	UFUNCTION(BlueprintCallable, Category = "Audio")
 	static USoundWave* AudioNote(float amplitude = 8192.0f, float frequency = 440.0f, float seconds = 1.0f);
 
 	/**
@@ -30,6 +30,6 @@ public:
 	* @param amplitude - Intensity [Similar to volume]
 	* @param frequency - Pitch[Hz]
 	*/
-	UFUNCTION(BlueprintCallable, Category = "Midi|Audio")
+	UFUNCTION(BlueprintCallable, Category = "Audio")
 	static USoundWave* ConstantNote(float amplitude = 8192.0f, float frequency = 440.0f);
 };

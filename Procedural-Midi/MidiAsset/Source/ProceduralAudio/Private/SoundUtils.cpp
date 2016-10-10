@@ -1,6 +1,6 @@
 // Copyright -> Scott Bishel
 
-#include "MidiPrivatePCH.h"
+#include "ProceduralAudioPrivatePCH.h"
 #include "SoundUtils.h"
 
 #include "Sound/SoundWaveProcedural.h"
@@ -8,53 +8,10 @@
 
 #include <sstream>      // std::stringstream, std::stringbuf
 
-// Audio Formulas
-//
-// Basic Sin Wave
-// f(T) = amplitude * sin((2*PI*Frequency)*Time) | Time = T / Sample Size
-//
-// Mathmatical Square Wave
-// f(x, p) = sin(x / period * 2.0 * M_PI)>=0.0 ? 1.0:-1.0;
-
-
-float Sin_Wave(float frequency, float time) {
-	return FMath::Sin((2 * PI*frequency)*time);
-}
-
-float Square_Wave(float x, float period) {
-	return FMath::Sin(x / period * 2.0 * PI) >= 0.0 ? 1.0 : -1.0;
-}
-
-// Mathmatical Saw Wave
-const double Sample_Rate = 44100.0;
-typedef struct Saw_Data{
-	double _phasor = 0.0;
-	double _tolerance = 1.0;
-}Saw_Data;
-
-double Saw_Wave(double* _frequency, Saw_Data* _data){
-	double _val = _data->_phasor;
-	_data->_phasor += 2.0 * (1.0 / (Sample_Rate / *_frequency));
-	if (_data->_phasor > _data->_tolerance) {
-		_data->_phasor -= 2.0;
-	}
-	return _val;
-}
-
-//double SamplingThread::value(double timeStamp) const
-//{
-//	const double period = 1.0 / d_frequency;
-//
-//	const double x = MathF::fmod(timeStamp, period);
-//	const double v = d_amplitude * FMath::Sin(x / period * 2 * M_PI);
-//
-//	return v;
-//}
-
 namespace little_endian_io
 {
 	template <typename Word>
-	void write_word(stringstream& outs, Word value, unsigned size = sizeof(Word))
+	void write_word(std::stringstream& outs, Word value, unsigned size = sizeof(Word))
 	{
 		for (; size; --size, value >>= 8)
 			outs.put(static_cast <char> (value & 0xFF));

@@ -1,6 +1,6 @@
 // Copyright -> Scott Bishel
 
-#include "MidiPrivatePCH.h"
+#include "ProceduralAudioPrivatePCH.h"
 #include "SoundWaveProceduralTest.h"
 
 USoundWaveProceduralTest::USoundWaveProceduralTest(const FObjectInitializer& PCIP)
@@ -22,15 +22,28 @@ int32 USoundWaveProceduralTest::GeneratePCMData(uint8* PCMData, const int32 Samp
 {
 	float TimeStart = Time;
 
+	// Sine
 	Omega = 2.0f * PI * Frequency;	// angular frequency [rad/s]
+	// Saw
+//	Omega = 2.0f * (1.0f / (SampleRate / Frequency));	// angular frequency [rad/s]
 
 	for (int i = 0; i < SamplesNeeded; i++)
 	{
 		Time = TimeStart + i * DeltaTime;
+		// Sine
 		int32 a = Amplitude * FMath::Sin(Omega*Time);
-		if (a > 65535)
+
+		// Saw
+/*		float val = data._phasor;
+		data._phasor += Omega;
+		if (data._phasor > data._tolerance) {
+			data._phasor -= 2.0f;
+		}
+		int32 a = Amplitude * data._phasor;
+*/
+		if (a > MAX_uint16)
 		{
-			a = 65535;
+			a = MAX_uint16;
 		}
 		else if (a < 0)
 		{
