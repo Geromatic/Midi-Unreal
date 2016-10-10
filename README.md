@@ -30,7 +30,7 @@ Plugin Supports:
 - iOS: [TBA]
 - Linus: [TBA]
 
-### Installation [Github Version Only / C++ Project Required] (Blueprints made in 4.9.2)
+### Installation \[Github Version Only / C++ Project Required\] (Blueprints made in 4.9.2)
 
 Place MidiAsset folder in your Plugins folder in youe Unreal project
 
