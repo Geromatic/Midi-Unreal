@@ -35,6 +35,11 @@
 			"Name" : "MidiInterface",
 			"Type" : "Runtime",
 			"LoadingPhase" : "Default"
+		},
+		{
+			"Name" : "ProceduralAudio",
+			"Type" : "Runtime",
+			"LoadingPhase" : "Default"
 		}
 	]
 }
