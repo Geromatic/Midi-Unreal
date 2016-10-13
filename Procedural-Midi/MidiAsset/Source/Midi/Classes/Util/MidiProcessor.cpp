@@ -103,7 +103,7 @@ void MidiProcessor::dispatch(MidiEvent * _event) {
 			dispatch(mMetronome);
 		}
 	}
-	mListener->onEvent(_event, mCurrentTrack);
+	mListener->onEvent(_event);
 }
 
 void MidiProcessor::process() {
@@ -135,9 +135,6 @@ void MidiProcessor::process() {
 		while (mCurrEvents[i]) {
 			MidiEvent * _event = *mCurrEvents[i];
 			if (_event->getTick() <= mTicksElapsed) {
-
-				mCurrentTrack = i;
-
 				dispatch(_event);
 				mCurrEvents[i]++;
 			}

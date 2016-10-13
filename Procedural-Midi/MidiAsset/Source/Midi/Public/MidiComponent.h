@@ -12,8 +12,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStart, bool, beginning);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStop, bool, finished);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FEventMidi, int32, track,int32, note,int32, velocity,int32, elapsed);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventDevice, TArray<uint8>, msg);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FEventMidi, int32, channel,int32, note,int32, velocity,int32, elapsed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventDevice, TArray<uint8>, msg, int32, elapsed);
 
 /*
 * A component that gives an actor the ability to manipulate a midi asset or to create
@@ -53,7 +53,7 @@ private:
 
 	// Midi Event Listener
 
-	void onEvent(MidiEvent* _event, int track);
+	void onEvent(MidiEvent* _event);
 	void onStart(bool fromBeginning);
 	void onStop(bool finish);
 

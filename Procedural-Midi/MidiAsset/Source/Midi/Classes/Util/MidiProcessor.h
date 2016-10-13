@@ -47,7 +47,6 @@ protected:
 private:
 	TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
 	uint32 mLastMs;
-	int mCurrentTrack;
 	MidiEventListener* mListener;
 
 	class MidiTrackEventQueue

@@ -94,15 +94,15 @@ void UMidiComponent::LoadFile(FString path) {
 	mProcessor.load(*mMidiFile);
 }
 
-void UMidiComponent::onEvent(MidiEvent* _event, int track) {
+void UMidiComponent::onEvent(MidiEvent* _event) {
 	if (_event->getType() == (ChannelEvent::NOTE_ON & 0x0F)) {
 		NoteOn* note = static_cast<NoteOn*>(_event);
-		OnEvent.Broadcast(track, note->getNoteValue(), note->getVelocity(), _event->getTick());
+		OnEvent.Broadcast(note->getChannel(), note->getNoteValue(), note->getVelocity(), _event->getTick());
 	}
 
 	else if (_event->getType() == (ChannelEvent::NOTE_OFF & 0x0F)) {
 		NoteOff* note = static_cast<NoteOff*>(_event);
-		OnEvent.Broadcast(track, note->getNoteValue(), 0, _event->getTick());
+		OnEvent.Broadcast(note->getChannel(), note->getNoteValue(), 0, _event->getTick());
 	}
 
 	// MIDI Interface data
@@ -112,7 +112,7 @@ void UMidiComponent::onEvent(MidiEvent* _event, int track) {
 		data.Add(shortMsg->getStatus());
 		data.Add(shortMsg->getData1());
 		data.Add(shortMsg->getData2());
-		OnSend.Broadcast(data);
+		OnSend.Broadcast(data, _event->getTick());
 	}
 	else if (_event->getType() == 0xF0 || _event->getType() == 0xF7) {
 	}
