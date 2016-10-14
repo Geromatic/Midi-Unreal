@@ -14,7 +14,7 @@
 	"CanContainContent" : false,
 	"IsBetaVersion" : true,
 	"Installed" : false,
-	"BlacklistPlatforms" : [ "Mac", "IOS" ],
+	"BlacklistPlatforms" : [ "Mac" ],
 	"Modules" :
 	[
 		{
