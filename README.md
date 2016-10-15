@@ -1,5 +1,5 @@
 # Midi-Unreal
-Midi for Unreal Engine
+Midi for Unreal Engine[Beta]
 
 MarketPlace: https://www.unrealengine.com/marketplace/procedural-midi
 
