@@ -1,5 +1,5 @@
 # Midi-Unreal
-Midi for Unreal Engine
+Midi for Unreal Engine[Beta]
 
 MarketPlace: https://www.unrealengine.com/marketplace/procedural-midi
 
@@ -22,12 +22,9 @@ Features:
 
 Plugin Supports:
 
-- supports all  platforms [beta]
 - Windows(32/64): [Packaged+Tested+Works]
-- Mac: [TBA]
 - HTML5: [Packaged+Tested+Works but no sound]
 - Android(All): [Packaged+Untested]
-- iOS: [TBA]
 - Linus: [TBA]
 
 ### Installation \[Github Version Only / C++ Project Required\] (Blueprints made in 4.9.2)
