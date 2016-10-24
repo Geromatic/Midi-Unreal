@@ -25,10 +25,10 @@ double MidiUtil::msToTicks(long ms, float bpm, int ppq) {
 }
 
 int MidiUtil::bpmToMpqn(float bpm) {
-	return (int)(bpm * 60000000);
+	return (int)(60000000 / bpm);
 }
 float MidiUtil::mpqnToBpm(int mpqn) {
-	return mpqn / 60000000.0f;
+	return 60000000.0f / mpqn;
 }
 
 /**
