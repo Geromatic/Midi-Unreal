@@ -11,7 +11,7 @@ using namespace std;
 * MIDI Unit Conversions
 */
 long MidiUtil::ticksToMs(long ticks, int mpqn, int resolution) {
-	return ((ticks * (mpqn & 0x00000000ffffffffL)) / resolution) / 1000;
+	return ((ticks * (uint64)mpqn) / resolution) / 1000;
 }
 long MidiUtil::ticksToMs(long ticks, float bpm, int resolution) {
 	return ticksToMs(ticks, bpmToMpqn(bpm), resolution);
