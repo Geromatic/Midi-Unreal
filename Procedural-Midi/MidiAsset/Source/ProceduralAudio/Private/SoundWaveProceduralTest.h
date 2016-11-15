@@ -25,7 +25,6 @@ class PROCEDURALAUDIO_API USoundWaveProceduralTest : public USoundWave
 
 	virtual void Serialize(FArchive& Ar) override;
 	virtual void GetAssetRegistryTags(TArray<FAssetRegistryTag>& OutTags) const override;
-	virtual SIZE_T GetResourceSize(EResourceSizeMode::Type Mode) override;
 
 	// USoundWave interface
 
