@@ -5,9 +5,9 @@
 
 USoundWaveProceduralTest::USoundWaveProceduralTest(const FObjectInitializer& PCIP)
 	: Super(PCIP)
-	, Time(0.0f)
 	, Amplitude(8192.0f)
 	, Frequency(100.0f)
+	, Time(0.0f)
 {
 	SampleRate = 44100;
 	NumChannels = 2;

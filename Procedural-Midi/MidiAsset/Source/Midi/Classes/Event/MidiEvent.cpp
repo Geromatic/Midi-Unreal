@@ -16,7 +16,7 @@
 #include "Meta/MetaEvent.h"
 #include <sstream>
 
-MidiEvent::MidiEvent(long tick, long delta) : mDelta(NULL), mType(-1)  {
+MidiEvent::MidiEvent(long tick, long delta) : mType(-1), mDelta(NULL)  {
 	mTick = tick;
 	mDelta = new VariableLengthInt((int)delta);
 }

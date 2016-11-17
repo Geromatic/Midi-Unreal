@@ -4,7 +4,7 @@
 #include "SystemExclusiveEvent.h"
 
 SystemExclusiveEvent::SystemExclusiveEvent(int type, long tick, char data[])
-	: MidiEvent(tick, 0), mData(NULL), mLength(NULL)
+	: MidiEvent(tick, 0), mLength(NULL), mData(NULL)
 {
 	mType = type & 0xFF;
 	if (mType != 0xF0 && mType != 0xF7) {
@@ -16,7 +16,7 @@ SystemExclusiveEvent::SystemExclusiveEvent(int type, long tick, char data[])
 }
 
 SystemExclusiveEvent::SystemExclusiveEvent(int type, long tick, long delta, char data[])
-	: MidiEvent(tick, delta), mData(NULL), mLength(NULL)
+	: MidiEvent(tick, delta), mLength(NULL), mData(NULL)
 {
 
 	mType = type & 0xFF;

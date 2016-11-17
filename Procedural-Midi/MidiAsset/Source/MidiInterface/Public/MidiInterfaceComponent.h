@@ -42,8 +42,6 @@ public:
 	//UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
 	void Send(const TArray<uint8>& message);
 
-	static void GetPorts();
-
 	//  Called when a device sends a message to the computer
 	UPROPERTY(BlueprintAssignable, Category = "Midi|Interface")
 	FEventInterface OnReceive;
