@@ -37,5 +37,29 @@ public class MidiInterface : ModuleRules
 				"CoreUObject", "Engine", "Slate", "SlateCore"
 			}
 			);
+		
+		
+		if (Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
+		{
+			Definitions.Add("__WINDOWS_MM__=1");
+			PublicAdditionalLibraries.Add("winmm.lib");
+		}
+		else if (Target.Platform == UnrealTargetPlatform.IOS || Target.Platform == UnrealTargetPlatform.Mac)
+        {
+			Definitions.Add("__MACOSX_CORE__=1");
+            if (Target.Platform == UnrealTargetPlatform.IOS)
+            {
+                Definitions.Add("TARGET_OS_IPHONE=1");
+            }
+            PublicFrameworks.AddRange(new string[] { "CoreMIDI", "CoreAudio", "CoreFoundation"});
+        }
+		else if (Target.Platform == UnrealTargetPlatform.Linux)
+        {
+			Definitions.Add("__LINUX_ALSA__=1");
+        }
+		else
+		{
+			Definitions.Add("__RTMIDI_DUMMY__=1");
+		}
     }
 }

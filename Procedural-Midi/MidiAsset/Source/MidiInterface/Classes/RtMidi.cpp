@@ -1917,7 +1917,6 @@ void MidiOutAlsa :: sendMessage( std::vector<unsigned char> *message )
 
 typedef FPlatformTypes::uint32 _UINT;
 typedef FPlatformTypes::SIZE_T _DWORD;
-#pragma comment(lib, "winmm.lib")
 
 #define  RT_SYSEX_BUFFER_SIZE 1024
 #define  RT_SYSEX_BUFFER_COUNT 4

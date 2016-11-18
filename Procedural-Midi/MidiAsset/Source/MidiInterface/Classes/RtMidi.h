@@ -36,19 +36,6 @@
 */
 /**********************************************************************/
 
-#if PLATFORM_WINDOWS
-	#define __WINDOWS_MM__
-/*#elif PLATFORM_MAC || PLATFORM_IOS
-	#define __MACOSX_CORE__
-	#if PLATFORM_IOS
-		#define TARGET_OS_IPHONE
-	#endif*/
-#elif PLATFORM_LINUX
-	#define __LINUX_ALSA__
-#else
-	#define __RTMIDI_DUMMY__
-#endif
-
 /*!
   \file RtMidi.h
  */
