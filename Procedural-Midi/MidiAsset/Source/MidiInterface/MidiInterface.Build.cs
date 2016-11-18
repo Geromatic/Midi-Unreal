@@ -47,15 +47,12 @@ public class MidiInterface : ModuleRules
 		else if (Target.Platform == UnrealTargetPlatform.IOS || Target.Platform == UnrealTargetPlatform.Mac)
         {
 			Definitions.Add("__MACOSX_CORE__=1");
-            if (Target.Platform == UnrealTargetPlatform.IOS)
-            {
-                Definitions.Add("TARGET_OS_IPHONE=1");
-            }
             PublicFrameworks.AddRange(new string[] { "CoreMIDI", "CoreAudio", "CoreFoundation"});
         }
 		else if (Target.Platform == UnrealTargetPlatform.Linux)
         {
 			Definitions.Add("__LINUX_ALSA__=1");
+			PublicAdditionalLibraries.AddRange(new string[] { "asound", "pthread"});
         }
 		else
 		{
