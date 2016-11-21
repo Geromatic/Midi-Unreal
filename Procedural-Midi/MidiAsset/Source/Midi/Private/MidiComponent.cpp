@@ -17,8 +17,7 @@
 #include "Event/ProgramChange.h"
 #include "Event/SystemExclusiveEvent.h"
 
-#include "Interface/ShortMessege.h"
-
+#include "Interface/ShortMessage.h"
 
 #include "MidiAsset.h"
 
@@ -94,12 +93,12 @@ void UMidiComponent::LoadFile(FString path) {
 }
 
 void UMidiComponent::onEvent(MidiEvent* _event) {
-	if (_event->getType() == (ChannelEvent::NOTE_ON & 0x0F)) {
+	if (_event->getType() == ChannelEvent::NOTE_ON) {
 		NoteOn* note = static_cast<NoteOn*>(_event);
 		OnEvent.Broadcast(note->getChannel(), note->getNoteValue(), note->getVelocity(), _event->getTick());
 	}
 
-	else if (_event->getType() == (ChannelEvent::NOTE_OFF & 0x0F)) {
+	else if (_event->getType() == ChannelEvent::NOTE_OFF) {
 		NoteOff* note = static_cast<NoteOff*>(_event);
 		OnEvent.Broadcast(note->getChannel(), note->getNoteValue(), 0, _event->getTick());
 	}
@@ -113,7 +112,11 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 		data.Add(shortMsg->getData2());
 		OnSend.Broadcast(data, _event->getTick());
 	}
+	// System Exclusive Event
 	else if (_event->getType() == 0xF0 || _event->getType() == 0xF7) {
+	}
+	else {
+
 	}
 }
 

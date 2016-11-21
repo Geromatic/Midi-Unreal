@@ -7,9 +7,9 @@
 #include "MidiInterfaceLibrary.generated.h"
 
 /**
- * A library that acts like a Midi playback
+ * A library that that lets you send MIDI to a device (ex. computer sound card)
  */
-UCLASS()
+UCLASS(meta=(DisplayName = "MIDI Interface Library"))
 class MIDIINTERFACE_API UMidiInterface : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
@@ -19,19 +19,21 @@ class MIDIINTERFACE_API UMidiInterface : public UBlueprintFunctionLibrary
 
 public:	
 
-	//UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static bool OpenMidiInput(uint8 port = 0);
-	UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	// Opens a MIDI output device (ex. computer sound card)
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static bool OpenMidiOutput(uint8 port = 0);
 	
-	//UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static void CloseMidiInput();
-	UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	// Closes the MIDI output device
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static void CloseMidiOutput();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Midi|Interface")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Interface", meta=(DisplayName="IsMidiOutputOpen"))
 	static bool isOutputOpen();
 
-	UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static void SendMidiMessage(const TArray<uint8>& message);
 };

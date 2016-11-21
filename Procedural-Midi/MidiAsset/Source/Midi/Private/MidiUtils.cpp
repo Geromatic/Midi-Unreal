@@ -55,34 +55,3 @@ int32 UMidiUtils::FrequencyToOctave(float Frequency) {
 	int32 Octave = FMath::Log2(Frequency / 440.0);
 	return Octave;
 }
-
-FString UMidiUtils::PreviewScore(const TArray<uint8>& data)
-{
-	FString test;
-	FBufferReader reader((uint8*)data.GetData(), data.Num(), false);
-	MidiFile file(reader);
-
-	for (int i = 0; i < file.getTracks().Num(); i++) {
-		MidiTrack* track = file.getTracks()[i];
-
-		test.Append(FString::FormatAsNumber(i));
-		test.Append("\n");
-		for (int it = 0; it < track->getEvents().Num(); it++) {
-			MidiEvent* next = track->getEvents()[it];
-			if (next->getType() == (ChannelEvent::NOTE_ON & 0X0F)) {
-				NoteOn* note = (NoteOn*)next;
-				if(note->getVelocity() == 0) {
-					test.Append("-");
-					continue;
-				}
-				FString text = FString("C C#D D#E F F#G G#A A#B ").Mid((note->getNoteValue() % 12) * 2, 2);
-				test.Append(text);
-			}
-			if (next->getType() == (ChannelEvent::NOTE_OFF & 0X0F)) {
-				test.Append("-");
-			}
-		}
-		test.Append("\n");
-	}
-	return test;
-}

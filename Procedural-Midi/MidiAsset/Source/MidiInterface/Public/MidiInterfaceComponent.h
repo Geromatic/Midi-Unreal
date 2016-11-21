@@ -9,7 +9,10 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventInterface, TArray<uint8>, msg, float, deltaTime);
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent), meta = (DisplayName = "Midi Interface Component"))
+/*
+* A component that lets you open and receive data from a MIDI device
+*/
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent), meta = (DisplayName = "MIDI Interface Component"))
 class MIDIINTERFACE_API UMidiInterfaceComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -29,11 +32,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
+	// Opens a MIDI input device (ex. MIDI keyboard)
 	UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
 	bool OpenInput(uint8 port = 0);
 	//UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
 	bool OpenOutput(uint8 port = 0);
 
+	// Close the MIDI input device
 	UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
 	void CloseInput();
 	//UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
@@ -43,6 +48,6 @@ public:
 	void Send(const TArray<uint8>& message);
 
 	//  Called when a device sends a message to the computer
-	UPROPERTY(BlueprintAssignable, Category = "Midi|Interface")
+	UPROPERTY(BlueprintAssignable, Category = "Midi|Interface", meta=(DisplayName="OnReceiveEvent"))
 	FEventInterface OnReceive;
 };

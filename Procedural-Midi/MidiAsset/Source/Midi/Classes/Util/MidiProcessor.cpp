@@ -90,11 +90,11 @@ void MidiProcessor::setListener(MidiEventListener* listener) {
 void MidiProcessor::dispatch(MidiEvent * _event) {
 
 	// Tempo and Time Signature events are always needed by the processor
-	if (_event->getType() == (MetaEvent::TEMPO & 0XFF)) {
+	if (_event->getType() == MetaEvent::TEMPO) {
 		mMPQN = (static_cast<Tempo*>(_event))->getMpqn();
 	}
 
-	else if (_event->getType() == (MetaEvent::TIME_SIGNATURE & 0XFF)) {
+	else if (_event->getType() == MetaEvent::TIME_SIGNATURE) {
 		bool shouldDispatch = mMetronome->getBeatNumber() != 1;
 		mMetronome->setTimeSignature(static_cast<TimeSignature*>(_event));
 

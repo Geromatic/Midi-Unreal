@@ -8,7 +8,7 @@
 /**
  * Implements an asset that can be used to store midi data
  */
-UCLASS(BlueprintType, hidecategories=(Object))
+UCLASS(BlueprintType, hidecategories=(Object), meta=(DisplayName="MIDI Asset"))
 class MIDIASSET_API UMidiAsset
 	: public UObject
 {
@@ -16,6 +16,6 @@ class MIDIASSET_API UMidiAsset
 
 public:
 	/** Holds the stored data. */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="MidiAsset")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="MIDI|Asset")
 	TArray<uint8> Data;
 };

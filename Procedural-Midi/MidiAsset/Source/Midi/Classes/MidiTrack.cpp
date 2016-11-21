@@ -82,7 +82,7 @@ void MidiTrack::readTrackData(FBufferReader & input)
 
 		// Not adding the EndOfTrack event here allows the track to be edited
 		// after being read in from file.
-		if (E->getType() == (MetaEvent::END_OF_TRACK & 0XFF)) {
+		if (E->getType() == MetaEvent::END_OF_TRACK) {
 			break;
 		}
 		mEvents.Add(E);
@@ -162,7 +162,7 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	}
 
 	mSize += newEvent->getSize();
-	if (newEvent->getType() == (MetaEvent::END_OF_TRACK & 0XFF) ) {
+	if (newEvent->getType() == MetaEvent::END_OF_TRACK) {
 		if (next != NULL) {
 			UE_LOG(LogTemp, Error, TEXT("Attempting to insert EndOfTrack before an existing event.  Use closeTrack() when finished with MidiTrack."));
 			return;

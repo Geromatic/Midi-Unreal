@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(hidecategories=Object, meta=(DisplayName="Sine Wave"))
 class PROCEDURALAUDIO_API USoundNodeProceduralTest : public USoundNode
 {
 	GENERATED_UCLASS_BODY()

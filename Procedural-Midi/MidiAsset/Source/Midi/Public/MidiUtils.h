@@ -23,7 +23,7 @@ enum  ENoteEnum
 };
 
 /**
- * 
+ * MIDI Frequency Conversion Utility
  */
 UCLASS()
 class MIDI_API UMidiUtils : public UBlueprintFunctionLibrary
@@ -33,13 +33,14 @@ class MIDI_API UMidiUtils : public UBlueprintFunctionLibrary
 public:
 
 	// Default Middle key note frequencies
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Midi")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static float DefaultNoteToFrequency(TEnumAsByte<ENoteEnum> note);
 
 	// Gets the frequency of a note
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Midi")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static float NoteToFrequency(int32 note);
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Midi")
+	// Gets the note of a frequency
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static int32 FrequencyToNote(float Frequency);
 
 	static float SemitoneToFrequency(int32 semitone);
@@ -48,8 +49,4 @@ public:
 	// Number of cents from A4
 	static int32 FrequencyToCent(float Frequency);
 	static int32 FrequencyToOctave(float Frequency);
-
-	// Displays a musical score of the midi asset
-	UFUNCTION(BlueprintCallable, Category = "Midi")
-	static FString PreviewScore(const TArray<uint8>& data);
 };
