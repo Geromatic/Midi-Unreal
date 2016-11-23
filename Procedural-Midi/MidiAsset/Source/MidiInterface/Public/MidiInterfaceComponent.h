@@ -33,21 +33,22 @@ public:
 
 
 	// Opens a MIDI input device (ex. MIDI keyboard)
-	UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	bool OpenInput(uint8 port = 0);
-	//UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	// Opens a MIDI output device (ex, Computer Speakers)
+	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	bool OpenOutput(uint8 port = 0);
 
 	// Close the MIDI input device
-	UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	void CloseInput();
-	//UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
+	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	void CloseOutput();
 
-	//UFUNCTION(BlueprintCallable, Category = "Midi|Interface")
-	void Send(const TArray<uint8>& message);
+	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
+	void SendMessage(const TArray<uint8>& message);
 
 	//  Called when a device sends a message to the computer
-	UPROPERTY(BlueprintAssignable, Category = "Midi|Interface", meta=(DisplayName="OnReceiveEvent"))
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface", meta=(DisplayName="OnReceiveEvent"))
 	FEventInterface OnReceive;
 };

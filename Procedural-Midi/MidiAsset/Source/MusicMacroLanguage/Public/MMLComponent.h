@@ -20,7 +20,7 @@ typedef struct {
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventMMLNote, float, freq);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventMMLRest, float, ms);
 /**
- * 
+ * A component that translates text to MIDI
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent), meta = (DisplayName = "MML Component"))
 class MUSICMACROLANGUAGE_API UMMLComponent : public UActorComponent

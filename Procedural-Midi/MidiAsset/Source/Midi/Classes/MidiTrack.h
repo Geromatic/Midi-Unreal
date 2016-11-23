@@ -11,7 +11,8 @@ class MIDI_API MidiTrack
 {
 	static const bool VERBOSE = false;
 public:
-	static const char IDENTIFIER[];
+	// Track Identifier
+	static const char IDENTIFIER[]; // 'M', 'T', 'r', 'k'
 
 private:
 	int mSize;

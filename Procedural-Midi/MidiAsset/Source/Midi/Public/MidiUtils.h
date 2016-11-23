@@ -25,7 +25,7 @@ enum  ENoteEnum
 /**
  * MIDI Frequency Conversion Utility
  */
-UCLASS()
+UCLASS(meta=(DisplayName="MIDI Conversion Utilities")
 class MIDI_API UMidiUtils : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()

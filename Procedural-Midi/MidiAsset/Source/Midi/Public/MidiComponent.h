@@ -16,7 +16,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FEventMidi, int32, track,int32, no
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventDevice, TArray<uint8>, msg, int32, elapsed);
 
 /*
-* A component that loads/plays a MIDI Asset
+* A component that loads/plays a MIDI Asset or file
 */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), meta=(DisplayName = "MIDI Processor Component") )
 class MIDI_API UMidiComponent : public UActorComponent, public MidiEventListener
@@ -72,6 +72,9 @@ public:
 	// check if MIDI is playing
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	bool isRunning();
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
+	int GetResolution();
 
 protected:
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
@@ -83,7 +86,7 @@ protected:
 	FEventMidi OnEvent;
 
 	//called when any ChannelEvent MIDI Message is called
-	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor", meta=(DisplayName="OnEventEx"))
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
 	FEventDevice OnSend;
 
 	

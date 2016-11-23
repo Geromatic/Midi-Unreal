@@ -143,3 +143,15 @@ bool UMidiComponent::isStarted() {
 bool UMidiComponent::isRunning() {
 	return mProcessor.isRunning();
 }
+
+int UMidiComponent::GetResolution()
+{
+	if (mMidiFile)
+	{
+		return mMidiFile->getResolution();
+	}
+	else
+	{
+		return 0;
+	}
+}
