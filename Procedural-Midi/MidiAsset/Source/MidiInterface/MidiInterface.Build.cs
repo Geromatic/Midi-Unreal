@@ -44,7 +44,7 @@ public class MidiInterface : ModuleRules
 			Definitions.Add("__WINDOWS_MM__=1");
 			PublicAdditionalLibraries.Add("winmm.lib");
 		}
-		else if (Target.Platform == UnrealTargetPlatform.IOS || Target.Platform == UnrealTargetPlatform.Mac)
+		/*else if (Target.Platform == UnrealTargetPlatform.IOS || Target.Platform == UnrealTargetPlatform.Mac)
         {
 			Definitions.Add("__MACOSX_CORE__=1");
             PublicFrameworks.AddRange(new string[] { "CoreMIDI", "CoreAudio", "CoreFoundation"});
@@ -57,6 +57,6 @@ public class MidiInterface : ModuleRules
 		else
 		{
 			Definitions.Add("__RTMIDI_DUMMY__=1");
-		}
+		}*/
     }
 }
