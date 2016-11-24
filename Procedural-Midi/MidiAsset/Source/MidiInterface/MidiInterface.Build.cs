@@ -44,19 +44,9 @@ public class MidiInterface : ModuleRules
 			Definitions.Add("__WINDOWS_MM__=1");
 			PublicAdditionalLibraries.Add("winmm.lib");
 		}
-		/*else if (Target.Platform == UnrealTargetPlatform.IOS || Target.Platform == UnrealTargetPlatform.Mac)
-        {
-			Definitions.Add("__MACOSX_CORE__=1");
-            PublicFrameworks.AddRange(new string[] { "CoreMIDI", "CoreAudio", "CoreFoundation"});
-        }
-		else if (Target.Platform == UnrealTargetPlatform.Linux)
-        {
-			Definitions.Add("__LINUX_ALSA__=1");
-			PublicAdditionalLibraries.AddRange(new string[] { "asound", "pthread"});
-        }
 		else
 		{
 			Definitions.Add("__RTMIDI_DUMMY__=1");
-		}*/
+		}
     }
 }

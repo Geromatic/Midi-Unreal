@@ -46,7 +46,7 @@ public:
 	void CloseOutput();
 
 	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
-	void SendMessage(const TArray<uint8>& message);
+	void Send(const TArray<uint8>& message);
 
 	//  Called when a device sends a message to the computer
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface", meta=(DisplayName="OnReceiveEvent"))
