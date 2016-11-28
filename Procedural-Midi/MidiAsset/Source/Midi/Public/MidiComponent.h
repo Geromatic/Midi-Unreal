@@ -37,7 +37,7 @@ public:
 // MIDI
 
 	//Variable that can fix playback speed [recommended 1.04]
-	UPROPERTY(EditAnywhere, Category = "MIDI|Processor")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
 	float PlaySpeed;
 	
 	// loads the Midi Asset Data
