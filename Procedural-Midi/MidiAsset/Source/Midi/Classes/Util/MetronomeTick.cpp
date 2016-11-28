@@ -57,6 +57,8 @@ void MetronomeTick::setMetronomeFrequency(int meter)
 		mMetronomeFrequency = mResolution * 4;
 		break;
 	}
+	// reset progress as result of changed frequency
+	mMetronomeProgress = 0;
 }
 
 int MetronomeTick::getBeatNumber()
@@ -71,7 +73,6 @@ int MetronomeTick::getMeasure()
 
 std::string MetronomeTick::ToString()
 {
-//	FString::Printf(TEXT("Metronome: %d\t%d"), mCurrentMeasure, getBeatNumber());
 	std::stringstream ss;
 	ss << "Metronome: " << mCurrentMeasure << "\t" << getBeatNumber();
 	return ss.str();
