@@ -35,6 +35,10 @@ public:
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 	
 // MIDI
+
+	//Variable that can fix playback speed [recommended 1.04]
+	UPROPERTY(EditAnywhere, Category = "MIDI|Processor")
+	float PlaySpeed;
 	
 	// loads the Midi Asset Data
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")

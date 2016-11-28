@@ -24,7 +24,7 @@
 #include "Util/MidiProcessor.h"
 
 // Sets default values for this component's properties
-UMidiComponent::UMidiComponent()
+UMidiComponent::UMidiComponent() : PlaySpeed(1.0f)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -54,6 +54,8 @@ void UMidiComponent::BeginPlay()
 void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
+		
+	mProcessor.PlaySpeed = PlaySpeed;
 		
 	mProcessor.process();
 }

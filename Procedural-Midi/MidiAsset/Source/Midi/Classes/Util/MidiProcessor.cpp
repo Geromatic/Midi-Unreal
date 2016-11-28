@@ -8,7 +8,7 @@
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-MidiProcessor::MidiProcessor() {
+MidiProcessor::MidiProcessor(): PlaySpeed(1.0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
 
@@ -19,7 +19,7 @@ MidiProcessor::MidiProcessor() {
 
 MidiProcessor::~MidiProcessor()
 {
-	if(mMetronome)
+	if (mMetronome)
 		delete mMetronome;
 	mMetronome = NULL;
 }
@@ -117,7 +117,7 @@ void MidiProcessor::process() {
 		return;
 	}
 
-	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ);
+	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlaySpeed;
 	if (ticksElapsed < 1) {
 		return;
 	}
@@ -130,6 +130,7 @@ void MidiProcessor::process() {
 	mLastMs = now;
 	mMsElapsed += msElapsed;
 	mTicksElapsed += ticksElapsed;
+
 
 	for (int i = 0; i < mCurrEvents.Num(); i++) {
 		while (mCurrEvents[i]) {

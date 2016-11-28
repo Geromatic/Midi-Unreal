@@ -8,8 +8,8 @@
 #include "MidiEventListener.h"
 
 /**
- * 
- */
+*	Loads and plays back a MIDI file
+*/
 class MIDI_API MidiProcessor
 {
 	static const int PROCESS_RATE_MS = 8;
@@ -41,6 +41,10 @@ public:
 	void setListener(MidiEventListener* listener);
 
 	void process();
+	
+	//Variable that can fix playback speed
+	double PlaySpeed;
+
 protected:
 	void dispatch(MidiEvent * _event);
 
@@ -48,7 +52,7 @@ private:
 	TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
 	uint32 mLastMs;
 	MidiEventListener* mListener;
-
+	
 	class MidiTrackEventQueue
 	{
 	private:
