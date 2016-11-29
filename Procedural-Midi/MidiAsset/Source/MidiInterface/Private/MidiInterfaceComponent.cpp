@@ -21,6 +21,7 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 		// check if it is a channel message
 		if (type >= 0x8 && type <= 0xE) {
 			FMidiEvent Event;
+			Event.Type = (EMidiTypeEnum)type;
 			Event.Channel = channel;
 			Event.Data1 = message->at(i++);
 			// Running Status Byte
