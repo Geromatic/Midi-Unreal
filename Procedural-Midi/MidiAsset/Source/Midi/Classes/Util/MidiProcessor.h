@@ -43,7 +43,8 @@ public:
 	void process();
 	
 	//Variable that can fix playback speed
-	double PlaySpeed;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
+	float PlaySpeed = 1;
 
 protected:
 	void dispatch(MidiEvent * _event);
