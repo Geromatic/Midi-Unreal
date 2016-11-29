@@ -4,9 +4,12 @@
 
 #include "RtMidi.h"
 
+#include "MidiUtils.h"
+
 #include "GameFramework/Actor.h"
 #include "MidiInterfaceComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventReceive, FMidiEvent, Event, float, deltaTime);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventInterface, TArray<uint8>, msg, float, deltaTime);
 
 /*
@@ -31,24 +34,23 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-
 	// Opens a MIDI input device (ex. MIDI keyboard)
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	bool OpenInput(uint8 port = 0);
 	// Opens a MIDI output device (ex, Computer Speakers)
-	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	bool OpenOutput(uint8 port = 0);
 
 	// Close the MIDI input device
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	void CloseInput();
-	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	void CloseOutput();
+	void Send(const FMidiEvent& Event);
 
-	//UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
-	void Send(const TArray<uint8>& message);
+	//  Called when a device sends a Midi Event to the computer
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
+	FEventReceive OnReceiveEvent;
 
-	//  Called when a device sends a message to the computer
-	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface", meta=(DisplayName="OnReceiveEvent"))
+	// Obsolete. Use OnReceiveEvent
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface", meta = (DeprecatedEvent, DeprecationMessage = "This event is deprecated, please use OnReceiveEvent instead."))
 	FEventInterface OnReceive;
 };

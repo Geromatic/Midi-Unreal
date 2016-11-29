@@ -19,14 +19,14 @@ float UMidiUtils::DefaultNoteToFrequency(TEnumAsByte<ENoteEnum> note) {
 	return NoteToFrequency((uint8)note + 60);
 }
 
-float UMidiUtils::NoteToFrequency(int32 note) {
+float UMidiUtils::NoteToFrequency(uint8 note) {
 	//	Hertz = 440.0 * pow(2.0, (midi note - 69) / 12);
 	// Diatonic Scale
 	float Frequency = 440.0 * FMath::Pow(2.0, (note - 69) / 12.0);
 	return Frequency;
 }
 
-int32 UMidiUtils::FrequencyToNote(float Frequency) {
+uint8 UMidiUtils::FrequencyToNote(float Frequency) {
 	// midi note = log(Hertz/440.0)/log(2) * 12 + 69;
 	int32 MidiNote = 69 + 12 * FMath::Log2(Frequency / 440.0);
 	return MidiNote;
@@ -54,4 +54,8 @@ int32 UMidiUtils::FrequencyToOctave(float Frequency) {
 	// octave = log(Hertz/440.0)/log(2);
 	int32 Octave = FMath::Log2(Frequency / 440.0);
 	return Octave;
+}
+
+ENoteEnum UMidiUtils::NoteToChord(uint8 note) {
+	return (ENoteEnum)(note % 12);
 }

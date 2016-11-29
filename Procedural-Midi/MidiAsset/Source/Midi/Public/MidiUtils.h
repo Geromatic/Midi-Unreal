@@ -1,7 +1,6 @@
 // Copyright -> Scott Bishel
 
 #pragma once
-
 #include "MidiUtils.generated.h"
 
 // Middle Key Notes
@@ -22,6 +21,43 @@ enum  ENoteEnum
 	NE_B 	UMETA(DisplayName = "B")
 };
 
+UENUM(BlueprintType)
+enum class EMidiTypeEnum : uint8
+{
+	MTE_NOTE = 9				UMETA(DisplayName = "NOTE"),
+	MTE_NOTE_AFTERTOUCH 		UMETA(DisplayName = "NOTE AFTERTOUCH"),
+	MTE_CONTROLLER				UMETA(DisplayName = "CONTROLLER"),
+	MTE_PROGRAM_CHANGE 			UMETA(DisplayName = "PROGRAM CHANGE"),
+	MTE_CHANNEL_AFTERTOUCH 		UMETA(DisplayName = "CHANNEL AFTERTOUCH"),
+	MTE_PITCH_BEND 				UMETA(DisplayName = "PITCH BEND")
+};
+
+USTRUCT(BlueprintType)
+struct FMidiEvent
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EMidiTypeEnum Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	uint8 Channel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	uint8 Data1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	uint8 Data2;
+
+	//Constructor
+	FMidiEvent()
+	{
+		Channel = 0;
+		Data1 = 0;
+		Data2 = 0;
+	}
+};
+
 /**
  * MIDI Frequency Conversion Utility
  */
@@ -38,10 +74,9 @@ public:
 
 	// Gets the frequency of a note
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
-	static float NoteToFrequency(int32 note);
-	// Gets the note of a frequency
+	static float NoteToFrequency(uint8 note);
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
-	static int32 FrequencyToNote(float Frequency);
+	static uint8 FrequencyToNote(float Frequency);
 
 	static float SemitoneToFrequency(int32 semitone);
 	static int32 FrequencyToSemitone(float Frequency);
@@ -49,4 +84,8 @@ public:
 	// Number of cents from A4
 	static int32 FrequencyToCent(float Frequency);
 	static int32 FrequencyToOctave(float Frequency);
+
+	// Returns the visual representation of a note
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
+	static ENoteEnum NoteToChord(uint8 note);
 };

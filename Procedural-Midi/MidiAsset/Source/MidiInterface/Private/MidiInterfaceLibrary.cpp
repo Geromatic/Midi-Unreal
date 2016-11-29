@@ -37,7 +37,7 @@ bool UMidiInterface::OpenMidiInput(uint8 port)
 	midiIn.setCallback(&midiMessegeCallback, &midiOut);
 
 	// Don't ignore sysex, timing, or active sensing messages.
-	midiIn.ignoreTypes(false, false, false);
+//	midiIn.ignoreTypes(false, false, false);
 
 	return true;
 }
@@ -76,6 +76,18 @@ bool UMidiInterface::isOutputOpen()
 {
 	return midiOut.isPortOpen();
 }
+
+void UMidiInterface::SendMidiEvent(const FMidiEvent& Event)
+{
+	std::vector<uint8> msg;
+	uint8 status = ((uint8)Event.Type << 4) | Event.Channel;
+	msg.push_back(status);
+	msg.push_back(Event.Data1);
+	msg.push_back(Event.Data2);
+	midiOut.sendMessage(&msg);
+}
+
+// Obsolete
 
 void UMidiInterface::SendMidiMessage(const TArray<uint8>& message)
 {

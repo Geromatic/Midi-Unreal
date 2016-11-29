@@ -7,12 +7,16 @@
 #include "Util/MetronomeTick.h"
 #include "Util/MidiProcessor.h"
 
+#include "MidiUtils.h"
+
 #include "Components/ActorComponent.h"
 #include "MidiComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStart, bool, beginning);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStop, bool, finished);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FEventMidi, int32, track,int32, note,int32, velocity,int32, elapsed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventMidiEvent, struct FMidiEvent, Event);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FEventMidi, int32, track, int32, note, int32, velocity, int32, elapsed);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventDevice, TArray<uint8>, msg, int32, elapsed);
 
 /*
@@ -37,8 +41,8 @@ public:
 // MIDI
 
 	//Variable that can fix playback speed [recommended 1.04]
-	UPROPERTY(EditAnywhere, Category = "MIDI|Processor")
-	float PlaySpeed;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
+	float PlaySpeed = 1;
 	
 	// loads the Midi Asset Data
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
@@ -85,13 +89,15 @@ protected:
 	FEventStart OnStart;
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
 	FEventStop OnStop;
-	// Called when a Note On/Off is called
+	// Called when a Midi Event is received
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
-	FEventMidi OnEvent;
-
-	//called when any ChannelEvent MIDI Message is called
-	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
-	FEventDevice OnSend;
-
+	FEventMidiEvent OnMidiEvent;
 	
+	// Obsolete. Use OnMidiEvent
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor", meta = (DeprecatedEvent, DeprecationMessage = "This event is deprecated, please use OnMidiEvent instead."))
+		FEventMidi OnEvent;
+
+	// Obsolete. Use OnMidiEvent
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor", meta = (DeprecatedEvent, DeprecationMessage = "This event is deprecated, please use OnMidiEvent instead."))
+		FEventDevice OnSend;
 };

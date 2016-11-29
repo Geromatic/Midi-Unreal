@@ -8,16 +8,40 @@
 
 void mycallback(double deltatime, std::vector< unsigned char > *message, void *userData)
 {
+	UMidiInterfaceComponent* component = (UMidiInterfaceComponent*)userData;
 	if (message == NULL)
 		return;
 
-	TArray<uint8> data;
 	unsigned int nBytes = message->size();
+	for (unsigned int i = 0; i < nBytes; ) {
+		int id = message->at(i++);
+		int type = id >> 4;
+		int channel = id & 0x0F;
+
+		// check if it is a channel message
+		if (type >= 0x8 && type <= 0xE) {
+			FMidiEvent Event;
+			Event.Channel = channel;
+			Event.Data1 = message->at(i++);
+			// Running Status Byte
+			if (type == 0x8) {
+				Event.Type = (EMidiTypeEnum)0x9;
+				Event.Data2 = 0;
+			}
+			// check for program change or CHANNEL_AFTERTOUCH
+			else if (!(type == 0xC || type == 0xD)) {
+				Event.Data2 = message->at(i++);
+			}
+			component->OnReceiveEvent.Broadcast(Event, deltatime);
+		}
+	}
+
+	// Obsolete
+
+	TArray<uint8> data;
 	for (unsigned int i = 0; i < nBytes; i++) {
 		data.Add(message->at(i));
 	}
-
-	UMidiInterfaceComponent* component = (UMidiInterfaceComponent*)userData;
 	component->OnReceive.Broadcast(data, deltatime);
 }
 
@@ -63,7 +87,7 @@ bool UMidiInterfaceComponent::OpenInput(uint8 port)
 	midiIn.setCallback(&mycallback, this);
 
 	// Don't ignore sysex, timing, or active sensing messages.
-	midiIn.ignoreTypes(false, false, false);
+//	midiIn.ignoreTypes(false, false, false);
 
 	return true;
 }
@@ -97,12 +121,12 @@ void UMidiInterfaceComponent::CloseOutput()
 	midiOut.closePort();
 }
 
-void UMidiInterfaceComponent::Send(const TArray<uint8>& message)
+void UMidiInterfaceComponent::Send(const FMidiEvent& Event)
 {
-	std::vector<unsigned char> data;
-	for (int i = 0; i < message.Num(); i++) {
-		data.push_back(message[i]);
-	}
-
-	midiOut.sendMessage(&data);
+	std::vector<uint8> msg;
+	uint8 status = ((uint8)Event.Type << 4) | Event.Channel;
+	msg.push_back(status);
+	msg.push_back(Event.Data1);
+	msg.push_back(Event.Data2);
+	midiOut.sendMessage(&msg);
 }

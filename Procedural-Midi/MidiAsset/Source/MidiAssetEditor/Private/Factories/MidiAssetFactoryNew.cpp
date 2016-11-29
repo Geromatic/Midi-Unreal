@@ -11,8 +11,8 @@ UMidiAssetFactoryNew::UMidiAssetFactoryNew(const FObjectInitializer& ObjectIniti
 	: Super(ObjectInitializer)
 {
 	SupportedClass = UMidiAsset::StaticClass();
-	bCreateNew = true;
-	bEditAfterNew = true;
+	bCreateNew = false;
+	bEditAfterNew = false;
 }
 
 
@@ -27,5 +27,5 @@ UObject* UMidiAssetFactoryNew::FactoryCreateNew(UClass* InClass, UObject* InPare
 
 bool UMidiAssetFactoryNew::ShouldShowInNewMenu() const
 {
-	return true;
+	return false;
 }
