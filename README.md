@@ -28,18 +28,17 @@ Plugin Supports:
 - Android(All): [Packaged+Untested]
 - Linus: [TBA]
 
-### Installation \[Github Version Only / C++ Project Required\] (Blueprints made in 4.9.2)
+### Installation \[Github Version Only / C++ Project Required\]
 
 Place MidiAsset folder in your Plugins folder in youe Unreal project
-
-Place Content folder in your Unreal project
 
 ###Showcase: [Blueprint]
 
 ![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Overview.PNG)
-![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Blueprint.PNG)
+![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Preview.PNG)
+![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Detail.PNG)
+![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Info.PNG)
 ![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Library.PNG)
-![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Cue.PNG)
 
 ###Example Usage: [Beta-Untested/C++]
 ----
