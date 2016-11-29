@@ -35,7 +35,7 @@ Place MidiAsset folder in your Plugins folder in youe Unreal project
 ###Showcase: [Blueprint]
 
 ![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Overview.PNG)
-![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Preview.PNG)
+![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Preview.png)
 ![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Detail.PNG)
 ![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Info.PNG)
 ![ScreenShot](https://github.com/Geromatic/Midi-Unreal/blob/master/Feature/Midi_Screenshot_Library.PNG)
