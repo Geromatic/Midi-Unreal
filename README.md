@@ -28,7 +28,9 @@ Plugin Supports:
 - Android(All): [Packaged+Untested]
 - Linus: [TBA]
 
-### Installation \[Github Version Only / C++ Project Required\]
+### Installation \[Github Version Only / C++ Project Required\] 
+
+####<b>[Caution: careful when you have marketplace  and c++ plugins on same UE version as they may conflict with eachother]
 
 Place MidiAsset folder in your Plugins folder in youe Unreal project
 
