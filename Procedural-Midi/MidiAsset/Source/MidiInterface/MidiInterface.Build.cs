@@ -44,9 +44,5 @@ public class MidiInterface : ModuleRules
 			Definitions.Add("__WINDOWS_MM__=1");
 			PublicAdditionalLibraries.Add("winmm.lib");
 		}
-		else
-		{
-			Definitions.Add("__RTMIDI_DUMMY__=1");
-		}
     }
 }
