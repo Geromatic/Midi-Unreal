@@ -24,12 +24,36 @@ enum  ENoteEnum
 UENUM(BlueprintType)
 enum class EMidiTypeEnum : uint8
 {
-	MTE_NOTE = 9				UMETA(DisplayName = "NOTE"),
-	MTE_NOTE_AFTERTOUCH 		UMETA(DisplayName = "NOTE AFTERTOUCH"),
-	MTE_CONTROLLER				UMETA(DisplayName = "CONTROLLER"),
-	MTE_PROGRAM_CHANGE 			UMETA(DisplayName = "PROGRAM CHANGE"),
-	MTE_CHANNEL_AFTERTOUCH 		UMETA(DisplayName = "CHANNEL AFTERTOUCH"),
-	MTE_PITCH_BEND 				UMETA(DisplayName = "PITCH BEND")
+	/*
+	*	Note On/Off Event
+	*	[Data1=Note, Data2=Velocity]
+	*/
+	MTE_NOTE = 9				UMETA(DisplayName = "Note"),
+	/*
+	*	Note Aftertouch Event
+	*	[Data1=Note, Data2=Amount]
+	*/
+	MTE_NOTE_AFTERTOUCH 		UMETA(DisplayName = "Note Aftertouch"),
+	/*
+	*	Controller Event
+	*	[Data1=Type, Data2=Amount]
+	*/
+	MTE_CONTROLLER				UMETA(DisplayName = "Controller"),
+	/*
+	*	Program(Instrument) Change Event
+	*	[Data1=Number, Data2=0]
+	*/
+	MTE_PROGRAM_CHANGE 			UMETA(DisplayName = "Program Change"),
+	/*
+	*	Channel Aftertouch Event
+	*	[Data1=Amount, Data2=0]
+	*/
+	MTE_CHANNEL_AFTERTOUCH 		UMETA(DisplayName = "Channel Aftertouch"),
+	/*
+	*	Pitch Bend Event
+	*	[Data1=LowBit, Data2=HighBit]
+	*/
+	MTE_PITCH_BEND 				UMETA(DisplayName = "Pitch Bend")
 };
 
 USTRUCT(BlueprintType)
