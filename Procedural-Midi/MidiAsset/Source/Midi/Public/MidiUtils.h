@@ -37,15 +37,19 @@ struct FMidiEvent
 {
 	GENERATED_BODY()
 
+	// The Type of Event this struct represents
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI")
 	EMidiTypeEnum Type;
 
+	// The Channel that the Event is on (0-15)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI")
 	uint8 Channel;
 
+	// The first data value (ex. Note)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI")
 	uint8 Data1;
 
+	// The second data value (ex, Velocity)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI")
 	uint8 Data2;
 
@@ -75,6 +79,7 @@ public:
 	// Gets the frequency of a note
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static float NoteToFrequency(uint8 note);
+	// Gets a note from a frequency
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static uint8 FrequencyToNote(float Frequency);
 
