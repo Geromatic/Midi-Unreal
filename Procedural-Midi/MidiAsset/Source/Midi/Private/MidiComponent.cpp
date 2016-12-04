@@ -29,7 +29,7 @@ UMidiComponent::UMidiComponent() : PlaySpeed(1.0f)
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	PrimaryComponentTick.TickInterval = 0.01f;
+	PrimaryComponentTick.TickInterval = 0.000f;
 	// ...
 	mProcessor.setListener(this);
 	mMidiFile = NULL;
@@ -55,7 +55,8 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 		
-	mProcessor.PlaySpeed = PlaySpeed;
+	if(mProcessor.PlaySpeed != PlaySpeed)
+		mProcessor.PlaySpeed = PlaySpeed;
 		
 	mProcessor.process();
 }

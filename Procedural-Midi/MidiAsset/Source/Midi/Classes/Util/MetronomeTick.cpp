@@ -5,7 +5,7 @@
 
 
 MetronomeTick::MetronomeTick(TimeSignature* sig, int resolution) 
-	: MidiEvent(0, 0)
+	: MidiEvent(0, 0), mMetronomeProgress(0.0)
 {
 	mResolution = resolution;
 
@@ -57,8 +57,6 @@ void MetronomeTick::setMetronomeFrequency(int meter)
 		mMetronomeFrequency = mResolution * 4;
 		break;
 	}
-	// reset progress as result of changed frequency
-	mMetronomeProgress = 0;
 }
 
 int MetronomeTick::getBeatNumber()

@@ -17,7 +17,7 @@ class MIDI_API MidiProcessor
 	MidiFile* mMidiFile;
 	bool mRunning;
 	double mTicksElapsed;
-	long mMsElapsed;
+	double mMsElapsed;
 
 	int mMPQN;
 	int mPPQ;

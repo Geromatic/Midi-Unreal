@@ -112,12 +112,14 @@ void MidiProcessor::process() {
 		return;
 
 	uint32 now = FPlatformTime::Cycles();
-	long msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
-	if (msElapsed < PROCESS_RATE_MS) {
-		return;
-	}
+	double msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
+	// used for performance
+	//if (msElapsed < (double)PROCESS_RATE_MS) {
+	//	return;
+	//}
 
-	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlaySpeed;
+	//double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ);
+	double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * PlaySpeed;
 	if (ticksElapsed < 1) {
 		return;
 	}
