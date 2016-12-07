@@ -37,7 +37,4 @@ public:
 	// Sends a Midi Event to a Device
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static void SendMidiEvent(const FMidiEvent& Event);
-
-	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface", meta = (DeprecatedFunction, DeprecationMessage = "This function is deprecated, please use SendMidiEvent instead."))
-	static void SendMidiMessage(const TArray<uint8>& message);
 };

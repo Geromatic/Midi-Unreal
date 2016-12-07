@@ -54,10 +54,10 @@ void UMidiComponent::BeginPlay()
 void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
-		
+
 	if(mProcessor.PlaySpeed != PlaySpeed)
 		mProcessor.PlaySpeed = PlaySpeed;
-		
+	
 	mProcessor.process();
 }
 
@@ -112,33 +112,6 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 			_midiEvent.Data2 = msg->getData2();
 		}
 		OnMidiEvent.Broadcast(_midiEvent);
-	}
-
-	// Obsolete
-	if (_event->getType() == ChannelEvent::NOTE_ON) {
-		NoteOn* note = static_cast<NoteOn*>(_event);
-		OnEvent.Broadcast(note->getChannel(), note->getNoteValue(), note->getVelocity(), _event->getTick());
-	}
-
-	else if (_event->getType() == ChannelEvent::NOTE_OFF) {
-		NoteOff* note = static_cast<NoteOff*>(_event);
-		OnEvent.Broadcast(note->getChannel(), note->getNoteValue(), 0, _event->getTick());
-	}
-
-	// MIDI Interface data
-	if (_event->getType() >= ChannelEvent::NOTE_OFF && _event->getType() <= ChannelEvent::PITCH_BEND) {
-		TArray<uint8> data;
-		ShortMessage* shortMsg = static_cast<ShortMessage*>(_event);
-		data.Add(shortMsg->getStatus());
-		data.Add(shortMsg->getData1());
-		data.Add(shortMsg->getData2());
-		OnSend.Broadcast(data, _event->getTick());
-	}
-	// System Exclusive Event
-	else if (_event->getType() == 0xF0 || _event->getType() == 0xF7) {
-	}
-	else {
-
 	}
 }
 

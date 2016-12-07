@@ -86,15 +86,3 @@ void UMidiInterface::SendMidiEvent(const FMidiEvent& Event)
 	msg.push_back(Event.Data2);
 	midiOut.sendMessage(&msg);
 }
-
-// Obsolete
-
-void UMidiInterface::SendMidiMessage(const TArray<uint8>& message)
-{
-	std::vector<unsigned char> data;
-	for (int i = 0; i < message.Num(); i++) {
-		data.push_back(message[i]);
-	}
-
-	midiOut.sendMessage(&data);
-}

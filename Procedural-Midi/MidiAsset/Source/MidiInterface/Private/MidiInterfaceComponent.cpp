@@ -36,14 +36,6 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 			component->OnReceiveEvent.Broadcast(Event, deltatime);
 		}
 	}
-
-	// Obsolete
-
-	TArray<uint8> data;
-	for (unsigned int i = 0; i < nBytes; i++) {
-		data.Add(message->at(i));
-	}
-	component->OnReceive.Broadcast(data, deltatime);
 }
 
 // Sets default values

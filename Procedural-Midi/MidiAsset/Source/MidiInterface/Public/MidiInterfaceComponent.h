@@ -10,7 +10,6 @@
 #include "MidiInterfaceComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventReceive, FMidiEvent, Event, float, deltaTime);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventInterface, TArray<uint8>, msg, float, deltaTime);
 
 /*
 * A component that lets you open and receive data from a MIDI device
@@ -49,8 +48,4 @@ public:
 	//  Called when a device sends a Midi Event to the computer
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
 	FEventReceive OnReceiveEvent;
-
-	// Obsolete. Use OnReceiveEvent
-	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface", meta = (DeprecatedEvent, DeprecationMessage = "This event is deprecated, please use OnReceiveEvent instead."))
-	FEventInterface OnReceive;
 };
