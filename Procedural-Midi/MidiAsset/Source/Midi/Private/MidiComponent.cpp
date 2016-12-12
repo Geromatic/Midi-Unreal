@@ -95,11 +95,11 @@ void UMidiComponent::LoadFile(FString path) {
 
 void UMidiComponent::onEvent(MidiEvent* _event) {
 	if (_event->getType() >= ChannelEvent::NOTE_OFF && _event->getType() <= ChannelEvent::PITCH_BEND) {
-		ChannelEvent* msg = static_cast<ChannelEvent*>(_event);
+		ChannelEvent* channelEvent = static_cast<ChannelEvent*>(_event);
 		FMidiEvent _midiEvent;
 
-		_midiEvent.Channel = msg->getChannel() & 0x0F;
-		_midiEvent.Data1 = msg->getValue1() & 0xFF;
+		_midiEvent.Channel = channelEvent->getChannel() & 0x0F;
+		_midiEvent.Data1 = channelEvent->getValue1() & 0xFF;
 		
 		// Running Status Event [Improved Midi Performance]
 		if (_event->getType() == ChannelEvent::NOTE_OFF) {
@@ -108,7 +108,7 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 		}
 		else {
 			_midiEvent.Type = static_cast<EMidiTypeEnum>(_event->getType());
-			_midiEvent.Data2 = msg->getValue2() & 0xFF;
+			_midiEvent.Data2 = channelEvent->getValue2() & 0xFF;
 		}
 		OnMidiEvent.Broadcast(_midiEvent);
 	}
