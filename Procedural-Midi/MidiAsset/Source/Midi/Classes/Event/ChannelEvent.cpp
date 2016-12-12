@@ -16,8 +16,6 @@
 
 #include "Meta/MetaEvent.h"
 
-TMap<int, int> ChannelEvent::mOrderMap;
-
 ChannelEvent::ChannelEvent(long tick, int type, int channel, int param1, int param2)
 	: MidiEvent(tick, 0)
 {
@@ -50,6 +48,13 @@ void ChannelEvent::setChannel(int c) {
 }
 int ChannelEvent::getChannel() {
 	return mChannel;
+}
+
+int ChannelEvent::getValue1() {
+	return mValue1;
+}
+int ChannelEvent::getValue2() {
+	return mValue2;
 }
 
 int ChannelEvent::getEventSize() {

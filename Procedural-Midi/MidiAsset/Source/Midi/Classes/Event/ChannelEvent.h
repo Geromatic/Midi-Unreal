@@ -26,6 +26,9 @@ protected:
 public:
 	void setChannel(int c);
 	int getChannel();
+	
+	int getValue1();
+	int getValue2();
 
 protected:
 	int getEventSize();
