@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #include "MidiPrivatePCH.h"
 #include "Tempo.h"
@@ -43,7 +44,8 @@ int Tempo::getEventSize() {
 void Tempo::writeToFile(FMemoryWriter & output) {
 	MetaEvent::writeToFile(output);
 
-	output.Serialize((char*)3, 1);
+	int size = getEventSize() - 3;
+	output.Serialize(&size, 1);
 	output.Serialize(MidiUtil::intToBytes(mMPQN, 3), 3);
 }
 

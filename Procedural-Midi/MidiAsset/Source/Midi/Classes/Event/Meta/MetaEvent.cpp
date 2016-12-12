@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #include "MidiPrivatePCH.h"
 #include "MetaEvent.h"
@@ -41,7 +42,9 @@ void MetaEvent::writeToFile(FMemoryWriter & output, bool writeType) {
 
 void MetaEvent::writeToFile(FMemoryWriter & output) {
 	MidiEvent::writeToFile(output, true);
-	output.Serialize((unsigned char*)0xFF, 1);
+	
+	int status = 0XFF;
+	output.Serialize(&status, 1);
 	output.Serialize(&mType, 1);
 }
 

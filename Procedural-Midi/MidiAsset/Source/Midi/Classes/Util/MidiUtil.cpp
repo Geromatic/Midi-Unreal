@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #include "MidiPrivatePCH.h"
 #include "MidiUtil.h"
@@ -49,9 +50,9 @@ int MidiUtil::bytesToInt(char buff[], int off, int len) {
 }
 
 char * MidiUtil::intToBytes(int val, int byteCount) {
-	static char buffer[32];
+	static char buffer[4] = {0};
 
-	for (int i = 0; i < 32; i++)
+	for (int i = 0; i < 4; i++)
 		buffer[i] = 0;
 
 	for (int i = 0; i < byteCount; i++) {
@@ -96,7 +97,7 @@ string MidiUtil::byteToHex(char b) {
 
 	int high = (b & 0xF0) >> 4;
 	int low = (b & 0x0F);
-//	FString::Printf(TEXT("%d%d"), HEX[high], HEX[low]).t;
+
 	stringstream ss;
 	ss << HEX[high] << HEX[low];
 	return ss.str();
@@ -104,8 +105,6 @@ string MidiUtil::byteToHex(char b) {
 string MidiUtil::bytesToHex(char b[]) {
 	stringstream ss;
 	for (int i = 0; i < sizeof(&b); i++) {
-//		FString::Printf(TEXT("%s "), byteToHex(b[i]));
-
 		ss << byteToHex(b[i]) << " ";
 	}
 	return ss.str();

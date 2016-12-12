@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #pragma once
 
@@ -12,12 +13,12 @@ using namespace std;
 class MIDI_API VariableLengthInt
 {
 	int mValue;
-	char * mBytes;
+	char mBytes[4];
 	int mSizeInBytes;
 
 public:
 	VariableLengthInt(int value);
-	VariableLengthInt(FBufferReader& input);
+	VariableLengthInt(FBufferReader & input);
 	~VariableLengthInt();
 
 	void setValue(int value);

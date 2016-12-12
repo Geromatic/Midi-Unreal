@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #include "MidiPrivatePCH.h"
 #include "TimeSignature.h"
@@ -30,7 +31,7 @@ int TimeSignature::getDenominatorValue() {
 }
 int TimeSignature::getRealDenominator() {
 
-	return (int)FMath::Pow(2, mDenominator);
+	return (int)pow(2, mDenominator);
 }
 int TimeSignature::getMeter() {
 	return mMeter;
@@ -46,7 +47,8 @@ int TimeSignature::getEventSize() {
 void TimeSignature::writeToFile(FMemoryWriter & output) {
 	MetaEvent::writeToFile(output);
 
-	output.Serialize((char*)4, 1);
+	int size = getEventSize() - 3;
+	output.Serialize(&size, 1);
 	output.Serialize(&mNumerator, 1);
 	output.Serialize(&mDenominator, 1);
 	output.Serialize(&mMeter, 1);
@@ -63,7 +65,7 @@ TimeSignature * TimeSignature::parseTimeSignature(long tick, long delta, FBuffer
 	input.Serialize(&met, 1);
 	input.Serialize(&fps, 1);
 
-	den = (int)FMath::Pow(2, den);
+	den = (int)pow(2, den);
 
 	return new TimeSignature(tick, delta, num, den, met, fps);
 }
@@ -102,8 +104,6 @@ int TimeSignature::CompareTo(MidiEvent *other) {
 }
 
 string TimeSignature::ToString() {
-//	FString::Printf(TEXT("%s %d/%d"), MetaEvent::ToString(), mNumerator, getRealDenominator());
-
 	std::stringstream ss;
 	ss << MetaEvent::ToString() << " " << mNumerator << "/" << getRealDenominator();
 	return ss.str();

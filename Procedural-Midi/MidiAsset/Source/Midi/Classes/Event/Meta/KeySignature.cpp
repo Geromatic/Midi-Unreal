@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #include "MidiPrivatePCH.h"
 #include "KeySignature.h"
@@ -36,7 +37,8 @@ int KeySignature::getEventSize() {
 void KeySignature::writeToFile(FMemoryWriter & output) {
 	MetaEvent::writeToFile(output);
 
-	output.Serialize((char*)2, 1);
+	int size = getEventSize() - 3;
+	output.Serialize(&size, 1);
 	output.Serialize(&mKey, 1);
 	output.Serialize(&mScale, 1);
 }

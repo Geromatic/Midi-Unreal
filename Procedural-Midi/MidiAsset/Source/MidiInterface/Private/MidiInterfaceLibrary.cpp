@@ -83,6 +83,9 @@ void UMidiInterface::SendMidiEvent(const FMidiEvent& Event)
 	uint8 status = ((uint8)Event.Type << 4) | Event.Channel;
 	msg.push_back(status);
 	msg.push_back(Event.Data1);
-	msg.push_back(Event.Data2);
+	// check for program change or CHANNEL_AFTERTOUCH
+	if ((uint8)Event.Type != 0xC && (uint8)Event.Type != 0xD) {
+		msg.push_back(Event.Data2);
+	}
 	midiOut.sendMessage(&msg);
 }

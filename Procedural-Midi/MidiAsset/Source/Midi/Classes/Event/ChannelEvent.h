@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #pragma once
 
@@ -7,11 +8,10 @@
 using namespace std;
 
 /**
- * 
+ * Abstract Channel Event
  */
 class MIDI_API ChannelEvent : public MidiEvent
 {
-	static TMap<int, int> mOrderMap;
 
 protected:
 	int mChannel;
@@ -21,7 +21,8 @@ protected:
 protected:
 	ChannelEvent(long tick, int type, int channel, int param1, int param2);
 	ChannelEvent(long tick, long delta, int type, int channel, int param1, int param2);
-
+	virtual ~ChannelEvent() = 0 {}
+	
 public:
 	void setChannel(int c);
 	int getChannel();
@@ -36,8 +37,6 @@ public:
 	void writeToFile(FMemoryWriter & output, bool writeType);
 
 	static ChannelEvent * parseChannelEvent(long tick, long delta, int type, int channel, FBufferReader & input);
-
-	static void buildOrderMap();
 public:
 	static const int NOTE_OFF = 0x8;
 	static const int NOTE_ON = 0x9;

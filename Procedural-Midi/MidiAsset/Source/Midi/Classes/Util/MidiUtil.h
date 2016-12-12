@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #pragma once
 
@@ -25,7 +26,7 @@ public:
 	static char* extractBytes(char buffer[], int off, int len);
 
 private:
-	static const char HEX[];
+	static const char HEX[]; // '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'd', 'E', 'F'
 
 public:
 	static std::string byteToHex(char b);

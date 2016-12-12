@@ -17,8 +17,6 @@
 #include "Event/ProgramChange.h"
 #include "Event/SystemExclusiveEvent.h"
 
-#include "Interface/ShortMessage.h"
-
 #include "MidiAsset.h"
 
 #include "Util/MidiProcessor.h"
@@ -97,10 +95,10 @@ void UMidiComponent::LoadFile(FString path) {
 
 void UMidiComponent::onEvent(MidiEvent* _event) {
 	if (_event->getType() >= ChannelEvent::NOTE_OFF && _event->getType() <= ChannelEvent::PITCH_BEND) {
-		ShortMessage* msg = static_cast<ShortMessage*>(_event);
+		ChannelEvent* channelEvent = static_cast<ChannelEvent*>(_event);
 		FMidiEvent _midiEvent;
-		_midiEvent.Channel = msg->getChannel();
-		_midiEvent.Data1 = msg->getData1();
+		_midiEvent.Channel = channelEvent->getChannel();
+		_midiEvent.Data1 = channelEvent->getValue1();
 		
 		// Running Status Event [Improved Midi Performance]
 		if (_event->getType() == ChannelEvent::NOTE_OFF) {
@@ -109,7 +107,7 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 		}
 		else {
 			_midiEvent.Type = static_cast<EMidiTypeEnum>(_event->getType());
-			_midiEvent.Data2 = msg->getData2();
+			_midiEvent.Data2 = channelEvent->getValue2();
 		}
 		OnMidiEvent.Broadcast(_midiEvent);
 	}

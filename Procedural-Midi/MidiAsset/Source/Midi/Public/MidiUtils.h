@@ -62,19 +62,19 @@ struct FMidiEvent
 	GENERATED_BODY()
 
 	// The Type of Event this struct represents
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	EMidiTypeEnum Type;
 
 	// The Channel that the Event is on (0-15)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	uint8 Channel;
 
 	// The first data value (ex. Note)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	uint8 Data1;
 
 	// The second data value (ex, Velocity)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	uint8 Data2;
 
 	//Constructor

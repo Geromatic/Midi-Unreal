@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #include "MidiPrivatePCH.h"
 #include "ChannelEvent.h"
@@ -66,12 +67,8 @@ int ChannelEvent::CompareTo(MidiEvent *other) {
 	ChannelEvent * o = static_cast<ChannelEvent*>(other);
 	if (mType != o->getType()) {
 
-		if (mOrderMap.Num() == 0) {
-			buildOrderMap();
-		}
-
-		int order1 = mOrderMap[mType];
-		int order2 = mOrderMap[o->getType()];
+		int order1 = mType - PROGRAM_CHANGE;
+		int order2 = o->getType() - PROGRAM_CHANGE;
 
 		return order1 < order2 ? -1 : 1;
 	}
@@ -138,18 +135,7 @@ ChannelEvent * ChannelEvent::parseChannelEvent(long tick, long delta, int type, 
 		return new ChannelAftertouch(tick, delta, channel, val1);
 	case PITCH_BEND:
 		return new PitchBend(tick, delta, channel, val1, val2);
-	default:
-		return new ChannelEvent(tick, delta, type, channel, val1, val2);
 	}
-}
-
-void ChannelEvent::buildOrderMap() {
-
-	mOrderMap[(int)PROGRAM_CHANGE] = 0;
-	mOrderMap[(int)CONTROLLER] = 1;
-	mOrderMap[(int)NOTE_ON] = 2;
-	mOrderMap[(int)NOTE_OFF] = 3;
-	mOrderMap[(int)NOTE_AFTERTOUCH] = 4;
-	mOrderMap[(int)CHANNEL_AFTERTOUCH] = 5;
-	mOrderMap[(int)PITCH_BEND] = 6;
+	
+	return NULL;
 }

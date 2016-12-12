@@ -30,7 +30,7 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 				Event.Data2 = 0;
 			}
 			// check for program change or CHANNEL_AFTERTOUCH
-			else if (!(type == 0xC || type == 0xD)) {
+			else if ((uint8)Event.Type != 0xC && (uint8)Event.Type != 0xD) {
 				Event.Data2 = message->at(i++);
 			}
 			component->OnReceiveEvent.Broadcast(Event, deltatime);
@@ -120,6 +120,9 @@ void UMidiInterfaceComponent::Send(const FMidiEvent& Event)
 	uint8 status = ((uint8)Event.Type << 4) | Event.Channel;
 	msg.push_back(status);
 	msg.push_back(Event.Data1);
-	msg.push_back(Event.Data2);
+	// check for program change or CHANNEL_AFTERTOUCH
+	if ((uint8)Event.Type != 0xC && (uint8)Event.Type != 0xD) {
+		msg.push_back(Event.Data2);
+	}
 	midiOut.sendMessage(&msg);
 }

@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #include "MidiPrivatePCH.h"
 #include "SmpteOffset.h"
@@ -63,7 +64,8 @@ int SmpteOffset::getEventSize() {
 void SmpteOffset::writeToFile(FMemoryWriter & output) {
 	MetaEvent::writeToFile(output);
 
-	output.Serialize((char*)5, 1);
+	int size = getEventSize() - 3;
+	output.Serialize(&size, 1);
 	output.Serialize(&mHours, 1);
 	output.Serialize(&mMinutes, 1);
 	output.Serialize(&mSeconds, 1);

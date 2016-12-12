@@ -16,6 +16,6 @@ class MIDIASSET_API UMidiAsset
 
 public:
 	/** Holds the stored data. */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="MIDI|Asset")
+	UPROPERTY(EditAnywhere, Category="MIDI|Asset")
 	TArray<uint8> Data;
 };

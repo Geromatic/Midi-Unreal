@@ -1,4 +1,5 @@
-// Copyright -> Scott Bishel
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
 
 #include "MidiPrivatePCH.h"
 #include "VariableLengthInt.h"
@@ -6,23 +7,17 @@
 #include "MidiUtil.h"
 #include <sstream>
 
-VariableLengthInt::VariableLengthInt(int value) : mBytes(NULL) {
+VariableLengthInt::VariableLengthInt(int value) {
 	setValue(value);
 }
 
-VariableLengthInt::VariableLengthInt(FBufferReader & input) : mBytes(NULL) {
+VariableLengthInt::VariableLengthInt(FBufferReader & input) {
 
 	parseBytes(input);
 }
 
 VariableLengthInt::~VariableLengthInt()
 {
-	if (mBytes != NULL)
-	{
-		delete[] mBytes;
-	}
-
-	mBytes = NULL;
 }
 
 void VariableLengthInt::setValue(int value) {
@@ -40,7 +35,9 @@ char * VariableLengthInt::getBytes() {
 	return mBytes;
 }
 
-void VariableLengthInt::parseBytes(FBufferReader & input){
+void VariableLengthInt::parseBytes(FBufferReader & input) {
+	memset(mBytes, 0, 4);
+	
 	int ints[4] = { 0 };
 
 	mSizeInBytes = 0;
@@ -65,12 +62,7 @@ void VariableLengthInt::parseBytes(FBufferReader & input){
 	for (int i = 1; i < mSizeInBytes; i++) {
 		shift += 7;
 	}
-	if (mBytes != NULL)
-	{
-		delete[] mBytes;
-		mBytes = NULL;
-	}
-	mBytes = new char[mSizeInBytes];
+
 	for (int i = 0; i < mSizeInBytes; i++) {
 		mBytes[i] = (char)ints[i];
 
@@ -80,15 +72,9 @@ void VariableLengthInt::parseBytes(FBufferReader & input){
 }
 
 void VariableLengthInt::buildBytes() {
+	memset(mBytes, 0, 4);
 
 	if (mValue == 0) {
-		if (mBytes != NULL)
-		{
-			delete[] mBytes;
-			mBytes = NULL;
-		}
-		mBytes = new char[1];
-		mBytes[0] = 0x00;
 		mSizeInBytes = 1;
 		return;
 	}
@@ -108,21 +94,13 @@ void VariableLengthInt::buildBytes() {
 		vals[i] |= 0x80;
 	}
 
-	if (mBytes != NULL)
-	{
-		delete[] mBytes;
-		mBytes = NULL;
-	}
-	mBytes = new char[mSizeInBytes];
 	for (int i = 0; i < mSizeInBytes; i++) {
 		mBytes[i] = (char)vals[mSizeInBytes - i - 1];
 	}
 }
 
 string VariableLengthInt::ToString() {
-//	FString::Printf(TEXT("%s (%d)"), MidiUtil::bytesToHex(mBytes), mValue);
-
-	std::stringstream ss;
+	stringstream ss;
 	ss << MidiUtil::bytesToHex(mBytes) << " (" << mValue << ")";
 	return ss.str();
 }
