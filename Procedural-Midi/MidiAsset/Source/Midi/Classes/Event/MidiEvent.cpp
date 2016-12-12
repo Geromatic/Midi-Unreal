@@ -126,21 +126,20 @@ MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
 
 bool MidiEvent::verifyIdentifier(int id) {
 
+	sId = id;
+
 	int type = id >> 4;
 	int channel = id & 0x0F;
 
 	if (type >= 0x8 && type <= 0xE) {
-		sId = id;
 		sType = type;
 		sChannel = channel;
 	}
 	else if (id == 0xFF) {
-		sId = id;
 		sType = -1;
 		sChannel = -1;
 	}
 	else if (type == 0xF) {
-		sId = id;
 		sType = type;
 		sChannel = -1;
 	}

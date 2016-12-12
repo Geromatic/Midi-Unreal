@@ -44,7 +44,7 @@ enum class EMidiTypeEnum : uint8
 	*	[Data1=Number, Data2=0]
 	*/
 	MTE_PROGRAM_CHANGE 			UMETA(DisplayName = "Program Change"),
-:	/*
+	/*
 	*	Channel Aftertouch Event
 	*	[Data1=Amount, Data2=0]
 	*/
