@@ -103,11 +103,11 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 		
 		// Running Status Event [Improved Midi Performance]
 		if (_event->getType() == ChannelEvent::NOTE_OFF) {
-			_midiEvent.Type = static_cast<EMidiTypeEnum>(ChannelEvent::NOTE_ON);
+			_midiEvent.Type = static_cast<EMidiTypeEnum>(ChannelEvent::NOTE_ON & 0X0F);
 			_midiEvent.Data2 = 0 & 0XFF;
 		}
 		else {
-			_midiEvent.Type = static_cast<EMidiTypeEnum>(_event->getType());
+			_midiEvent.Type = static_cast<EMidiTypeEnum>(_event->getType() & 0X0F);
 			_midiEvent.Data2 = channelEvent->getValue2() & 0xFF;
 		}
 		OnMidiEvent.Broadcast(_midiEvent);

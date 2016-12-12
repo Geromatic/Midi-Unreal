@@ -21,17 +21,17 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 		// check if it is a channel message
 		if (type >= 0x8 && type <= 0xE) {
 			FMidiEvent Event;
-			Event.Type = (EMidiTypeEnum)type;
-			Event.Channel = channel;
-			Event.Data1 = message->at(i++);
+			Event.Type = (EMidiTypeEnum)(type & 0X0F);
+			Event.Channel = channel & 0X0F;
+			Event.Data1 = message->at(i++) & 0XFF;
 			// Running Status Byte
 			if (type == 0x8) {
-				Event.Type = (EMidiTypeEnum)0x9;
-				Event.Data2 = 0;
+				Event.Type = (EMidiTypeEnum)(0x9 & 0X0F);
+				Event.Data2 = 0 & 0XFF;
 			}
 			// check for program change or CHANNEL_AFTERTOUCH
-			else if ((uint8)Event.Type != 0xC && (uint8)Event.Type != 0xD) {
-				Event.Data2 = message->at(i++);
+			else if (type != 0xC && type != 0xD) {
+				Event.Data2 = message->at(i++) & 0XFF;
 			}
 			component->OnReceiveEvent.Broadcast(Event, deltatime);
 		}
