@@ -35,6 +35,10 @@ ChannelEvent::ChannelEvent(long tick, long delta, int type, int channel, int par
 	mValue2 = param2 & 0xFF;
 }
 
+ChannelEvent::~ChannelEvent()  {
+	
+}
+
 void ChannelEvent::setChannel(int c) {
 	if (c < 0) {
 		c = 0;

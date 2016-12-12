@@ -21,7 +21,7 @@ protected:
 protected:
 	ChannelEvent(long tick, int type, int channel, int param1, int param2);
 	ChannelEvent(long tick, long delta, int type, int channel, int param1, int param2);
-	virtual ~ChannelEvent() = 0 {}
+	virtual ~ChannelEvent() = 0;
 	
 public:
 	void setChannel(int c);

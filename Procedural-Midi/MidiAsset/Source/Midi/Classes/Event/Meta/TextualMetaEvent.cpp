@@ -10,6 +10,10 @@ TextualMetaEvent::TextualMetaEvent(long tick, long delta, int type, string text)
 	mText = text;
 }
 
+TextualMetaEvent::~TextualMetaEvent() {
+	
+}
+
 void TextualMetaEvent::setText(string t) {
 	mText = t;
 	mLength->setValue((int)t.length());

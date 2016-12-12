@@ -14,7 +14,7 @@ protected:
 	string mText;
 
 	TextualMetaEvent(long tick, long delta, int type, string text);
-	virtual ~TextualMetaEvent() = 0 {}
+	virtual ~TextualMetaEvent() = 0;
 
 public:
 	void setText(string t);
