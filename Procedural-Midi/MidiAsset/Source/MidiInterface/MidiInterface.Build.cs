@@ -44,5 +44,31 @@ public class MidiInterface : ModuleRules
 			Definitions.Add("__WINDOWS_MM__=1");
 			PublicAdditionalLibraries.Add("winmm.lib");
 		}
+		else if (Target.Platform == UnrealTargetPlatform.Mac || Target.Platform == UnrealTargetPlatform.IOS) {
+			Definitions.Add("__MACOSX_CORE__=1");	
+			PublicIncludePaths.AddRange(new string[] {"Runtime/Core/Public/Apple"});
+			
+			if(Target.Platform == UnrealTargetPlatform.Mac)
+				PublicIncludePaths.AddRange(new string[] {"Runtime/Core/Public/Mac"});
+			else
+				PublicIncludePaths.AddRange(new string[] {"Runtime/Core/Public/IOS"});
+
+			PublicAdditionalFrameworks.AddRange(
+			new string[]
+			{
+				"CoreMIDI", "CoreAudio", "CoreFoundation"
+			});
+		}
+		else if (Target.Platform == UnrealTargetPlatform.Linux) {			
+			Definitions.Add("__LINUX_ALSA__=1");
+
+			PublicIncludePaths.Add("Runtime/Core/Public/Linux");
+			
+			PublicAdditionalLibraries.Add(			
+			new string[]
+			{
+				"alsalib2.so", "libpthread.so"
+			});
+		}
     }
 }
