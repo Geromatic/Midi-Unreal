@@ -40,8 +40,8 @@ public:
 
 	TArray<MidiTrack*>& getTracks();
 
-	void addTrack(MidiTrack T);
-	void addTrack(MidiTrack T, int pos);
+	void addTrack(MidiTrack* T);
+	void addTrack(MidiTrack* T, int pos);
 
 	void removeTrack(int pos);
 
