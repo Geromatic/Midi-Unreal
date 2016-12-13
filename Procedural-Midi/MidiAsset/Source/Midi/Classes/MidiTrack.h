@@ -23,7 +23,7 @@ private:
 	TArray<MidiEvent*> mEvents;
 
 public:
-	static MidiTrack createTempoTrack();
+	static MidiTrack* createTempoTrack();
 
 	MidiTrack();
 	MidiTrack(FBufferReader & input);
