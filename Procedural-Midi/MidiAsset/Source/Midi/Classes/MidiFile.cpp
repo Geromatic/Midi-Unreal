@@ -12,16 +12,16 @@ MidiFile::MidiFile()
 {
 	mResolution = DEFAULT_RESOLUTION;
 
-	mTrackCount = mTracks.Num();
-	mType = mTrackCount > 1 ? 1 : 0;
+	mTrackCount = 0;
+	mType = 0;
 }
 
 MidiFile::MidiFile(int resolution)
 {
 	mResolution = resolution >= 0 ? resolution : DEFAULT_RESOLUTION;
 
-	mTrackCount = mTracks.Num();
-	mType = mTrackCount > 1 ? 1 : 0;
+	mTrackCount = 0;
+	mType = 0;
 }
 
 MidiFile::MidiFile(int resolution, const TArray<MidiTrack*>& tracks)
@@ -117,12 +117,12 @@ TArray<MidiTrack*>& MidiFile::getTracks()
 	return mTracks;
 }
 
-void MidiFile::addTrack(MidiTrack T)
+void MidiFile::addTrack(MidiTrack* T)
 {
 	addTrack(T, (int)mTracks.Num());
 }
 
-void MidiFile::addTrack(MidiTrack T, int pos) {
+void MidiFile::addTrack(MidiTrack *T, int pos) {
 
 	if (pos > mTracks.Num())
 	{
@@ -133,7 +133,7 @@ void MidiFile::addTrack(MidiTrack T, int pos) {
 		pos = 0;
 	}
 
-	mTracks.Insert(&T, pos);
+	mTracks.Insert(T, pos);
 	mTrackCount = (int)mTracks.Num();
 	mType = mTrackCount > 1 ? 1 : 0;
 }
