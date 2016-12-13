@@ -44,9 +44,7 @@ public class MidiInterface : ModuleRules
 			Definitions.Add("__WINDOWS_MM__=1");
 			PublicAdditionalLibraries.Add("winmm.lib");
 		}
-		
-		return;
-		if (Target.Platform == UnrealTargetPlatform.Mac || Target.Platform == UnrealTargetPlatform.IOS) {
+		else if (Target.Platform == UnrealTargetPlatform.Mac || Target.Platform == UnrealTargetPlatform.IOS) {
 			Definitions.Add("__MACOSX_CORE__=1");	
 			PublicIncludePaths.AddRange(new string[] {"Runtime/Core/Public/Apple"});
 			
