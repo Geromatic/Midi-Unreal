@@ -161,6 +161,8 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	if (next != NULL) {
 		next->setDelta(next->getTick() - newEvent->getTick());
 	}
+	
+	mEvents.Sort(ConstPredicate);
 
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == MetaEvent::END_OF_TRACK) {
