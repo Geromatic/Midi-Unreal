@@ -67,7 +67,7 @@ public class MidiInterface : ModuleRules
 			PublicAdditionalLibraries.Add(			
 			new string[]
 			{
-				"alsalib2.so", "libpthread.so"
+				"libasound2.so", "libpthread.so"
 			});
 		}
     }
