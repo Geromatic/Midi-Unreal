@@ -12,12 +12,12 @@
 
 const char MidiTrack::IDENTIFIER[] = { 'M', 'T', 'r', 'k' };
 
-MidiTrack MidiTrack::createTempoTrack() {
+MidiTrack* MidiTrack::createTempoTrack() {
 
-	MidiTrack T;
+	MidiTrack* T = new MidiTrack();
 
-	T.insertEvent(new TimeSignature());
-	T.insertEvent(new Tempo());
+	T->insertEvent(new TimeSignature());
+	T->insertEvent(new Tempo());
 
 	return T;
 }
