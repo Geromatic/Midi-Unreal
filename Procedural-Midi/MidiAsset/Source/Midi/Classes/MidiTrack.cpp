@@ -56,12 +56,6 @@ MidiTrack::~MidiTrack()
 	}
 }
 
-// TODO Sort
-inline static bool ConstPredicate(MidiEvent& ip1, MidiEvent& ip2)
-{
-	return ip1.CompareTo(&ip2) < 0;
-}
-
 void MidiTrack::readTrackData(FBufferReader & input)
 {
 	long totalTicks = 0;
@@ -89,7 +83,6 @@ void MidiTrack::readTrackData(FBufferReader & input)
 		mEvents.Add(E);
 	}
 
-	//	mEvents.Sort(ConstPredicate);
 }
 
 TArray<MidiEvent*>& MidiTrack::getEvents() {
@@ -161,8 +154,6 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	if (next != NULL) {
 		next->setDelta(next->getTick() - newEvent->getTick());
 	}
-	
-	mEvents.Sort(ConstPredicate);
 
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == MetaEvent::END_OF_TRACK) {
