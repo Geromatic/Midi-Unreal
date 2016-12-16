@@ -36,7 +36,9 @@ char * VariableLengthInt::getBytes() {
 }
 
 void VariableLengthInt::parseBytes(FBufferReader & input) {
-	memset(mBytes, 0, 4);
+	for (int i = 0; i < 4; i++) {
+		mBytes[i] = 0;
+	}
 	
 	int ints[4] = { 0 };
 
@@ -72,7 +74,9 @@ void VariableLengthInt::parseBytes(FBufferReader & input) {
 }
 
 void VariableLengthInt::buildBytes() {
-	memset(mBytes, 0, 4);
+	for (int i = 0; i < 4; i++) {
+		mBytes[i] = 0;
+	}
 
 	if (mValue == 0) {
 		mSizeInBytes = 1;
