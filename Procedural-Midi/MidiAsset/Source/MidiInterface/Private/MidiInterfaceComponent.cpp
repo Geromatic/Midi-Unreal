@@ -21,7 +21,6 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 		// check if it is a channel message
 		if (type >= 0x8 && type <= 0xE) {
 			FMidiEvent Event;
-			Event.Type = (EMidiTypeEnum)(type & 0X0F);
 			Event.Channel = channel & 0X0F;
 			Event.Data1 = message->at(i++) & 0XFF;
 			// Running Status Byte
@@ -29,8 +28,11 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 				Event.Type = (EMidiTypeEnum)(0x9 & 0X0F);
 				Event.Data2 = 0 & 0XFF;
 			}
+			else {
+				Event.Type = (EMidiTypeEnum)(type & 0X0F);
+			}
 			// check for program change or CHANNEL_AFTERTOUCH
-			else if (type != 0xC && type != 0xD) {
+			if (type != 0xC && type != 0xD) {
 				Event.Data2 = message->at(i++) & 0XFF;
 			}
 			component->OnReceiveEvent.Broadcast(Event, deltatime);
@@ -121,7 +123,7 @@ void UMidiInterfaceComponent::Send(const FMidiEvent& Event)
 	msg.push_back(status);
 	msg.push_back(Event.Data1);
 	// check for program change or CHANNEL_AFTERTOUCH
-	if ((uint8)Event.Type != 0xC && (uint8)Event.Type != 0xD) {
+	if (Event.Type != EMidiTypeEnum::MTE_PROGRAM_CHANGE && Event.Type != EMidiTypeEnum::MTE_CHANNEL_AFTERTOUCH) {
 		msg.push_back(Event.Data2);
 	}
 	midiOut.sendMessage(&msg);
