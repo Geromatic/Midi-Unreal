@@ -25,6 +25,11 @@ UENUM(BlueprintType)
 enum class EMidiTypeEnum : uint8
 {
 	/*
+	*	Note Off Event [Reserved for future ref]
+	*	[Data1=Note, Data2=Velocity]
+	*/
+	MTE_NOTE_Off = 8				UMETA(DisplayName = "Note Off [Not Used]"),
+	/*
 	*	Note On/Off Event
 	*	[Data1=Note, Data2=Velocity]
 	*/
