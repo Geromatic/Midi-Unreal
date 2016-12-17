@@ -53,8 +53,7 @@ public class MidiInterface : ModuleRules
 			else
 				PublicIncludePaths.AddRange(new string[] {"Runtime/Core/Public/IOS"});
 
-			PublicAdditionalFrameworks.AddRange(
-			new string[]
+			PublicFrameworks.AddRange(new string[]
 			{
 				"CoreMIDI", "CoreAudio", "CoreFoundation"
 			});
@@ -64,7 +63,7 @@ public class MidiInterface : ModuleRules
 
 			PublicIncludePaths.Add("Runtime/Core/Public/Linux");
 			
-			PublicAdditionalLibraries.Add(			
+			PublicAdditionalLibraries.AddRange(			
 			new string[]
 			{
 				"libasound2.so", "libpthread.so"
