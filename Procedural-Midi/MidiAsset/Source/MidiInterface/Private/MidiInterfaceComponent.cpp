@@ -9,11 +9,9 @@
 void mycallback(double deltatime, std::vector< unsigned char > *message, void *userData)
 {
 	UMidiInterfaceComponent* component = (UMidiInterfaceComponent*)userData;
-	if (message == NULL)
-		return;
 
-	unsigned int nBytes = message->size();
-	for (unsigned int i = 0; i < nBytes; ) {
+	size_t nBytes = message->size();
+	for (size_t i = 0; i < nBytes; ) {
 		int id = message->at(i++);
 		int type = id >> 4;
 		int channel = id & 0x0F;
@@ -27,14 +25,18 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 			if (type == 0x8) {
 				Event.Type = (EMidiTypeEnum)(0x9 & 0X0F);
 				Event.Data2 = 0 & 0XFF;
+
+				// Discard byte
+				message->at(i++);
 			}
 			else {
 				Event.Type = (EMidiTypeEnum)(type & 0X0F);
+				// check for program change or CHANNEL_AFTERTOUCH
+				if (type != 0xC && type != 0xD) {
+					Event.Data2 = message->at(i++) & 0XFF;
+				}
 			}
-			// check for program change or CHANNEL_AFTERTOUCH
-			if (type != 0xC && type != 0xD) {
-				Event.Data2 = message->at(i++) & 0XFF;
-			}
+
 			component->OnReceiveEvent.Broadcast(Event, deltatime);
 		}
 	}
