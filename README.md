@@ -27,6 +27,7 @@ Plugin Supports:
 - HTML5: [Packaged+Tested+Works but no sound]
 - Android(All): [Packaged+Untested]
 - Linus: [TBA]
+- Mac/IOS: [TBA] 
 
 ### Installation \[Github Version Only / C++ Project Required\] 
 
