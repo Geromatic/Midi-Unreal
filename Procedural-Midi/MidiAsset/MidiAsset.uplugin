@@ -1,7 +1,7 @@
 {
 	"FileVersion" : 3,
-	"Version" : 12,
-	"VersionName" : "2.2",
+	"Version" : 13,
+	"VersionName" : "2.3",
 	"FriendlyName" : "Midi Asset",
 	"Description" : "A Plugin to add Midi capability such as importing, playing, and interfacing with Midi files.  It also includes connecting with external devices and procedural audio",
 	"Category" : "Audio",
