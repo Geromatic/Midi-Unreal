@@ -114,7 +114,7 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 		case LYRICS:
 			return new Lyrics(tick, delta, text);
 		case MARKER:
-			return new Marker(tick, delta, text);
+			return new _Marker(tick, delta, text);
 		case CUE_POINT:
 			return new CuePoint(tick, delta, text);
 		case SEQUENCER_SPECIFIC:
