@@ -8,12 +8,12 @@
 /**
  * 
  */
-class MIDI_API Marker : public TextualMetaEvent
+class MIDI_API _Marker : public TextualMetaEvent
 {
 public:
-	Marker();
-	Marker(string marker);
-	Marker(long tick, long delta, string marker);
+	_Marker();
+	_Marker(string marker);
+	_Marker(long tick, long delta, string marker);
 
 	void setMarkerName(string name);
 	string getMarkerName();
