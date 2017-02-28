@@ -166,6 +166,8 @@ int MidiEvent::CompareTo(MidiEvent *other)
 }
 
 string getMidiClassName(int type) {
+
+	// ChannelEvent
 	switch (type) {
 	case ChannelEvent::NOTE_OFF:
 		return "Note Off";
@@ -183,6 +185,7 @@ string getMidiClassName(int type) {
 		return "Pitch Bend";
 	}
 
+	// MetaEvent
 	switch (type) {
 	case MetaEvent::SEQUENCE_NUMBER:
 		return "Sequence Number";
@@ -216,6 +219,7 @@ string getMidiClassName(int type) {
 		return "Sequencer Specific";
 	}
 	
+	// System Exclusive
 	if(type == 0xF0)
 		return "System Exclusive";
 	if(type == 0xF7)
@@ -226,8 +230,6 @@ string getMidiClassName(int type) {
 
 string MidiEvent::ToString()
 {
-
-//	FString::Printf(TEXT("%d (%d): %s"), mTick, mDelta->getValue(), typeid(this).name());
 	std::stringstream ss;
 	ss << mTick << " (" << mDelta->getValue() << "): " << getMidiClassName(mType);
 	return ss.str();

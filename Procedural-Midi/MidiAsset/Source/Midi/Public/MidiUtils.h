@@ -25,10 +25,16 @@ UENUM(BlueprintType)
 enum class EMidiTypeEnum : uint8
 {
 	/*
-	*	Note On/Off Event
+	*	Note Off Event
 	*	[Data1=Note, Data2=Velocity]
 	*/
-	MTE_NOTE = 9				UMETA(DisplayName = "Note"),
+	MTE_NOTE_OFF = 8			UMETA(DisplayName = "Note Off"),
+	/*
+	*	Note On
+	*	[Data1=Note, Data2=Velocity]
+	*	Note: Velocity of 0 = same as Note Off
+	*/
+	MTE_NOTE = 9				UMETA(DisplayName = "Note On"),
 	/*
 	*	Note Aftertouch Event
 	*	[Data1=Note, Data2=Amount]

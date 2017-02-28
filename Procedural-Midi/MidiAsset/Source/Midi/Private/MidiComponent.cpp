@@ -17,6 +17,8 @@
 #include "Event/ProgramChange.h"
 #include "Event/SystemExclusiveEvent.h"
 
+#include "Event/Meta/Tempo.h"
+
 #include "MidiAsset.h"
 
 #include "Util/MidiProcessor.h"
@@ -98,18 +100,11 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 		ChannelEvent* channelEvent = static_cast<ChannelEvent*>(_event);
 		FMidiEvent _midiEvent;
 
+		_midiEvent.Type = static_cast<EMidiTypeEnum>(_event->getType() & 0X0F);
 		_midiEvent.Channel = channelEvent->getChannel() & 0x0F;
 		_midiEvent.Data1 = channelEvent->getValue1() & 0xFF;
-		
-		// Running Status Event [Improved Midi Performance]
-		if (_event->getType() == ChannelEvent::NOTE_OFF) {
-			_midiEvent.Type = static_cast<EMidiTypeEnum>(ChannelEvent::NOTE_ON & 0X0F);
-			_midiEvent.Data2 = 0 & 0XFF;
-		}
-		else {
-			_midiEvent.Type = static_cast<EMidiTypeEnum>(_event->getType() & 0X0F);
-			_midiEvent.Data2 = channelEvent->getValue2() & 0xFF;
-		}
+		_midiEvent.Data2 = channelEvent->getValue2() & 0xFF;
+
 		OnMidiEvent.Broadcast(_midiEvent);
 	}
 }
@@ -143,6 +138,67 @@ int UMidiComponent::GetResolution()
 	if (mMidiFile)
 	{
 		return mMidiFile->getResolution();
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+float UMidiComponent::GetDuration()
+{
+	// TODO find a better solution
+	if (mMidiFile)
+	{
+
+		TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
+		TArray<MidiTrack*>& tracks = mMidiFile->getTracks();
+		for (int i = 0; i < tracks.Num(); i++) {
+			mCurrEvents.Add(tracks[i]->getEvents().CreateIterator());
+		}
+
+		double mMsElapsed = 0;
+		const int& mPPQ = mMidiFile->getResolution();
+		int mMPQN = Tempo::DEFAULT_MPQN;
+		double mTicksElapsed = 0;
+
+		while (true) {
+
+			const double msElapsed = 1.0;
+			double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * PlaySpeed;
+
+			mMsElapsed += msElapsed;
+			mTicksElapsed += ticksElapsed;
+
+			for (int i = 0; i < mCurrEvents.Num(); i++) {
+				while (mCurrEvents[i]) {
+					MidiEvent * _event = *mCurrEvents[i];
+					if (_event->getTick() <= mTicksElapsed) {
+						// Tempo and Time Signature events are always needed by the processor
+						if (_event->getType() == MetaEvent::TEMPO) {
+							mMPQN = (static_cast<Tempo*>(_event))->getMpqn();
+						}
+						++mCurrEvents[i];
+					}
+					else
+						break;
+				}
+			}
+			
+			bool more = false;
+			for (int i = 0; i < mCurrEvents.Num(); i++) {
+				if (mCurrEvents[i])
+				{
+					more = true; 
+					break;
+				}
+			}
+
+			if (more == false)
+				break;
+		}
+
+		return  mMsElapsed / 1000.0f;
 	}
 	else
 	{

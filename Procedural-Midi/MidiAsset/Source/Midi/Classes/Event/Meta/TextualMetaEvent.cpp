@@ -45,8 +45,6 @@ int TextualMetaEvent::CompareTo(MidiEvent *other) {
 }
 
 string TextualMetaEvent::ToString() {
-//	FString::Printf(TEXT("%s: %s"), MetaEvent::ToString(), mText);
-
 	std::stringstream ss;
 	ss << MetaEvent::ToString() << ": " << mText;
 	return ss.str();
