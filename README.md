@@ -1,8 +1,8 @@
 # Midi-Unreal
-Midi for Unreal Engine[Beta]
+Midi for Unreal Engine
 
 MarketPlace: https://www.unrealengine.com/marketplace/procedural-midi 
-<br>Example Project: Updated 12/16/2016
+<br>Example Project: Updated 2/27/2017
 
 This code provides an interface to read, manipulate, and write MIDI files. "Playback" is supported as a real-time event dispatch system.(Leffelman)
 
@@ -26,8 +26,8 @@ Plugin Supports:
 - Windows(32/64): [Packaged+Tested+Works]
 - HTML5: [Packaged+Tested+Works but no sound]
 - Android(All): [Packaged+Untested]
-- Linus: [TBA]
-- Mac/IOS: [TBA] 
+- Linus: [Packaged+Tested+Works]
+- Mac/IOS: [Packaged+Tested+Works] 
 
 ### Installation \[Github Version Only / C++ Project Required\] 
 
