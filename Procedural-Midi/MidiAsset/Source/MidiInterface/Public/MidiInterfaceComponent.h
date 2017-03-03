@@ -36,13 +36,17 @@ public:
 	// Opens a MIDI input device (ex. MIDI keyboard)
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	bool OpenInput(uint8 port = 0);
-	// Opens a MIDI output device (ex, Computer Speakers)
+	// Opens a MIDI output device (ex, Computer Speakers, Synth)
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	bool OpenOutput(uint8 port = 0);
 
 	// Close the MIDI input device
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	void CloseInput();
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	void CloseOutput();
+	// Sends MIDI event a a MIDI output device
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	void Send(const FMidiEvent& Event);
 
 	//  Called when a device sends a Midi Event to the computer
