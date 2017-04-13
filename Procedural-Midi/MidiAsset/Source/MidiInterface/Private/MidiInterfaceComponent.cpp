@@ -17,7 +17,7 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 		int channel = id & 0x0F;
 
 		// check if it is a channel message
-		if (type >= 0x8 && type <= 0xE) {
+		if (type >= 0x8 && type <= 0xE && (i < nBytes) ) {
 			FMidiEvent Event;
 
 			Event.Type = (EMidiTypeEnum)(type & 0X0F);
@@ -25,7 +25,7 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 			Event.Data1 = message->at(i++) & 0XFF;
 
 			// check for program change or CHANNEL_AFTERTOUCH
-			if (type != 0xC && type != 0xD) {
+			if (type != 0xC && type != 0xD && (i < nBytes) ) {
 				Event.Data2 = message->at(i++) & 0XFF;
 			}
 
