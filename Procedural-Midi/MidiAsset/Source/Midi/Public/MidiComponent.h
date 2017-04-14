@@ -48,6 +48,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
 	void LoadFile(FString path);
 
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
+	void LoadMML(FString path);
+
 // Other
 //-----------------------
 

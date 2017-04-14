@@ -23,6 +23,8 @@
 
 #include "Util/MidiProcessor.h"
 
+#include "Util/LabMidiSong.h"
+
 // Sets default values for this component's properties
 UMidiComponent::UMidiComponent() : PlaySpeed(1.0f)
 {
@@ -92,6 +94,22 @@ void UMidiComponent::LoadFile(FString path) {
 
 	FBufferReader reader((uint8*)data.GetData(), data.Num(), false);
 	mMidiFile = new MidiFile(reader);
+	mProcessor.load(*mMidiFile);
+}
+
+void UMidiComponent::LoadMML(FString path) {
+	if (mProcessor.isRunning()) return;
+
+	if (mMidiFile)
+		delete mMidiFile;
+	mMidiFile = NULL;
+
+	char* a = new char[path.Len()];
+	for (int i = 0; i < path.Len(); i++)
+		a[i] = path[i];
+
+	mMidiFile = Lab::MidiSong::parseMML(a, (int)path.Len(), false);
+	delete[] a;
 	mProcessor.load(*mMidiFile);
 }
 
