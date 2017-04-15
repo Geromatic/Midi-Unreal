@@ -12,7 +12,7 @@ Modified for Unreal Engine: Scott Bishel
 http://groundsthirteen.webs.com/midi.htm - libraries for c++/c#/obj-c
 
 This tool is free but the developer accepts your support by letting you pay what you think is fair for the tool.
-www.paypal.me/Bishel
+www.paypal.me/Bishel/5
 
 Features:
 
