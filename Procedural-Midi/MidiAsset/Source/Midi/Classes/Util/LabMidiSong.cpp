@@ -195,8 +195,8 @@ namespace Lab {
     
 	MidiFile* MidiSong::parseMML(char const*const mmlStr, int length, bool verbose)
     {
-		MidiFile* mMidiFile = new MidiFile(480);
-		int ticksPerBeat = mMidiFile->getResolution();  // 480
+		MidiFile* mMidiFile = new MidiFile();
+		int ticksPerBeat = 240;//mMidiFile->getResolution();  // 480
 
 		long ticks = 0;
 
@@ -275,7 +275,8 @@ namespace Lab {
 				break;
 			}
 
-			case '/':
+			case ',':
+				ticks = 0;
 				tr++;
 				if (tr > 15)
 					tr = 15;
@@ -300,6 +301,7 @@ namespace Lab {
 			case 'B': {
 				int note = noteToChord(c) + sharpFlat(curr) + octave * 12;
 				int duration = dotted(curr, tempo, ticksPerBeat, len);
+
 				// note output { tr, cnt, size 3, 0x90|tr note & 0x7f vol=0x7f }
 				if (!tied) {
 					track->insertNote(tr, note & 0x7f, volume, ticks, duration);
@@ -336,7 +338,7 @@ namespace Lab {
 					break;
 				}
 
-			case ',': // other
+			//case ',': // other
 			case '[':
 			case ']':
 				break;
@@ -384,5 +386,154 @@ namespace Lab {
             delete [] a;
         }
     }
+
+	// ----------------------------------------
+
+	static uint32_t get_note_length_ms(CHORD *p, uint32_t note_ticks)
+	{
+		return (60000) * note_ticks / p->bpm / p->bticks;
+	}
+
+	static void note_clear(CHORD *p)
+	{
+		p->count = 0;
+	}
+
+	static void note_stack(CHORD *p, int number)
+	{
+		if ((p->count + 1) < CHORD_MAX_NOTES) {
+			p->freqlist[p->count++] = number;
+		}
+	}
+
+	static void chord_init(CHORD *p, int bpm, int bticks)
+	{
+		p->bpm = bpm;
+		p->bticks = bticks;
+	}
+
+
+	/*
+	static void note_sound(CHORD *p, int ticks, MidiSong* component)
+	{
+		uint32_t ms = get_note_length_ms(p, ticks);
+		uint32_t duration = MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
+		for (int i = 0; i < p->count; i++) {
+			component->track->insertNote(component->trackNumber, p->freqlist[i] & 0x7f, 127, component->ticks, duration);
+		}
+		component->ticks += duration;
+
+
+		//const int volume = 127;
+
+		//uint32_t ms = get_note_length_ms(p, ticks);
+		//uint32_t duration = MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
+		//uint32_t cnt_ms = 0;
+
+		//uint32_t t = component->ticks;
+		//while (1) {
+		//	uint8_t i;
+		//	for (i = 0; i < p->count; i++) {
+		//		component->track->insertNote(component->trackNumber, p->freqlist[i] & 0x7f, volume, component->ticks + cnt_ms, CHORD_SPLIT_TIME_MS);
+		//		cnt_ms += CHORD_SPLIT_TIME_MS;
+		//		if (ms <= cnt_ms) {
+		//			component->ticks += cnt_ms;
+		//			return;
+		//		}
+		//	}
+		//	cnt_ms += CHORD_SPLIT_TIME_MS;
+
+		//	if (ms <= cnt_ms) {
+		//		component->ticks += cnt_ms;
+		//		return;
+		//	}
+		//}
+	}
+	*/
+
+	static void note_sound(CHORD *p, int ticks, int number, MidiSong* component)
+	{
+		uint32_t ms = get_note_length_ms(p, ticks);
+		uint32_t duration = MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
+		component->track->insertNote(component->trackNumber, number & 0x7f, 127, component->ticks, duration);
+		component->ticks += duration;
+	}
+
+	static void rest_sound(CHORD *p, int ticks, MidiSong* component)
+	{
+		uint32_t ms = get_note_length_ms(p, ticks);
+		uint32_t duration = MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
+		component->ticks += duration;
+	}
+
+	static void mml_callback(MML_INFO *p, void *extobj)
+	{
+		MidiSong* component = (MidiSong*)extobj;
+		CHORD& chord = component->chord;
+		switch (p->type) {
+		case MML_TYPE_TEMPO:
+		{
+			MML_ARGS_TEMPO *args = &(p->args.tempo);
+			chord_init(&chord, args->value, component->mml_opt.bticks);
+			component->track->insertEvent(new Tempo(component->ticks, 0, MidiUtil::bpmToMpqn(args->value)));
+		}
+		break;
+		case MML_TYPE_NOTE:
+		{
+			MML_ARGS_NOTE *args = &(p->args.note);
+			note_sound(&chord, args->ticks, args->number, component);
+
+			//note_stack(&chord, args->number);
+
+			//if (0 < args->ticks) {
+
+			//	note_sound(&chord, args->ticks, component);
+			//	note_clear(&chord);
+			//}
+		}
+		break;
+		case MML_TYPE_REST:
+		{
+			MML_ARGS_REST *args = &(p->args.rest);
+			rest_sound(&chord, args->ticks, component);
+		}
+		break;
+		}
+
+	}
+
+	// Called when the game starts
+	void MidiSong::LoadString(const FString &data)
+	{
+
+		track = new MidiTrack();
+
+		trackNumber = 0;
+		/*
+		* Initialize the MML module.
+		*/
+		mml_init(&mml, mml_callback, this);
+		MML_OPTION_INITIALIZER_DEFAULT(&mml_opt);
+
+		/*
+		* Initialize the chord module.
+		*/
+		int tempo_default = 120;
+		chord_init(&chord, tempo_default, mml_opt.bticks);
+		chord.count = 0;
+
+
+		TArray<TCHAR> CharData = data.GetCharArray();
+		char * MMLDataChar = new char[CharData.Num()];
+		for (int i = 0; i < CharData.Num(); i++)
+			MMLDataChar[i] = CharData[i];
+		mml_setup(&mml, &mml_opt, (char*)MMLDataChar);
+		
+		MML_RESULT cher;
+		while ( (cher = mml_fetch(&mml)) == MML_RESULT_OK) {
+		}
+		delete[] MMLDataChar;
+		note_clear(&chord);
+	}
     
 } // Lab

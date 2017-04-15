@@ -36,12 +36,36 @@
 #include <string>
 #include <vector>
 
+#include "./MML/mml.h"
+
 namespace Lab {
+
+#define CHORD_MAX_NOTES             (128)
+#define CHORD_SPLIT_TIME_MS         (14)
+
+	typedef struct {
+		uint32_t bpm;
+		uint32_t bticks;
+		int freqlist[CHORD_MAX_NOTES];
+		int count;
+	} CHORD;
 
     class MidiSong {
     public:
         static MidiFile* parseMML(char const*const mmlStr, int length, bool verbose);
 		static void parseMML(char const*const midifilePath, bool verbose);
+
+		void LoadString(const FString &data);
+
+		CHORD chord;
+		MML mml;
+		MML_OPTION mml_opt;
+
+		long ticks = 0;
+
+		int trackNumber = 0;
+
+		MidiTrack* track;
     };
 
 } // Lab

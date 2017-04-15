@@ -37,11 +37,6 @@
 			"LoadingPhase" : "Default"
 		},
 		{
-			"Name" : "MusicMacroLanguage",
-			"Type" : "Developer",
-			"LoadingPhase" : "Default"
-		},
-		{
 			"Name" : "ProceduralAudio",
 			"Type" : "Runtime",
 			"LoadingPhase" : "Default"

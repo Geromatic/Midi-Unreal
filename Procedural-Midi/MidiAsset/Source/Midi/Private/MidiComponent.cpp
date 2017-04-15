@@ -108,8 +108,15 @@ void UMidiComponent::LoadMML(FString path) {
 	for (int i = 0; i < path.Len(); i++)
 		a[i] = path[i];
 
-	mMidiFile = Lab::MidiSong::parseMML(a, (int)path.Len(), false);
-	delete[] a;
+	//mMidiFile = Lab::MidiSong::parseMML(a, (int)path.Len(), false);
+	//delete[] a;
+	//mProcessor.load(*mMidiFile);
+
+	Lab::MidiSong song;
+	song.trackNumber = 0;
+	song.LoadString(path);
+	mMidiFile = new MidiFile();
+	mMidiFile->addTrack(song.track);
 	mProcessor.load(*mMidiFile);
 }
 

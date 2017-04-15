@@ -40,6 +40,10 @@ public:
 	//Changes the Speed of MIDI playback
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
 	float PlaySpeed = 1;
+
+	// Ignores Note OFF events and replaces with Note ON with Velocity = 0
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
+	bool SimplifyNote = true;
 	
 	// loads the Midi Asset Data
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
