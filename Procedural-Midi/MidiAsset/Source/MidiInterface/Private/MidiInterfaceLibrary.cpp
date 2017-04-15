@@ -89,3 +89,20 @@ void UMidiInterface::SendMidiEvent(const FMidiEvent& Event)
 	}
 	midiOut.sendMessage(&msg);
 }
+
+void UMidiInterface::GetMidiDevices(TArray<FMidiDevice>& Input, TArray<FMidiDevice>& Output) {
+
+	int size = midiIn.getPortCount();
+	for (int i = 0; i < size; i++) {
+			FString name = FString(midiIn.getPortName(i).c_str());
+			uint8 port = i;
+			Input.Add(FMidiDevice(name, port));
+	}
+
+	size = midiOut.getPortCount();
+	for (int i = 0; i < size; i++) {
+		FString name = FString(midiOut.getPortName(i).c_str());
+		uint8 port = i;
+		Output.Add(FMidiDevice(name, port));
+	}
+}

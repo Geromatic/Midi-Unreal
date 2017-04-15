@@ -8,6 +8,37 @@
 
 #include "MidiInterfaceLibrary.generated.h"
 
+enum EPortType
+{
+	PT_INPUT 	UMETA(DisplayName = "Input"),
+	PT_OUTPUT 	UMETA(DisplayName = "Output"),
+};
+
+USTRUCT(BlueprintType)
+struct FMidiDevice {
+
+	GENERATED_BODY()
+
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MIDI|Device")
+		FString Name;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MIDI|Device")
+		uint8 Port;
+
+	//Constructor
+	FMidiDevice()
+	{
+		this->Name = "Unknown";
+		this->Port = 0;
+	}
+
+	//Constructor
+	FMidiDevice(FString name, uint8 port)
+	{
+		this->Name = name;
+		this->Port = port;
+	}
+};
+
 /**
  * A library that that lets you send MIDI to a device (ex. computer sound card)
  */
@@ -37,4 +68,8 @@ public:
 	// Sends a Midi Event to a Device
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static void SendMidiEvent(const FMidiEvent& Event);
+	
+	// Gets all the Input and Output devices
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
+	static void GetMidiDevices(TArray<FMidiDevice>& Input, TArray<FMidiDevice>& Output);
 };
