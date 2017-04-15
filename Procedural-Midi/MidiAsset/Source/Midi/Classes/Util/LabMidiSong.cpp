@@ -373,6 +373,7 @@ namespace Lab {
     
     void MidiSong::parseMML(char const*const path, bool verbose)
     {
+		/*
         FILE* f = fopen(path, "rb");
         if (f) {
             fseek(f, 0, SEEK_END);
@@ -385,6 +386,7 @@ namespace Lab {
             parseMML(a, l, verbose);
             delete [] a;
         }
+		*/
     }
 
 	// ----------------------------------------
