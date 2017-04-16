@@ -129,6 +129,14 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 		_midiEvent.Channel = channelEvent->getChannel() & 0x0F;
 		_midiEvent.Data1 = channelEvent->getValue1() & 0xFF;
 		_midiEvent.Data2 = channelEvent->getValue2() & 0xFF;
+		
+		if (SimplifyNote) {
+			// Running Status Event [Improved Midi Performance]
+			if (_event->getType() == ChannelEvent::NOTE_OFF) {
+				_midiEvent.Type = static_cast<EMidiTypeEnum>(ChannelEvent::NOTE_ON & 0X0F);
+				_midiEvent.Data2 = 0 & 0XFF;
+			}
+		}
 
 		OnMidiEvent.Broadcast(_midiEvent);
 	}
