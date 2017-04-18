@@ -83,7 +83,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "./Event/ProgramChange.h"
 #include "./Event/NoteOn.h"
 
-#include "MidiUtil.h"
+#include "./Util/MidiUtil.h"
 
 namespace Lab {
     

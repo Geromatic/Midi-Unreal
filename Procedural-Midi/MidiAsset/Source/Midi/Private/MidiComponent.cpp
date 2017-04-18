@@ -23,7 +23,7 @@
 
 #include "Util/MidiProcessor.h"
 
-#include "Util/LabMidiSong.h"
+#include "MML/LabMidiSong.h"
 
 // Sets default values for this component's properties
 UMidiComponent::UMidiComponent() : PlaySpeed(1.0f)
