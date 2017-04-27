@@ -20,15 +20,60 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 		// system message (top four bits 1111)
 		if (type == 0xF)
 		{
-			// sysex start?
-			if (channelOrSubtype == 0)
+			switch (channelOrSubtype)
 			{
-				component->startSysEx();
-			}
-			// sysex end?
-			else if (channelOrSubtype == 7)
-			{
-				component->stopSysEx(deltatime);
+				// sysex start?
+				case 0: component->startSysEx(); break;
+					// sysex end?
+				case 7:	component->stopSysEx(deltatime); break;
+					// song position pointer
+				case 2:
+				{
+
+					FMidiClockEvent Event;
+
+					Event.Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
+					Event.Data1 = message->at(i++) & 0XFF;
+					Event.Data2 = message->at(i++) & 0XFF;
+					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
+					break;
+				}
+				// start
+				case 10:
+				{
+					FMidiClockEvent Event;
+
+					Event.Type = EMidiClockTypeEnum::MCTE_START;
+					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
+					break;
+				}
+				// continue
+				case 11:
+				{
+					FMidiClockEvent Event;
+
+					Event.Type = EMidiClockTypeEnum::MCTE_CONTINUE;
+					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
+					break;
+				}
+				// Timing clock/pulse
+				case 8:
+				{
+					FMidiClockEvent Event;
+
+					Event.Type = EMidiClockTypeEnum::MCTE_CLOCK;
+					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
+					break;
+				}
+				// Stop
+				case 12:
+				{
+					FMidiClockEvent Event;
+
+					Event.Type = EMidiClockTypeEnum::MCTE_STOP;
+					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
+					break;
+				}
 			}
 		}
 		// if in the middle of sysex, pass it on to sysex buffer

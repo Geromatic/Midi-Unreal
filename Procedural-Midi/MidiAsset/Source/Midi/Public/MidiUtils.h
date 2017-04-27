@@ -61,7 +61,35 @@ enum class EMidiTypeEnum : uint8
 	*/
 	MTE_PITCH_BEND 				UMETA(DisplayName = "Pitch Bend")
 };
-
+UENUM(BlueprintType)
+enum class EMidiClockTypeEnum : uint8
+{
+	/*
+	*	Song Position Pointer
+	*	[Data1=LowBit, Data2=HighBit]
+	*/
+	MCTE_SONG_POSITION 				UMETA(DisplayName = "Song position pointer"),
+	/*
+	*	Clock
+	*	[Data1=Unused, Data2=Unused]
+	*/
+	MCTE_CLOCK 						UMETA(DisplayName = "Clock"),
+	/*
+	*	Start
+	*	[Data1=Unused, Data2=Unused]
+	*/
+	MCTE_START 						UMETA(DisplayName = "Start"),
+	/*
+	*	Stop
+	*	[Data1=Unused, Data2=Unused]
+	*/
+	MCTE_STOP 						UMETA(DisplayName = "Stop"),
+	/*
+	*	Continue
+	*	[Data1=Unused, Data2=Unused]
+	*/
+	MCTE_CONTINUE 					UMETA(DisplayName = "Continue")
+};
 USTRUCT(BlueprintType)
 struct FMidiEvent
 {
@@ -93,6 +121,32 @@ struct FMidiEvent
 	}
 };
 
+
+USTRUCT(BlueprintType)
+struct FMidiClockEvent
+{
+	GENERATED_BODY()
+
+		// The Type of Event this struct represents
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
+		EMidiClockTypeEnum Type;
+
+	// The first data value
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
+		uint8 Data1;
+
+	// The second data value
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
+		uint8 Data2;
+
+	//Constructor
+	FMidiClockEvent()
+	{
+		Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
+		Data1 = 0;
+		Data2 = 0;
+	}
+};
 /**
  * MIDI Frequency Conversion Utility
  */

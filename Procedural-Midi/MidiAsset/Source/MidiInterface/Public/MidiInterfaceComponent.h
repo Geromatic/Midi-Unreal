@@ -11,6 +11,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventReceive, FMidiEvent, Event, float, deltaTime);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSysExEventReceive,const TArray<uint8>&, data, float, deltaTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FClockEventReceive, FMidiClockEvent, Event, float, deltaTime);
 /*
 * A component that lets you open and receive data from a MIDI device
 */
@@ -68,6 +69,11 @@ public:
 	//  Called when a device sends a Midi SysEx Event to the computer
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
 	FSysExEventReceive OnReceiveSysExEvent;
+
+
+	//  Called when a device sends a Midi clock Event to the computer
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
+	FClockEventReceive OnReceiveClockEvent;
 
 private:
 	bool inSysEx;
