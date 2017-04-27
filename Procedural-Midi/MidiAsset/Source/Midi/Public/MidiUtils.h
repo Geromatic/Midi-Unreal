@@ -127,24 +127,19 @@ struct FMidiClockEvent
 {
 	GENERATED_BODY()
 
-		// The Type of Event this struct represents
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
-		EMidiClockTypeEnum Type;
+	// The Type of Event this struct represents
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
+	EMidiClockTypeEnum Type;
 
 	// The first data value
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
-		uint8 Data1;
-
-	// The second data value
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
-		uint8 Data2;
+	int32 Data;
 
 	//Constructor
 	FMidiClockEvent()
 	{
 		Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
-		Data1 = 0;
-		Data2 = 0;
+		Data = 0;
 	}
 };
 /**

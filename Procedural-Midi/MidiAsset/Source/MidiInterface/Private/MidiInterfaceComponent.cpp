@@ -24,17 +24,21 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 			{
 				// sysex start?
 				case 0: component->startSysEx(); break;
-					// sysex end?
+				// sysex end?
 				case 7:	component->stopSysEx(deltatime); break;
-					// song position pointer
+				// song position pointer
 				case 2:
 				{
-
 					FMidiClockEvent Event;
-
 					Event.Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
-					Event.Data1 = message->at(i++) & 0XFF;
-					Event.Data2 = message->at(i++) & 0XFF;
+					
+					// LSB
+					uint8 lsb = message->at(i++) & 0XFF;
+
+					//MSB
+					Event.Data = message->at(i++) & 0XFF;
+					Event.Data = Event.Data << 7;
+					Event.Data += lsb;
 					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
 					break;
 				}
