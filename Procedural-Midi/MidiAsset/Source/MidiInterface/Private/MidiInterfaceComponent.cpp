@@ -11,17 +11,38 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 	UMidiInterfaceComponent* component = (UMidiInterfaceComponent*)userData;
 
 	size_t nBytes = message->size();
-	for (size_t i = 0; i < nBytes; ) {
-		int id = message->at(i++);
-		int type = id >> 4;
-		int channel = id & 0x0F;
-
+	for (size_t i = 0; i < nBytes; )
+	{
+		uint8 id = message->at(i++);
+		uint8 type = id >> 4;
+		uint8 channelOrSubtype = id & 0x0F;
+		
+		// system message (top four bits 1111)
+		if (type == 0xF)
+		{
+			// sysex start?
+			if (channelOrSubtype == 0)
+			{
+				component->startSysEx();
+			}
+			// sysex end?
+			else if (channelOrSubtype == 7)
+			{
+				component->stopSysEx(deltatime);
+			}
+		}
+		// if in the middle of sysex, pass it on to sysex buffer
+		else if (component->getInSysEx())
+		{
+			component->appendSysEx(id);
+		}
 		// check if it is a channel message
-		if (type >= 0x8 && type <= 0xE && (i < nBytes) ) {
+		else if (type >= 0x8 && type <= 0xE && (i < nBytes) ) 
+		{
 			FMidiEvent Event;
 
 			Event.Type = (EMidiTypeEnum)(type & 0X0F);
-			Event.Channel = channel & 0X0F;
+			Event.Channel = channelOrSubtype & 0X0F;
 			Event.Data1 = message->at(i++) & 0XFF;
 
 			// check for program change or CHANNEL_AFTERTOUCH
@@ -31,6 +52,7 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 
 			component->OnReceiveEvent.Broadcast(Event, deltatime);
 		}
+		
 	}
 }
 
@@ -39,6 +61,8 @@ UMidiInterfaceComponent::UMidiInterfaceComponent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryComponentTick.bCanEverTick = false;
+	inSysEx = false;
+	
 }
 
 // Called when the game starts or when spawned
@@ -76,7 +100,7 @@ bool UMidiInterfaceComponent::OpenInput(uint8 port)
 	midiIn.setCallback(&mycallback, this);
 
 	// Don't ignore sysex, timing, or active sensing messages.
-//	midiIn.ignoreTypes(false, false, false);
+	midiIn.ignoreTypes(false, false, true);
 
 	return true;
 }
@@ -121,4 +145,42 @@ void UMidiInterfaceComponent::Send(const FMidiEvent& Event)
 		msg.push_back(Event.Data2);
 	}
 	midiOut.sendMessage(&msg);
+}
+void UMidiInterfaceComponent::SendRaw(const TArray<uint8>& Data)
+{
+	std::vector<uint8> msg;
+
+	for (auto& data : Data)
+	{
+		msg.push_back(data);
+	}
+	
+	midiOut.sendMessage(&msg);
+}
+void UMidiInterfaceComponent::startSysEx()
+{
+	if (getInSysEx())
+	{
+		UE_LOG(LogTemp, Display, TEXT("Already in sysex and a new sysex start receieved - throwing away the last one!"));
+	}
+	sysExArray.Empty();
+	setInSysEx(true);
+}
+
+void UMidiInterfaceComponent::stopSysEx(float deltaTime)
+{
+	if (!getInSysEx())
+	{
+		UE_LOG(LogTemp, Display, TEXT("Not in sysex and a sysex end receieved - ignoring!"));
+	}
+	else
+	{
+		setInSysEx(false);
+		// send sysex to BP here
+		OnReceiveSysExEvent.Broadcast(sysExArray, deltaTime);
+	}
+}
+void UMidiInterfaceComponent::appendSysEx(int data)
+{
+	sysExArray.Add(data);
 }
