@@ -161,7 +161,7 @@ void UMidiInterfaceComponent::startSysEx()
 {
 	if (getInSysEx())
 	{
-		UE_LOG(LogTemp, Display, TEXT("Already in sysex and a new sysex start receieved - throwing away the last one!"));
+		UE_LOG(LogTemp, Display, TEXT("Already in sysex and a new sysex start received - throwing away the last one!"));
 	}
 	sysExArray.Empty();
 	setInSysEx(true);
@@ -171,7 +171,7 @@ void UMidiInterfaceComponent::stopSysEx(float deltaTime)
 {
 	if (!getInSysEx())
 	{
-		UE_LOG(LogTemp, Display, TEXT("Not in sysex and a sysex end receieved - ignoring!"));
+		UE_LOG(LogTemp, Display, TEXT("Not in sysex and a sysex end received - ignoring!"));
 	}
 	else
 	{
