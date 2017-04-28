@@ -10,7 +10,7 @@
 #include "Event/ChannelAftertouch.h"
 #include "Event/ChannelEvent.h"
 #include "Event/Controller.h"
-#include "Event/NoteAftertouch.h"
+#include "Event/NoteAfterTouch.h"
 #include "Event/NoteOff.h"
 #include "Event/NoteOn.h"
 #include "Event/PitchBend.h"
