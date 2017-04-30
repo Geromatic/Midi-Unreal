@@ -4,12 +4,14 @@
 #include "MidiAssetEditorPrivatePCH.h"
 #include "ModuleInterface.h"
 
+#include "./Styles/MidiAssetEditorStyle.h"
+
 
 #define LOCTEXT_NAMESPACE "FMidiAssetEditorModule"
 
 
 /**
- * Implements the TextAssetEditor module.
+ * Implements the MidiAssetEditor module.
  */
 class FMidiAssetEditorModule
 	: public IModuleInterface
@@ -18,8 +20,14 @@ public:
 
 	// IModuleInterface interface
 
-	virtual void StartupModule() override { }
-	virtual void ShutdownModule() override { }
+	virtual void StartupModule() override { 
+		// Initialize & Register MidiAsset Style
+		FMidiAssetEditorStyle::Initialize();
+	}
+	virtual void ShutdownModule() override { 
+		// Unregister MidiAsset Style
+		FMidiAssetEditorStyle::Shutdown();
+	}
 
 	virtual bool SupportsDynamicReloading() override
 	{
