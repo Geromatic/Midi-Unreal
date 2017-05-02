@@ -25,11 +25,15 @@ class MIDIINTERFACE_API UMidiInterfaceComponent : public UActorComponent
 	
 public:	
 	// internal but public as called from callback proc
-	
+	static const bool queueCallbacks = true;
+
 	bool getInSysEx() { return inSysEx; }
 	void startSysEx();
 	void stopSysEx(float deltaTime);
 	void appendSysEx(int data);
+
+	void postCallback(double deltatime, std::vector< unsigned char > *message);
+	void handleCallback(double deltatime, std::vector< unsigned char > *message);
 
 	// Sets default values for this actor's properties
 	UMidiInterfaceComponent();
@@ -77,7 +81,16 @@ public:
 
 private:
 	bool inSysEx;
+	
+
+	class CallbackMessage
+	{
+	public:
+		float deltaTime;
+		std::vector< unsigned char > message;
+	};
 	TArray<uint8> sysExArray;
+	TQueue<CallbackMessage> messageQueue;
 
 	void setInSysEx(bool isInSysEx) { inSysEx = isInSysEx; }
 };

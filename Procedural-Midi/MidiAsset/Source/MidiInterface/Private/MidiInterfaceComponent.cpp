@@ -9,99 +9,13 @@
 void mycallback(double deltatime, std::vector< unsigned char > *message, void *userData)
 {
 	UMidiInterfaceComponent* component = (UMidiInterfaceComponent*)userData;
-
-	size_t nBytes = message->size();
-	for (size_t i = 0; i < nBytes; )
+	if (UMidiInterfaceComponent::queueCallbacks)
 	{
-		uint8 id = message->at(i++);
-		uint8 type = id >> 4;
-		uint8 channelOrSubtype = id & 0x0F;
-		
-		// system message (top four bits 1111)
-		if (type == 0xF)
-		{
-			switch (channelOrSubtype)
-			{
-				// sysex start?
-				case 0: component->startSysEx(); break;
-				// sysex end?
-				case 7:	component->stopSysEx(deltatime); break;
-				// song position pointer
-				case 2:
-				{
-					FMidiClockEvent Event;
-					Event.Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
-					
-					// LSB
-					uint8 lsb = message->at(i++) & 0XFF;
-
-					//MSB
-					Event.Data = message->at(i++) & 0XFF;
-					Event.Data = Event.Data << 7;
-					Event.Data += lsb;
-					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
-					break;
-				}
-				// start
-				case 10:
-				{
-					FMidiClockEvent Event;
-
-					Event.Type = EMidiClockTypeEnum::MCTE_START;
-					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
-					break;
-				}
-				// continue
-				case 11:
-				{
-					FMidiClockEvent Event;
-
-					Event.Type = EMidiClockTypeEnum::MCTE_CONTINUE;
-					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
-					break;
-				}
-				// Timing clock/pulse
-				case 8:
-				{
-					FMidiClockEvent Event;
-
-					Event.Type = EMidiClockTypeEnum::MCTE_CLOCK;
-					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
-					break;
-				}
-				// Stop
-				case 12:
-				{
-					FMidiClockEvent Event;
-
-					Event.Type = EMidiClockTypeEnum::MCTE_STOP;
-					component->OnReceiveClockEvent.Broadcast(Event, deltatime);
-					break;
-				}
-			}
-		}
-		// if in the middle of sysex, pass it on to sysex buffer
-		else if (component->getInSysEx())
-		{
-			component->appendSysEx(id);
-		}
-		// check if it is a channel message
-		else if (type >= 0x8 && type <= 0xE && (i < nBytes) ) 
-		{
-			FMidiEvent Event;
-
-			Event.Type = (EMidiTypeEnum)(type & 0X0F);
-			Event.Channel = channelOrSubtype & 0X0F;
-			Event.Data1 = message->at(i++) & 0XFF;
-
-			// check for program change or CHANNEL_AFTERTOUCH
-			if (type != 0xC && type != 0xD && (i < nBytes) ) {
-				Event.Data2 = message->at(i++) & 0XFF;
-			}
-
-			component->OnReceiveEvent.Broadcast(Event, deltatime);
-		}
-		
+		component->postCallback(deltatime, message);
+	}
+	else
+	{
+		component->handleCallback(deltatime, message);
 	}
 }
 
@@ -109,7 +23,8 @@ void mycallback(double deltatime, std::vector< unsigned char > *message, void *u
 UMidiInterfaceComponent::UMidiInterfaceComponent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryComponentTick.bCanEverTick = false;
+	
+	PrimaryComponentTick.bCanEverTick = queueCallbacks;
 	inSysEx = false;
 	
 }
@@ -125,6 +40,116 @@ void UMidiInterfaceComponent::TickComponent(float DeltaTime, ELevelTick TickType
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	while (!messageQueue.IsEmpty())
+	{
+		CallbackMessage message;
+		messageQueue.Dequeue(message);
+		handleCallback(message.deltaTime, &message.message);
+	}
+
+}
+void UMidiInterfaceComponent::postCallback(double deltatime, std::vector< unsigned char > *message)
+{
+	CallbackMessage cbMessage{ deltatime, *message };
+
+	messageQueue.Enqueue(cbMessage);
+
+}
+void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsigned char > *message)
+{
+	size_t nBytes = message->size();
+	for (size_t i = 0; i < nBytes; )
+	{
+		uint8 id = message->at(i++);
+		uint8 type = id >> 4;
+		uint8 channelOrSubtype = id & 0x0F;
+
+		// system message (top four bits 1111)
+		if (type == 0xF)
+		{
+			switch (channelOrSubtype)
+			{
+				// sysex start?
+			case 0: startSysEx(); break;
+				// sysex end?
+			case 7:	stopSysEx(deltatime); break;
+				// song position pointer
+			case 2:
+			{
+				FMidiClockEvent Event;
+				Event.Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
+
+				// LSB
+				uint8 lsb = message->at(i++) & 0XFF;
+
+				//MSB
+				Event.Data = message->at(i++) & 0XFF;
+				Event.Data = Event.Data << 7;
+				Event.Data += lsb;
+				OnReceiveClockEvent.Broadcast(Event, deltatime);
+				break;
+			}
+			// start
+			case 10:
+			{
+				FMidiClockEvent Event;
+
+				Event.Type = EMidiClockTypeEnum::MCTE_START;
+				OnReceiveClockEvent.Broadcast(Event, deltatime);
+				break;
+			}
+			// continue
+			case 11:
+			{
+				FMidiClockEvent Event;
+
+				Event.Type = EMidiClockTypeEnum::MCTE_CONTINUE;
+				OnReceiveClockEvent.Broadcast(Event, deltatime);
+				break;
+			}
+			// Timing clock/pulse
+			case 8:
+			{
+				FMidiClockEvent Event;
+
+				Event.Type = EMidiClockTypeEnum::MCTE_CLOCK;
+				OnReceiveClockEvent.Broadcast(Event, deltatime);
+				break;
+			}
+			// Stop
+			case 12:
+			{
+				FMidiClockEvent Event;
+
+				Event.Type = EMidiClockTypeEnum::MCTE_STOP;
+				OnReceiveClockEvent.Broadcast(Event, deltatime);
+				break;
+			}
+			}
+		}
+		// if in the middle of sysex, pass it on to sysex buffer
+		else if (getInSysEx())
+		{
+			appendSysEx(id);
+		}
+		// check if it is a channel message
+		else if (type >= 0x8 && type <= 0xE && (i < nBytes))
+		{
+			FMidiEvent Event;
+
+			Event.Type = (EMidiTypeEnum)(type & 0X0F);
+			Event.Channel = channelOrSubtype & 0X0F;
+			Event.Data1 = message->at(i++) & 0XFF;
+
+			// check for program change or CHANNEL_AFTERTOUCH
+			if (type != 0xC && type != 0xD && (i < nBytes)) {
+				Event.Data2 = message->at(i++) & 0XFF;
+			}
+
+			OnReceiveEvent.Broadcast(Event, deltatime);
+		}
+
+	}
 }
 
 bool UMidiInterfaceComponent::OpenInput(uint8 port)
