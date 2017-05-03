@@ -19,6 +19,7 @@ class MIDI_API MidiProcessor
 	bool mRunning;
 	double mTicksElapsed;
 	double mMsElapsed;
+	bool mUseRealClock;
 
 	int mMPQN;
 	int mPPQ;
@@ -40,6 +41,8 @@ public:
 	bool isRunning();
 
 	void setListener(MidiEventListener* listener);
+	void setWorld(UWorld *world);
+	void setUseRealClock(bool realClock);
 
 	void process();
 	
@@ -53,6 +56,8 @@ private:
 	TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
 	uint32 mLastMs;
 	MidiEventListener* mListener;
+	UWorld *mWorld;
+	UWorld *getWorld();
 	
 	class MidiTrackEventQueue
 	{

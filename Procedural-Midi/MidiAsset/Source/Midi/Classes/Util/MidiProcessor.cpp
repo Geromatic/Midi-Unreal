@@ -1,7 +1,8 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
+#include "../../Private/MidiPrivatePCH.h"
+
 #include "MidiProcessor.h"
 
 #include "../Event/Meta/Tempo.h"
@@ -16,6 +17,7 @@ MidiProcessor::MidiProcessor(): PlaySpeed(1.0) {
 	mRunning = false;
 	mTicksElapsed = 0;
 	mMsElapsed = 0;
+	mUseRealClock = true;
 }
 
 MidiProcessor::~MidiProcessor()
@@ -50,7 +52,13 @@ void MidiProcessor::load(MidiFile & file) {
 
 void MidiProcessor::start() {
 	if (mRunning) return;
-	mLastMs = FPlatformTime::Cycles();
+
+	if (mUseRealClock) {
+		mLastMs = FPlatformTime::Cycles();
+	}
+	else {
+		mLastMs = getWorld()->TimeSeconds * 1000.0f;
+	}
 	mRunning = true;
 
 	mListener->onStart(mMsElapsed == 0);
@@ -112,15 +120,25 @@ void MidiProcessor::process() {
 	if (!mRunning)
 		return;
 
-	uint32 now = FPlatformTime::Cycles();
-	double msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
+	double msElapsed;
+	double ticksElapsed;
+	float now;
+	if (mUseRealClock) {
+		now = FPlatformTime::Cycles();
+		msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
+		ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ);
+	}
+	else {
+		now = getWorld()->TimeSeconds * 1000.0f;
+		msElapsed = now - mLastMs;
+		ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * PlaySpeed;
+	}
+
 	// used for performance
 	//if (msElapsed < (double)PROCESS_RATE_MS) {
 	//	return;
 	//}
 
-	//double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ);
-	double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * PlaySpeed;
 	if (ticksElapsed < 1) {
 		return;
 	}
@@ -157,4 +175,16 @@ void MidiProcessor::process() {
 	mRunning = false;
 	mListener->onStop(true);
 
+}
+
+void MidiProcessor::setWorld(UWorld *aWorld) {
+	mWorld = aWorld;
+}
+
+UWorld *MidiProcessor::getWorld() {
+	return mWorld;
+}
+
+void MidiProcessor::setUseRealClock(bool realClock) {
+	mUseRealClock = realClock;
 }

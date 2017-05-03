@@ -26,7 +26,7 @@
 #include "MML/LabMidiSong.h"
 
 // Sets default values for this component's properties
-UMidiComponent::UMidiComponent() : PlaySpeed(1.0f)
+UMidiComponent::UMidiComponent() : PlaySpeed(1.0f), UseRealClock(true)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -34,6 +34,8 @@ UMidiComponent::UMidiComponent() : PlaySpeed(1.0f)
 	PrimaryComponentTick.TickInterval = 0.000f;
 	// ...
 	mProcessor.setListener(this);
+	mProcessor.setWorld(GetWorld());
+	mProcessor.setUseRealClock(UseRealClock);
 	mMidiFile = NULL;
 }
 
@@ -148,6 +150,7 @@ void UMidiComponent::onStop(bool finish) { OnStop.Broadcast(finish); }
 //-----------------------------------
 
 void UMidiComponent::start() {
+	mProcessor.setUseRealClock(UseRealClock);
 	mProcessor.start();
 }
 
