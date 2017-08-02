@@ -6,7 +6,8 @@
 #include "MetaEvent.h"
 
 /**
- * 
+ * Time Signature Meta Event
+ * A Event that 'defines the musical time signature of a MIDI sequence.'
  */
 class MIDI_API TimeSignature : public MetaEvent
 {

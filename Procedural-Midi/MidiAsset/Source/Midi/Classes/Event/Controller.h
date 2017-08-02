@@ -6,7 +6,8 @@
 #include "ChannelEvent.h"
 
 /**
- * 
+ * Controller Channel Event
+ * A event that can 'affect a controller, such as a slider, knob, or switch.'
  */
 class MIDI_API Controller : public ChannelEvent
 {

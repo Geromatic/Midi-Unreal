@@ -6,7 +6,8 @@
 #include "ChannelEvent.h"
 
 /**
- * 
+ * Channel Aftertouch Channel Event
+ * A event that can 'apply pressure to a MIDI channel, similar to applying pressure to electronic keyboard keys.'
  */
 class MIDI_API ChannelAftertouch : public ChannelEvent
 {

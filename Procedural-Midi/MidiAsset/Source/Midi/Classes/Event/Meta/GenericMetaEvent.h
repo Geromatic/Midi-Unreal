@@ -6,7 +6,8 @@
 #include "MetaEvent.h"
 
 /**
- * 
+ * Generic Meta Event
+ * Class that holds unrecognized MIDI events
  */
 class MIDI_API GenericMetaEvent : public MetaEvent
 {

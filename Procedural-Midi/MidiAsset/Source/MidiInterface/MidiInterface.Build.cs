@@ -5,7 +5,11 @@ using System.IO;
 
 public class MidiInterface : ModuleRules
 {
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+	public MidiInterface(ReadOnlyTargetRules Target) : base(Target)
+#else
     public MidiInterface(TargetInfo Target)
+#endif
 	{
 		
 		PublicIncludePaths.AddRange(

@@ -6,7 +6,8 @@
 #include "MetaEvent.h"
 
 /**
- *	Abstract Meta Text Event
+ * Abstract Textual Meta Event
+ * A abstract event for 'messages that contains 'text based' information about the MIDI sequence and that are not to be sent over MIDI ports.'
  */
 class MIDI_API TextualMetaEvent : public MetaEvent
 {
