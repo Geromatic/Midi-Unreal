@@ -61,7 +61,60 @@ enum class EMidiTypeEnum : uint8
 	*/
 	MTE_PITCH_BEND 				UMETA(DisplayName = "Pitch Bend")
 };
-
+UENUM(BlueprintType)
+enum class EMidiClockTypeEnum : uint8
+{
+	/*
+	*	Quarter Frame (MTC)
+	*	[Data=]
+	*/
+	MCTE_QUARTER_FRAME = 1 					UMETA(DisplayName = "Quarter Frame (MTC)"),
+	/*
+	*	Song Position Pointer
+	*	[Data=Position]
+	*/
+	MCTE_SONG_POSITION = 2 					UMETA(DisplayName = "Song position pointer"),
+	/*
+	*	Song Select
+	*	[Data=SongNumber]
+	*/
+	MCTE_SONG_SELECT 						UMETA(DisplayName = "Song Select"),
+	/*
+	*	Tune Request
+	*	[Data=]
+	*/
+	MCTE_TUNE_REQUEST = 8 					UMETA(DisplayName = "Tune Request"),
+	/*
+	*	Clock
+	*	[Data=]
+	*/
+	MCTE_CLOCK 	= 10						UMETA(DisplayName = "Timing Clock"),
+	/*
+	*	Start
+	*	[Data=]
+	*/
+	MCTE_START = 11							UMETA(DisplayName = "Start"),
+	/*
+	*	Continue
+	*	[Data=]
+	*/
+	MCTE_CONTINUE 							UMETA(DisplayName = "Continue"),
+	/*
+	*	Stop
+	*	[Data=]
+	*/
+	MCTE_STOP = 13							UMETA(DisplayName = "Stop"),
+	/*
+	*	Active Sensing
+	*	[Data=]
+	*/
+	MCTE_ACTIVE 							UMETA(DisplayName = "Active Sensing"),
+	/*
+	*	Reset
+	*	[Data=]
+	*/
+	MCTE_RESET  							UMETA(DisplayName = "Reset"),
+};
 USTRUCT(BlueprintType)
 struct FMidiEvent
 {
@@ -93,6 +146,27 @@ struct FMidiEvent
 	}
 };
 
+
+USTRUCT(BlueprintType)
+struct FMidiClockEvent
+{
+	GENERATED_BODY()
+
+	// The Type of Event this struct represents
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
+	EMidiClockTypeEnum Type;
+
+	// The first data value
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
+	int32 Data;
+
+	//Constructor
+	FMidiClockEvent()
+	{
+		Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
+		Data = 0;
+	}
+};
 /**
  * MIDI Frequency Conversion Utility
  */
@@ -124,4 +198,12 @@ public:
 	// Returns the visual representation of a note
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static ENoteEnum NoteToChord(uint8 note);
+
+	// get Pitch Bend amount
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
+	static int32 GetPitchBendAmount(uint8 data1, uint8 data2);
+
+	// convert Pitch Bend amount to data values
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
+	static void ConvertPitchBendAmount(int32 amount, uint8& data1, uint8& data2);
 };

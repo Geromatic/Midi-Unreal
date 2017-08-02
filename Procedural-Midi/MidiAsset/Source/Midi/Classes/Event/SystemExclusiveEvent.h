@@ -6,6 +6,7 @@
 #include "ChannelEvent.h"
 
 /**
+ * System Exclusive MIDI Event
  * SysEx events may not be properly handled by this library.
  */
 class MIDI_API SystemExclusiveEvent : public MidiEvent

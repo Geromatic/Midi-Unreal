@@ -6,7 +6,8 @@
 #include "TextualMetaEvent.h"
 
 /**
- * 
+ * Cue Point Textual Meta Message
+ * A event that 'denotes a cue in a MIDI file, usually to signify the beginning of an action'
  */
 class MIDI_API CuePoint : public TextualMetaEvent
 {

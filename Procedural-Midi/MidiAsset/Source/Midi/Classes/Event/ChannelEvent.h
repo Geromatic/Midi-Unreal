@@ -8,7 +8,7 @@
 using namespace std;
 
 /**
- * Abstract Channel Event
+ * Abstract Channel MIDI Event
  */
 class MIDI_API ChannelEvent : public MidiEvent
 {

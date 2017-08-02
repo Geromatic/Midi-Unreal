@@ -5,8 +5,11 @@ using System.IO;
 
 public class ProceduralAudio : ModuleRules
 {
-
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+        public ProceduralAudio(ReadOnlyTargetRules Target) : base(Target)
+#else
     public ProceduralAudio(TargetInfo Target)
+#endif
 	{
 		
 		PublicIncludePaths.AddRange(

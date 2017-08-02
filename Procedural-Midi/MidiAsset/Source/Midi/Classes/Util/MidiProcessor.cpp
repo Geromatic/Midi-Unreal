@@ -9,7 +9,7 @@
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-MidiProcessor::MidiProcessor(): PlaySpeed(1.0) {
+MidiProcessor::MidiProcessor() : PlaySpeed(1.0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
 
@@ -20,6 +20,12 @@ MidiProcessor::MidiProcessor(): PlaySpeed(1.0) {
 
 MidiProcessor::~MidiProcessor()
 {
+	if (mRunnable) {
+		mRunnable->Stop();
+		delete mRunnable;
+	}
+	mRunnable = NULL;
+
 	if (mMetronome)
 		delete mMetronome;
 	mMetronome = NULL;
@@ -54,16 +60,39 @@ void MidiProcessor::start() {
 	mRunning = true;
 
 	mListener->onStart(mMsElapsed == 0);
+
+	// Setup Thread
+	if (mRunnable) {
+		mRunnable->Stop();
+		delete mRunnable;
+	}
+	mRunnable = NULL;
+
+	if (processInBackground)
+		mRunnable = new FMidiProcessorWorker(this);
 }
 
 void MidiProcessor::stop() {
 	mRunning = false;
+
+	if (mRunnable) {
+		mRunnable->Stop();
+		delete mRunnable;
+	}
+	mRunnable = NULL;
 
 	mListener->onStop(false);
 }
 
 void MidiProcessor::reset() {
 	mRunning = false;
+
+	if (mRunnable) {
+		mRunnable->Stop();
+		delete mRunnable;
+	}
+	mRunnable = NULL;
+
 	mTicksElapsed = 0;
 	mMsElapsed = 0;
 

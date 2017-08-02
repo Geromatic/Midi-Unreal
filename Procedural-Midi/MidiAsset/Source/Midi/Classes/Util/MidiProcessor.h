@@ -1,4 +1,4 @@
-// Copyright 2011 Alex Leffelman
+/// Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
 #pragma once
@@ -7,6 +7,8 @@
 #include "../Event/MidiEvent.h"
 #include "MetronomeTick.h"
 #include "MidiEventListener.h"
+
+class FMidiProcessorWorker;
 
 /**
 *	Loads and plays back a MIDI file
@@ -42,9 +44,11 @@ public:
 	void setListener(MidiEventListener* listener);
 
 	void process();
-	
+
 	//Variable that can fix playback speed
 	double PlaySpeed;
+
+	bool processInBackground;
 
 protected:
 	void dispatch(MidiEvent * _event);
@@ -53,7 +57,7 @@ private:
 	TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
 	uint32 mLastMs;
 	MidiEventListener* mListener;
-	
+
 	class MidiTrackEventQueue
 	{
 	private:
@@ -63,7 +67,7 @@ private:
 		MidiEvent* mNext;
 
 	public:
-		MidiTrackEventQueue(MidiTrack* track): mIterator(track->getEvents().CreateIterator()), mNext(NULL)
+		MidiTrackEventQueue(MidiTrack* track) : mIterator(track->getEvents().CreateIterator()), mNext(NULL)
 		{
 			mTrack = track;
 
@@ -115,4 +119,59 @@ private:
 			}
 		}
 	};
+
+	FMidiProcessorWorker* mRunnable;
+};
+
+//////////////////////////////// Threading ///////////////////////////////////////////
+
+//~~~~~ Multi Threading ~~~
+class FMidiProcessorWorker : public FRunnable
+{
+	/** Thread to run the worker FRunnable on */
+	FRunnableThread* Thread;
+
+	/** The PC */
+	MidiProcessor* ThePC;
+
+public:
+
+	//Done?
+	bool IsFinished() const
+	{
+		return !ThePC->isRunning();
+	}
+
+	//~~~ Thread Core Functions ~~~
+
+	//Constructor / Destructor
+	FMidiProcessorWorker(MidiProcessor* IN_PC) : ThePC(IN_PC)
+	{
+		Thread = FRunnableThread::Create(this, TEXT("FMidiProcessorWorker"), 0, TPri_BelowNormal); //windows default = 8mb for thread, could specify more
+	}
+	virtual ~FMidiProcessorWorker() {
+		delete Thread;
+		Thread = NULL;
+	}
+
+	// Begin FRunnable interface.
+	virtual bool Init() {
+		return true;
+	}
+	virtual uint32 Run() {
+		while (!IsFinished())
+		{
+			ThePC->process();
+			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			//prevent thread from using too many resources
+			FPlatformProcess::Sleep(0.008f);
+			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		}
+		return 0;
+	}
+	virtual void Stop() {
+		Thread->WaitForCompletion();
+	}
+	// End FRunnable interface
+
 };

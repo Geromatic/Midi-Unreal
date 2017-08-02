@@ -6,7 +6,8 @@
 #include "MetaEvent.h"
 
 /**
- * 
+ * Tempo Meta Event
+ * A event that 'sets the tempo of a MIDI sequence in terms of microseconds per quarter note.
  */
 class MIDI_API Tempo : public MetaEvent
 {

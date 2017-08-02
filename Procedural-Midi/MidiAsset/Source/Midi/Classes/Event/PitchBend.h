@@ -6,7 +6,8 @@
 #include "ChannelEvent.h"
 
 /**
- * 
+ * Pitch Bend Channel Event
+ * A event that can 'change a channel pitch up or down.'
  */
 class MIDI_API PitchBend : public ChannelEvent
 {

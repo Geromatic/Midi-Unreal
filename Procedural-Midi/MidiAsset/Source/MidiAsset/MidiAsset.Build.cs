@@ -4,7 +4,11 @@ namespace UnrealBuildTool.Rules
 {
 	public class MidiAsset : ModuleRules
 	{
-		public MidiAsset(TargetInfo Target)
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+	public MidiAsset(ReadOnlyTargetRules Target) : base(Target)
+#else
+    public MidiAsset(TargetInfo Target)
+#endif
 		{
             PublicDependencyModuleNames.AddRange(
                 new string[] {

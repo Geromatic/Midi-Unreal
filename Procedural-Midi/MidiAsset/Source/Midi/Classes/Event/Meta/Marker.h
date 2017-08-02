@@ -6,7 +6,8 @@
 #include "TextualMetaEvent.h"
 
 /**
- * 
+ * Marker Textual Meta Event
+ * A event that 'marks a point in time for a MIDI sequence.'
  */
 class MIDI_API _Marker : public TextualMetaEvent
 {

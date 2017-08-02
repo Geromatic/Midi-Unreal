@@ -10,7 +10,8 @@
 #include "MidiInterfaceComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventReceive, FMidiEvent, Event, float, deltaTime);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSysExEventReceive,const TArray<uint8>&, data, float, deltaTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FClockEventReceive, FMidiClockEvent, Event, float, deltaTime);
 /*
 * A component that lets you open and receive data from a MIDI device
 */
@@ -23,6 +24,21 @@ class MIDIINTERFACE_API UMidiInterfaceComponent : public UActorComponent
 	RtMidiOut midiOut;
 	
 public:	
+	/////////////////////////////////////////////////
+
+	// internal but public as called from callback proc
+	static const bool queueCallbacks = true;
+
+	bool getInSysEx() { return inSysEx; }
+	void startSysEx();
+	void stopSysEx(float deltaTime);
+	void appendSysEx(int data);
+
+	void postCallback(double deltatime, std::vector< unsigned char > *message);
+	void handleCallback(double deltatime, std::vector< unsigned char > *message);
+
+	/////////////////////////////////////////////////
+
 	// Sets default values for this actor's properties
 	UMidiInterfaceComponent();
 
@@ -45,11 +61,43 @@ public:
 	void CloseInput();
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface|Local")
 	void CloseOutput();
-	// Sends MIDI event a a MIDI output device
+	// Sends MIDI event to a MIDI output device
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface|Local")
 	void Send(const FMidiEvent& Event);
+
+	// Sends Raw MIDI data to a MIDI output device
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface|Local")
+	void SendRaw(const TArray<uint8>& Data);
+
 
 	//  Called when a device sends a Midi Event to the computer
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
 	FEventReceive OnReceiveEvent;
+
+	//  Called when a device sends a Midi SysEx Event to the computer
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
+	FSysExEventReceive OnReceiveSysExEvent;
+
+
+	//  Called when a device sends a Midi clock Event to the computer
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
+	FClockEventReceive OnReceiveClockEvent;
+
+private:
+	/////////////////////////////////
+
+	bool inSysEx;
+
+	class CallbackMessage
+	{
+	public:
+		float deltaTime;
+		std::vector< unsigned char > message;
+	};
+	TArray<uint8> sysExArray;
+	TQueue<CallbackMessage> messageQueue;
+
+	void setInSysEx(bool isInSysEx) { inSysEx = isInSysEx; }
+
+	/////////////////////////////////
 };

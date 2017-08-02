@@ -59,3 +59,16 @@ int32 UMidiUtils::FrequencyToOctave(float Frequency) {
 ENoteEnum UMidiUtils::NoteToChord(uint8 note) {
 	return (ENoteEnum)(note % 12);
 }
+
+int32 UMidiUtils::GetPitchBendAmount(uint8 data1, uint8 data2) {
+	int y = ((int)data2 & 0x7F) << 7;
+	int x = ((int)data1);
+
+	return y + x;
+}
+
+void UMidiUtils::ConvertPitchBendAmount(int32 amount, uint8& data1, uint8& data2) {
+	amount = amount & 0x3FFF;
+	data1 = (amount & 0x7F);
+	data2 = amount >> 7;
+}
