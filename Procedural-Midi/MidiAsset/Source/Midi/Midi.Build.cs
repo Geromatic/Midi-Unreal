@@ -6,7 +6,11 @@ using System.IO;
 public class Midi : ModuleRules
 {
 
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+	public Midi(ReadOnlyTargetRules Target) : base(Target)
+#else
     public Midi(TargetInfo Target)
+#endif
 	{
 		
 		PublicIncludePaths.AddRange(

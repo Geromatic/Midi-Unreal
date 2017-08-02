@@ -4,7 +4,11 @@ using UnrealBuildTool;
 
 public class MidiAssetEditor : ModuleRules
 {
-	public MidiAssetEditor(TargetInfo Target)
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+	public MidiAssetEditor(ReadOnlyTargetRules Target) : base(Target)
+#else
+    public MidiAssetEditor(TargetInfo Target)
+#endif
 	{
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[] {

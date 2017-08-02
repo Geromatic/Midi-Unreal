@@ -5,7 +5,11 @@ using System.IO;
 
 public class MidiInterface : ModuleRules
 {
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+	public MidiInterface(ReadOnlyTargetRules Target) : base(Target)
+#else
     public MidiInterface(TargetInfo Target)
+#endif
 	{
 		
 		PublicIncludePaths.AddRange(
@@ -45,7 +49,7 @@ public class MidiInterface : ModuleRules
 			PublicAdditionalLibraries.Add("winmm.lib");
 		}
 		else if (Target.Platform == UnrealTargetPlatform.Mac || Target.Platform == UnrealTargetPlatform.IOS) {
-			Definitions.Add("__MACOSX_CORE__=1");	
+			//Definitions.Add("__MACOSX_CORE__=1");	
 			PublicIncludePaths.AddRange(new string[] {"Runtime/Core/Public/Apple"});
 			
 			if(Target.Platform == UnrealTargetPlatform.Mac)
