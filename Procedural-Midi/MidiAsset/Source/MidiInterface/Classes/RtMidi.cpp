@@ -386,7 +386,7 @@ MidiOutApi :: ~MidiOutApi( void )
 
 // OS-X CoreMIDI header files.
 #include <CoreMIDI/CoreMIDI.h>
-#include <CoreAudio/HostTime.h>
+#include <CoreAudio/CoreAudio.h>
 #include <CoreServices/CoreServices.h>
 
 // A structure to hold variables related to the CoreMIDI API
