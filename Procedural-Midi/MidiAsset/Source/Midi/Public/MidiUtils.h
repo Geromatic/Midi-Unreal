@@ -98,7 +98,7 @@ enum class EMidiClockTypeEnum : uint8
 	*	Continue
 	*	[Data1=Unused, Data2=Unused]
 	*/
-	MCTE_CONTINUE 							UMETA(DisplayName = "Continue")
+	MCTE_CONTINUE 							UMETA(DisplayName = "Continue"),
 	/*
 	*	Stop
 	*	[Data1=Unused, Data2=Unused]
