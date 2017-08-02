@@ -6,7 +6,8 @@
 #include "TextualMetaEvent.h"
 
 /**
- * 
+ * Lyrics Textual Meta Event
+ * A event that 'shows the lyrics of a song at a particular time in the MIDI sequence.'
  */
 class MIDI_API Lyrics : public TextualMetaEvent
 {

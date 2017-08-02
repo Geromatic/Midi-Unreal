@@ -6,7 +6,8 @@
 #include "TextualMetaEvent.h"
 
 /**
- * 
+ * Copyright Notice Textual Meta Event
+ * A event that 'places a copyright notice in a MIDI file.'
  */
 class MIDI_API CopyrightNotice : public TextualMetaEvent
 {

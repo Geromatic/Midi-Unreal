@@ -6,7 +6,8 @@
 #include "ChannelEvent.h"
 
 /**
- * 
+ * Note Off Channel Event
+ * A event that can 'release a note and stop playing it.'
  */
 class MIDI_API NoteOff : public ChannelEvent
 {

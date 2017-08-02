@@ -6,7 +6,8 @@
 #include "MetaEvent.h"
 
 /**
- * 
+ * Sequence Number Meta Event
+ * A event that 'defines the number of a sequence in type 0 and 1 MIDI files, or the pattern number in type 2 MIDI files.'
  */
 class MIDI_API SequenceNumber : public MetaEvent
 {
