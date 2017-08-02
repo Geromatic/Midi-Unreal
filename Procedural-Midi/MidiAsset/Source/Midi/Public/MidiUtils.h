@@ -113,7 +113,7 @@ enum class EMidiClockTypeEnum : uint8
 	*	Reset
 	*	[Data1=Unused, Data2=Unused]
 	*/
-	MCTE_RESET 								UMETA(DisplayName = "Reset"),
+	MCTE_RESET  							UMETA(DisplayName = "Reset"),
 };
 USTRUCT(BlueprintType)
 struct FMidiEvent

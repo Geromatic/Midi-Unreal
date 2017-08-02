@@ -81,21 +81,16 @@ void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsi
 			else {
 				FMidiClockEvent Event;
 				Event.Type = (EMidiClockTypeEnum)channelOrSubtype;
-				switch (channelOrSubtype)
-				{
-					// song position pointer
-					case 2:
-					{
-						// LSB
-						uint8 lsb = message->at(i++) & 0XFF;
 
-						//MSB
-						Event.Data = message->at(i++) & 0XFF;
-						Event.Data = Event.Data << 7;
-						Event.Data += lsb;
-						break;
-					}
-						
+				// song position pointer
+				if (channelOrSubtype == 2) {
+					// LSB
+					uint8 lsb = message->at(i++) & 0XFF;
+
+					//MSB
+					Event.Data = message->at(i++) & 0XFF;
+					Event.Data = Event.Data << 7;
+					Event.Data += lsb;
 				}
 				OnReceiveClockEvent.Broadcast(Event, deltatime);
 			}
@@ -121,7 +116,6 @@ void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsi
 
 			OnReceiveEvent.Broadcast(Event, deltatime);
 		}
-
 	}
 }
 

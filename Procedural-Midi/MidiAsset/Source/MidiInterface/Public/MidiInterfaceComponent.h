@@ -24,6 +24,8 @@ class MIDIINTERFACE_API UMidiInterfaceComponent : public UActorComponent
 	RtMidiOut midiOut;
 	
 public:	
+	/////////////////////////////////////////////////
+
 	// internal but public as called from callback proc
 	static const bool queueCallbacks = true;
 
@@ -34,6 +36,8 @@ public:
 
 	void postCallback(double deltatime, std::vector< unsigned char > *message);
 	void handleCallback(double deltatime, std::vector< unsigned char > *message);
+
+	/////////////////////////////////////////////////
 
 	// Sets default values for this actor's properties
 	UMidiInterfaceComponent();
@@ -80,8 +84,9 @@ public:
 	FClockEventReceive OnReceiveClockEvent;
 
 private:
+	/////////////////////////////////
+
 	bool inSysEx;
-	
 
 	class CallbackMessage
 	{
@@ -93,4 +98,6 @@ private:
 	TQueue<CallbackMessage> messageQueue;
 
 	void setInSysEx(bool isInSysEx) { inSysEx = isInSysEx; }
+
+	/////////////////////////////////
 };
