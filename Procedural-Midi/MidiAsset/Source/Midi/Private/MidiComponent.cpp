@@ -63,7 +63,7 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 		mProcessor.process();
 	else
 		while (!mQueue.IsEmpty()) {
-			static FMidiEvent _midiEvent;
+			FMidiEvent _midiEvent;
 			mQueue.Dequeue(_midiEvent);
 			OnMidiEvent.Broadcast(_midiEvent);
 		}

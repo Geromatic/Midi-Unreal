@@ -66,52 +66,52 @@ enum class EMidiClockTypeEnum : uint8
 {
 	/*
 	*	Quarter Frame (MTC)
-	*	[Data1=Data, Data2=Unused]
+	*	[Data=]
 	*/
 	MCTE_QUARTER_FRAME = 1 					UMETA(DisplayName = "Quarter Frame (MTC)"),
 	/*
 	*	Song Position Pointer
-	*	[Data1=LowBit, Data2=HighBit]
+	*	[Data=Position]
 	*/
-	MCTE_SONG_POSITION  					UMETA(DisplayName = "Song position pointer"),
+	MCTE_SONG_POSITION = 2 					UMETA(DisplayName = "Song position pointer"),
 	/*
 	*	Song Select
-	*	[Data1=SongNumber, Data2=Unused
+	*	[Data=SongNumber]
 	*/
 	MCTE_SONG_SELECT 						UMETA(DisplayName = "Song Select"),
 	/*
 	*	Tune Request
-	*	[Data1=Unused, Data2=Unused]
+	*	[Data=]
 	*/
 	MCTE_TUNE_REQUEST = 8 					UMETA(DisplayName = "Tune Request"),
 	/*
 	*	Clock
-	*	[Data1=Unused, Data2=Unused]
+	*	[Data=]
 	*/
 	MCTE_CLOCK 	= 10						UMETA(DisplayName = "Timing Clock"),
 	/*
 	*	Start
-	*	[Data1=Unused, Data2=Unused]
+	*	[Data=]
 	*/
 	MCTE_START = 11							UMETA(DisplayName = "Start"),
 	/*
 	*	Continue
-	*	[Data1=Unused, Data2=Unused]
+	*	[Data=]
 	*/
 	MCTE_CONTINUE 							UMETA(DisplayName = "Continue"),
 	/*
 	*	Stop
-	*	[Data1=Unused, Data2=Unused]
+	*	[Data=]
 	*/
 	MCTE_STOP = 13							UMETA(DisplayName = "Stop"),
 	/*
 	*	Active Sensing
-	*	[Data1=Unused, Data2=Unused]
+	*	[Data=]
 	*/
 	MCTE_ACTIVE 							UMETA(DisplayName = "Active Sensing"),
 	/*
 	*	Reset
-	*	[Data1=Unused, Data2=Unused]
+	*	[Data=]
 	*/
 	MCTE_RESET  							UMETA(DisplayName = "Reset"),
 };
