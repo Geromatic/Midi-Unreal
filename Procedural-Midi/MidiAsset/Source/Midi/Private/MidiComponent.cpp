@@ -51,26 +51,43 @@ void UMidiComponent::BeginPlay()
 	// ...
 }
 
-
 // Called every frame
 void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	if(mProcessor.PlaySpeed != PlaySpeed)
+	if (mProcessor.PlaySpeed != PlaySpeed)
 		mProcessor.PlaySpeed = PlaySpeed;
-	
-	mProcessor.process();
+
+	if(!mProcessor.processInBackground)
+		mProcessor.process();
+	else
+		while (!mQueue.IsEmpty()) {
+			static FMidiEvent _midiEvent;
+			mQueue.Dequeue(_midiEvent);
+			OnMidiEvent.Broadcast(_midiEvent);
+		}
 }
 
-void UMidiComponent::LoadAsset(UMidiAsset* MidiAsset) {
-	if (mProcessor.isRunning()) return;
+bool UMidiComponent::canInit() {
+	if (isRunning()) {
+		UE_LOG(LogTemp, Warning, TEXT("Unable to load MIDI while another is playing"));
+		return false;
+	}
+	mProcessor.processInBackground = RunInBackground;
+	mQueue.Empty();
 
 	if (mMidiFile)
 		delete mMidiFile;
 	mMidiFile = NULL;
 
+	return true;
+}
+
+void UMidiComponent::LoadAsset(UMidiAsset* MidiAsset) {
+	if (!canInit()) return;
 	if (!MidiAsset) return;
+
 	const TArray<uint8>& data = MidiAsset->Data;
 	if (data.Num() == 0)
 		return;
@@ -81,12 +98,8 @@ void UMidiComponent::LoadAsset(UMidiAsset* MidiAsset) {
 }
 
 void UMidiComponent::LoadFile(FString path) {
-	if (mProcessor.isRunning()) return;
+	if (!canInit()) return;
 
-	if (mMidiFile)
-		delete mMidiFile;
-	mMidiFile = NULL;
-	
 	TArray<uint8> data;
 	bool result = FFileHelper::LoadFileToArray(data, path.GetCharArray().GetData());
 	if (result == 0 || data.Num() == 0)
@@ -98,11 +111,7 @@ void UMidiComponent::LoadFile(FString path) {
 }
 
 void UMidiComponent::LoadMML(FString path) {
-	if (mProcessor.isRunning()) return;
-
-	if (mMidiFile)
-		delete mMidiFile;
-	mMidiFile = NULL;
+	if (!canInit()) return;
 
 	char* a = new char[path.Len()];
 	for (int i = 0; i < path.Len(); i++)
@@ -138,12 +147,10 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 				_midiEvent.Data2 = 0 & 0XFF;
 			}
 		}
-
-		OnMidiEvent.Broadcast(_midiEvent);
-	}
-	// System Exclusive Message
-	else if (_event->getType() == 0xF0 || _event->getType() == 0xF7) {
-		
+		if(mProcessor.processInBackground)
+			mQueue.Enqueue(_midiEvent);
+		else
+			OnMidiEvent.Broadcast(_midiEvent);
 	}
 }
 
@@ -162,6 +169,7 @@ void UMidiComponent::stop() {
 
 void UMidiComponent::reset() {
 	mProcessor.reset();
+	mQueue.Empty();
 }
 
 bool UMidiComponent::isStarted() {
@@ -203,7 +211,7 @@ float UMidiComponent::GetDuration()
 		while (true) {
 
 			const double msElapsed = 1.0;
-			double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * PlaySpeed;
+			double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * mProcessor.PlaySpeed;
 
 			mMsElapsed += msElapsed;
 			mTicksElapsed += ticksElapsed;

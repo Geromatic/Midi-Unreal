@@ -37,13 +37,17 @@ public:
 	
 // MIDI
 
-	//Changes the Speed of MIDI playback
+//Changes the Speed of MIDI playback
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
 	float PlaySpeed = 1;
 
 	// Ignores Note OFF events and replaces with Note ON with Velocity = 0
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
 	bool SimplifyNote = true;
+
+	// Allow Running in Background
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
+	bool RunInBackground = false;
 	
 	// loads the Midi Asset Data
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
@@ -63,6 +67,11 @@ public:
 private:
 	MidiFile* mMidiFile;
 	MidiProcessor mProcessor;
+
+	bool canInit();
+	
+	// Handle Data Racing
+	TQueue<FMidiEvent> mQueue;
 
 	// MIDI Event Listener
 
