@@ -124,4 +124,12 @@ public:
 	// Returns the visual representation of a note
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static ENoteEnum NoteToChord(uint8 note);
+
+	// get Pitch Bend amount
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
+	static int32 GetPitchBendAmount(uint8 data1, uint8 data2);
+
+	// convert Pitch Bend amount to data values
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
+	static void ConvertPitchBendAmount(int32 amount, uint8& data1, uint8& data2);
 };
