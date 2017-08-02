@@ -121,6 +121,7 @@ void UMidiComponent::LoadMML(FString path) {
 }
 
 void UMidiComponent::onEvent(MidiEvent* _event) {
+	// Channel Event
 	if (_event->getType() >= ChannelEvent::NOTE_OFF && _event->getType() <= ChannelEvent::PITCH_BEND) {
 		ChannelEvent* channelEvent = static_cast<ChannelEvent*>(_event);
 		FMidiEvent _midiEvent;
@@ -139,6 +140,10 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 		}
 
 		OnMidiEvent.Broadcast(_midiEvent);
+	}
+	// System Exclusive Message
+	else if (_event->getType() == 0xF0 || _event->getType() == 0xF7) {
+		
 	}
 }
 

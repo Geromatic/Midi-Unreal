@@ -65,30 +65,55 @@ UENUM(BlueprintType)
 enum class EMidiClockTypeEnum : uint8
 {
 	/*
+	*	Quarter Frame (MTC)
+	*	[Data1=Data, Data2=Unused]
+	*/
+	MCTE_QUARTER_FRAME = 1 					UMETA(DisplayName = "Quarter Frame (MTC)"),
+	/*
 	*	Song Position Pointer
 	*	[Data1=LowBit, Data2=HighBit]
 	*/
-	MCTE_SONG_POSITION 				UMETA(DisplayName = "Song position pointer"),
+	MCTE_SONG_POSITION  					UMETA(DisplayName = "Song position pointer"),
+	/*
+	*	Song Select
+	*	[Data1=SongNumber, Data2=Unused
+	*/
+	MCTE_SONG_SELECT 						UMETA(DisplayName = "Song Select"),
+	/*
+	*	Tune Request
+	*	[Data1=Unused, Data2=Unused]
+	*/
+	MCTE_TUNE_REQUEST = 8 					UMETA(DisplayName = "Tune Request"),
 	/*
 	*	Clock
 	*	[Data1=Unused, Data2=Unused]
 	*/
-	MCTE_CLOCK 						UMETA(DisplayName = "Clock"),
+	MCTE_CLOCK 	= 10						UMETA(DisplayName = "Timing Clock"),
 	/*
 	*	Start
 	*	[Data1=Unused, Data2=Unused]
 	*/
-	MCTE_START 						UMETA(DisplayName = "Start"),
-	/*
-	*	Stop
-	*	[Data1=Unused, Data2=Unused]
-	*/
-	MCTE_STOP 						UMETA(DisplayName = "Stop"),
+	MCTE_START = 11							UMETA(DisplayName = "Start"),
 	/*
 	*	Continue
 	*	[Data1=Unused, Data2=Unused]
 	*/
-	MCTE_CONTINUE 					UMETA(DisplayName = "Continue")
+	MCTE_CONTINUE 							UMETA(DisplayName = "Continue")
+	/*
+	*	Stop
+	*	[Data1=Unused, Data2=Unused]
+	*/
+	MCTE_STOP = 13							UMETA(DisplayName = "Stop"),
+	/*
+	*	Active Sensing
+	*	[Data1=Unused, Data2=Unused]
+	*/
+	MCTE_ACTIVE 							UMETA(DisplayName = "Active Sensing"),
+	/*
+	*	Reset
+	*	[Data1=Unused, Data2=Unused]
+	*/
+	MCTE_RESET 								UMETA(DisplayName = "Reset"),
 };
 USTRUCT(BlueprintType)
 struct FMidiEvent

@@ -80,46 +80,21 @@ void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsi
 			// MIDI Clock Events
 			else {
 				FMidiClockEvent Event;
+				Event.Type = (EMidiClockTypeEnum)channelOrSubtype;
 				switch (channelOrSubtype)
 				{
-				// song position pointer
-				case 2:
-				{
-					Event.Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
+					// song position pointer
+					case 2:
+					{
+						// LSB
+						uint8 lsb = message->at(i++) & 0XFF;
 
-					// LSB
-					uint8 lsb = message->at(i++) & 0XFF;
-
-					//MSB
-					Event.Data = message->at(i++) & 0XFF;
-					Event.Data = Event.Data << 7;
-					Event.Data += lsb;
-					break;
-				}
-				// start
-				case 10:
-				{
-					Event.Type = EMidiClockTypeEnum::MCTE_START;
-					break;
-				}
-				// continue
-				case 11:
-				{
-					Event.Type = EMidiClockTypeEnum::MCTE_CONTINUE;
-					break;
-				}
-				// Timing clock/pulse
-				case 8:
-				{
-					Event.Type = EMidiClockTypeEnum::MCTE_CLOCK;
-					break;
-				}
-				// Stop
-				case 12:
-				{
-					Event.Type = EMidiClockTypeEnum::MCTE_STOP;
-					break;
-				}
+						//MSB
+						Event.Data = message->at(i++) & 0XFF;
+						Event.Data = Event.Data << 7;
+						Event.Data += lsb;
+						break;
+					}
 						
 				}
 				OnReceiveClockEvent.Broadcast(Event, deltatime);
