@@ -50,7 +50,7 @@ void UMidiInterfaceComponent::TickComponent(float DeltaTime, ELevelTick TickType
 }
 void UMidiInterfaceComponent::postCallback(double deltatime, std::vector< unsigned char > *message)
 {
-	CallbackMessage cbMessage{ deltatime, *message };
+	CallbackMessage cbMessage{ static_cast<float>(deltatime), *message };
 
 	messageQueue.Enqueue(cbMessage);
 
