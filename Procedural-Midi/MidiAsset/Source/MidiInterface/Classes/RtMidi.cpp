@@ -42,10 +42,24 @@
 #include <sstream>
 
 #if defined(__MACOSX_CORE__)
-  #if TARGET_OS_IPHONE
+/*  #if TARGET_OS_IPHONE
     #define AudioGetCurrentHostTime CAHostTimeBase::GetCurrentTime
     #define AudioConvertHostTimeToNanos CAHostTimeBase::ConvertToNanos
-  #endif
+  #endif*/
+// TODO use mach_time workaround
+	#include <mach/mach_time.h>
+    unsigned long long AudioConvertHostTimeToNanos(unsigned long long time)
+    {
+				/* Get the timebase info */
+				struct mach_timebase_info info;
+				mach_timebase_info(&info);
+
+				/* Convert to nanoseconds */
+				time *= info.numer;
+				time /= info.denom;
+                return time;
+    }
+	#define AudioGetCurrentHostTime() (unsigned long long)mach_absolute_time()
 #endif
 
 //*********************************************************************//
@@ -386,7 +400,7 @@ MidiOutApi :: ~MidiOutApi( void )
 
 // OS-X CoreMIDI header files.
 #include <CoreMIDI/CoreMIDI.h>
-#include <CoreAudio/CoreAudio.h>
+//#include <CoreAudio/CoreAudio.h>
 #include <CoreServices/CoreServices.h>
 
 // A structure to hold variables related to the CoreMIDI API
