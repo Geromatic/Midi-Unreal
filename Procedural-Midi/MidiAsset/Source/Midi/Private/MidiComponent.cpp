@@ -66,7 +66,7 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 	if (mProcessor.PlaySpeed != PlaySpeed)
 		mProcessor.PlaySpeed = PlaySpeed;
 
-	if(!mWorker)
+	if(!InBackground)
 		mProcessor.process();
 	else
 		while (!mQueue.IsEmpty()) {
@@ -74,12 +74,6 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 			mQueue.Dequeue(_midiEvent);
 			OnMidiEvent.Broadcast(_midiEvent);
 		}
-}
-
-void UMidiComponent::SetRunInBackground(bool inBack) {
-	if (isRunning()) return;
-		
-	RunInBackground = inBack;
 }
 
 bool UMidiComponent::canInit() {
@@ -159,7 +153,7 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 				_midiEvent.Data2 = 0 & 0XFF;
 			}
 		}
-		if(RunInBackground)
+		if(InBackground)
 			mQueue.Enqueue(_midiEvent);
 		else
 			OnMidiEvent.Broadcast(_midiEvent);
@@ -168,7 +162,7 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 
 void UMidiComponent::onStart(bool fromBeginning) { 
 	// MultiThread
-	if (RunInBackground) {
+	if (InBackground) {
 		mWorker = new FMidiProcessorWorker(&mProcessor);
 	}
 
@@ -186,7 +180,9 @@ void UMidiComponent::onStop(bool finish) {
 
 //-----------------------------------
 
-void UMidiComponent::start() {
+void UMidiComponent::start(bool background) {
+	if (!isRunning())
+		InBackground = background;
 	mProcessor.start();
 }
 

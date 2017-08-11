@@ -47,13 +47,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
 	bool SimplifyNote = true;
 
-	// Set Running in Background
-	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
-	void SetRunInBackground(bool inBack);
-
 	// Get Running in Background
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MIDI|Processor")
-	bool RunInBackground = false;
+	bool InBackground = false;
 	
 	// loads the Midi Asset Data
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
@@ -88,7 +84,7 @@ private:
 public:
 	// start MIDI playback
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
-	void start();
+	void start(bool background);
 	// stop MIDI playback
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
 	void stop();
