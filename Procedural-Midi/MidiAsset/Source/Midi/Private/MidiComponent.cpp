@@ -16,7 +16,6 @@
 #include "Event/PitchBend.h"
 #include "Event/ProgramChange.h"
 #include "Event/SystemExclusiveEvent.h"
-
 #include "Event/Meta/Tempo.h"
 
 #include "MidiAsset.h"
@@ -24,9 +23,10 @@
 #include "Util/MidiProcessor.h"
 
 #include "MML/LabMidiSong.h"
+#include "Thread/MidiThread.h"
 
 // Sets default values for this component's properties
-UMidiComponent::UMidiComponent() : PlaySpeed(1.0f)
+UMidiComponent::UMidiComponent() : PlaySpeed(1.0f), mWorker(NULL)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -38,6 +38,13 @@ UMidiComponent::UMidiComponent() : PlaySpeed(1.0f)
 }
 
 UMidiComponent::~UMidiComponent() {
+	mProcessor.stop();
+
+	// make sure thread is deleted
+	if (mWorker)
+		delete mWorker;
+	mWorker = NULL;
+
 	if (mMidiFile)
 		delete mMidiFile;
 	mMidiFile = NULL;
@@ -59,7 +66,7 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 	if (mProcessor.PlaySpeed != PlaySpeed)
 		mProcessor.PlaySpeed = PlaySpeed;
 
-	if(!mProcessor.processInBackground)
+	if(!mWorker)
 		mProcessor.process();
 	else
 		while (!mQueue.IsEmpty()) {
@@ -69,13 +76,17 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 		}
 }
 
+void UMidiComponent::SetRunInBackground(bool inBack) {
+	if (isRunning()) return;
+		
+	RunInBackground = inBack;
+}
+
 bool UMidiComponent::canInit() {
 	if (isRunning()) {
 		UE_LOG(LogTemp, Warning, TEXT("Unable to load MIDI while another is playing"));
 		return false;
 	}
-	mProcessor.processInBackground = RunInBackground;
-	mQueue.Empty();
 
 	if (mMidiFile)
 		delete mMidiFile;
@@ -117,6 +128,7 @@ void UMidiComponent::LoadMML(FString path) {
 	for (int i = 0; i < path.Len(); i++)
 		a[i] = path[i];
 
+	// TODO figure out better method of parsing MML
 	//mMidiFile = Lab::MidiSong::parseMML(a, (int)path.Len(), false);
 	//delete[] a;
 	//mProcessor.load(*mMidiFile);
@@ -147,15 +159,30 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 				_midiEvent.Data2 = 0 & 0XFF;
 			}
 		}
-		if(mProcessor.processInBackground)
+		if(RunInBackground)
 			mQueue.Enqueue(_midiEvent);
 		else
 			OnMidiEvent.Broadcast(_midiEvent);
 	}
 }
 
-void UMidiComponent::onStart(bool fromBeginning) { OnStart.Broadcast(fromBeginning); }
-void UMidiComponent::onStop(bool finish) { OnStop.Broadcast(finish); }
+void UMidiComponent::onStart(bool fromBeginning) { 
+	// MultiThread
+	if (RunInBackground) {
+		mWorker = new FMidiProcessorWorker(&mProcessor);
+	}
+
+	OnStart.Broadcast(fromBeginning); }
+void UMidiComponent::onStop(bool finish) { 
+	// MultiThread
+	if (mWorker) {
+		mWorker->Stop();
+		delete mWorker;
+	}
+	mWorker = NULL;
+	mQueue.Empty();
+	
+	OnStop.Broadcast(finish); }
 
 //-----------------------------------
 
@@ -169,7 +196,6 @@ void UMidiComponent::stop() {
 
 void UMidiComponent::reset() {
 	mProcessor.reset();
-	mQueue.Empty();
 }
 
 bool UMidiComponent::isStarted() {

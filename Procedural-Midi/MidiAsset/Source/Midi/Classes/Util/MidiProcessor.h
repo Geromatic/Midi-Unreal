@@ -8,8 +8,6 @@
 #include "MetronomeTick.h"
 #include "MidiEventListener.h"
 
-class FMidiProcessorWorker;
-
 /**
 *	Loads and plays back a MIDI file
 */
@@ -47,8 +45,6 @@ public:
 
 	//Variable that can fix playback speed
 	double PlaySpeed;
-
-	bool processInBackground;
 
 protected:
 	void dispatch(MidiEvent * _event);
@@ -119,59 +115,4 @@ private:
 			}
 		}
 	};
-
-	FMidiProcessorWorker* mRunnable;
-};
-
-//////////////////////////////// Threading ///////////////////////////////////////////
-
-//~~~~~ Multi Threading ~~~
-class FMidiProcessorWorker : public FRunnable
-{
-	/** Thread to run the worker FRunnable on */
-	FRunnableThread* Thread;
-
-	/** The PC */
-	MidiProcessor* ThePC;
-
-public:
-
-	//Done?
-	bool IsFinished() const
-	{
-		return !ThePC->isRunning();
-	}
-
-	//~~~ Thread Core Functions ~~~
-
-	//Constructor / Destructor
-	FMidiProcessorWorker(MidiProcessor* IN_PC) : ThePC(IN_PC)
-	{
-		Thread = FRunnableThread::Create(this, TEXT("FMidiProcessorWorker"), 0, TPri_BelowNormal); //windows default = 8mb for thread, could specify more
-	}
-	virtual ~FMidiProcessorWorker() {
-		delete Thread;
-		Thread = NULL;
-	}
-
-	// Begin FRunnable interface.
-	virtual bool Init() {
-		return true;
-	}
-	virtual uint32 Run() {
-		while (!IsFinished())
-		{
-			ThePC->process();
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-			//prevent thread from using too many resources
-			FPlatformProcess::Sleep(0.008f);
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		}
-		return 0;
-	}
-	virtual void Stop() {
-		Thread->WaitForCompletion();
-	}
-	// End FRunnable interface
-
 };

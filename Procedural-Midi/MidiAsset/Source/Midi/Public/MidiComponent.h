@@ -12,6 +12,8 @@
 #include "Components/ActorComponent.h"
 #include "MidiComponent.generated.h"
 
+class FMidiProcessorWorker;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStart, bool, beginning);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStop, bool, finished);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventMidiEvent, struct FMidiEvent, Event);
@@ -45,8 +47,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
 	bool SimplifyNote = true;
 
-	// Allow Running in Background
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
+	// Set Running in Background
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
+	void SetRunInBackground(bool inBack);
+
+	// Get Running in Background
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MIDI|Processor")
 	bool RunInBackground = false;
 	
 	// loads the Midi Asset Data
@@ -111,4 +117,6 @@ protected:
 	// Called when a Midi Event is received
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
 	FEventMidiEvent OnMidiEvent;
+
+	FMidiProcessorWorker* mWorker = NULL;
 };

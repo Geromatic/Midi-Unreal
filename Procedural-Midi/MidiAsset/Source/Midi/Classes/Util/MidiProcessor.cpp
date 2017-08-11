@@ -20,12 +20,6 @@ MidiProcessor::MidiProcessor() : PlaySpeed(1.0) {
 
 MidiProcessor::~MidiProcessor()
 {
-	if (mRunnable) {
-		mRunnable->Stop();
-		delete mRunnable;
-	}
-	mRunnable = NULL;
-
 	if (mMetronome)
 		delete mMetronome;
 	mMetronome = NULL;
@@ -60,26 +54,10 @@ void MidiProcessor::start() {
 	mRunning = true;
 
 	mListener->onStart(mMsElapsed == 0);
-
-	// Setup Thread
-	if (mRunnable) {
-		mRunnable->Stop();
-		delete mRunnable;
-	}
-	mRunnable = NULL;
-
-	if (processInBackground)
-		mRunnable = new FMidiProcessorWorker(this);
 }
 
 void MidiProcessor::stop() {
 	mRunning = false;
-
-	if (mRunnable) {
-		mRunnable->Stop();
-		delete mRunnable;
-	}
-	mRunnable = NULL;
 
 	mListener->onStop(false);
 }
@@ -87,11 +65,8 @@ void MidiProcessor::stop() {
 void MidiProcessor::reset() {
 	mRunning = false;
 
-	if (mRunnable) {
-		mRunnable->Stop();
-		delete mRunnable;
-	}
-	mRunnable = NULL;
+	// makes sure thread is stopped
+	mListener->onStop(false);
 
 	mTicksElapsed = 0;
 	mMsElapsed = 0;
@@ -102,8 +77,6 @@ void MidiProcessor::reset() {
 	for (int i = 0; i < mCurrEvents.Num(); i++) {
 		mCurrEvents[i].Reset();
 	}
-
-	mListener->onStop(false);
 }
 
 bool MidiProcessor::isStarted() {
