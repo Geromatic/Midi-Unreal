@@ -81,7 +81,7 @@ enum class EMidiClockTypeEnum : uint8
 	MCTE_SONG_SELECT 						UMETA(DisplayName = "Song Select"),
 	/*
 	*	Tune Request
-	*	[Data=]
+	*	[Data1=]
 	*/
 	MCTE_TUNE_REQUEST = 8 					UMETA(DisplayName = "Tune Request"),
 	/*
@@ -96,7 +96,7 @@ enum class EMidiClockTypeEnum : uint8
 	MCTE_START = 11							UMETA(DisplayName = "Start"),
 	/*
 	*	Continue
-	*	[Data=]
+	*	[Data1=]
 	*/
 	MCTE_CONTINUE 							UMETA(DisplayName = "Continue"),
 	/*
@@ -120,23 +120,23 @@ struct FMidiEvent
 {
 	GENERATED_BODY()
 
-	// The Type of Event this struct represents
+	/* The Type of Event this struct represents */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	EMidiTypeEnum Type;
 
-	// The Channel that the Event is on (0-15)
+	/* The Channel that the Event is on (0-15) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	uint8 Channel;
 
-	// The first data value (ex. Note)
+	/* The first data value (ex. Note) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	uint8 Data1;
 
-	// The second data value (ex, Velocity)
+	/* The second data value (ex, Velocity) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	uint8 Data2;
 
-	//Constructor
+	/* Constructor */
 	FMidiEvent()
 	{
 		Type = EMidiTypeEnum::MTE_NOTE;
@@ -152,15 +152,15 @@ struct FMidiClockEvent
 {
 	GENERATED_BODY()
 
-	// The Type of Event this struct represents
+	/* The Type of Event this struct represents */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	EMidiClockTypeEnum Type;
 
-	// The first data value
+	/* The first data value */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MIDI|Event")
 	int32 Data;
 
-	//Constructor
+	/* Constructor */
 	FMidiClockEvent()
 	{
 		Type = EMidiClockTypeEnum::MCTE_SONG_POSITION;
@@ -176,15 +176,15 @@ class MIDI_API UMidiUtils : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-
-	// Default Middle key note frequencies
+	/* Default Middle key note frequencies */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static float DefaultNoteToFrequency(TEnumAsByte<ENoteEnum> note);
 
-	// Gets the frequency of a note
+	/* Gets the frequency of a note */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static float NoteToFrequency(uint8 note);
-	// Gets a note from a frequency
+
+	/* Gets a note from a frequency */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static uint8 FrequencyToNote(float Frequency);
 
@@ -195,15 +195,15 @@ public:
 	static int32 FrequencyToCent(float Frequency);
 	static int32 FrequencyToOctave(float Frequency);
 
-	// Returns the visual representation of a note
+	/* Returns the visual representation of a note */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static ENoteEnum NoteToChord(uint8 note);
 
-	// get Pitch Bend amount
+	/* get Pitch Bend amount */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static int32 GetPitchBendAmount(uint8 data1, uint8 data2);
 
-	// convert Pitch Bend amount to data values
+	/* convert Pitch Bend amount to data values */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Utilities")
 	static void ConvertPitchBendAmount(int32 amount, uint8& data1, uint8& data2);
 };

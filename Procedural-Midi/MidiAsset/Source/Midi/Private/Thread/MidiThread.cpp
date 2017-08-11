@@ -27,9 +27,19 @@ bool FMidiProcessorWorker::Init() {
 	return true;
 }
 uint32 FMidiProcessorWorker::Run() {
+	UWorld* world = GEngine->GameViewport->GetWorld();
+	if (!world)
+		return 0;
+
+	if(ThePC->isGameTime)
+		ThePC->setBeginTime(world->TimeSeconds * 1000.0f);
+
 	while (!IsFinished())
 	{
-		ThePC->process();
+		if (ThePC->isGameTime)
+			ThePC->update(world->TimeSeconds * 1000.0f);
+		else
+			ThePC->update();
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//prevent thread from using too many resources
 		FPlatformProcess::Sleep(0.008f);

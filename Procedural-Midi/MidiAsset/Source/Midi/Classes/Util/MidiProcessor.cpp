@@ -50,6 +50,7 @@ void MidiProcessor::load(MidiFile & file) {
 
 void MidiProcessor::start() {
 	if (mRunning) return;
+	
 	mLastMs = FPlatformTime::Cycles();
 	mRunning = true;
 
@@ -109,19 +110,17 @@ void MidiProcessor::dispatch(MidiEvent * _event) {
 	mListener->onEvent(_event);
 }
 
-void MidiProcessor::process() {
-
+void MidiProcessor::update(double deltaTime = -1) {
 	if (!mRunning)
 		return;
 
-	uint32 now = FPlatformTime::Cycles();
-	double msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
-	// used for performance
-	//if (msElapsed < (double)PROCESS_RATE_MS) {
-	//	return;
-	//}
+	double now = deltaTime;
+	double msElapsed = now - mLastMs;
+	if (deltaTime < 0) {
+		now = FPlatformTime::Cycles();
+		msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
+	}
 
-	//double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ);
 	double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * PlaySpeed;
 	if (ticksElapsed < 1) {
 		return;
@@ -136,6 +135,11 @@ void MidiProcessor::process() {
 	mMsElapsed += msElapsed;
 	mTicksElapsed += ticksElapsed;
 
+	process();
+
+}
+
+void MidiProcessor::process() {
 
 	for (int i = 0; i < mCurrEvents.Num(); i++) {
 		while (mCurrEvents[i]) {

@@ -26,7 +26,7 @@
 #include "Thread/MidiThread.h"
 
 // Sets default values for this component's properties
-UMidiComponent::UMidiComponent() : PlaySpeed(1.0f), mWorker(NULL)
+UMidiComponent::UMidiComponent() : PlaySpeed(1.0), mWorker(NULL)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -66,8 +66,15 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 	if (mProcessor.PlaySpeed != PlaySpeed)
 		mProcessor.PlaySpeed = PlaySpeed;
 
-	if(!InBackground)
-		mProcessor.process();
+	if (!InBackground) {
+		// update time
+		if (mProcessor.isGameTime) {
+			mProcessor.update(GetWorld()->TimeSeconds * 1000.0f);
+		}
+		else
+			mProcessor.update();
+	}
+
 	else
 		while (!mQueue.IsEmpty()) {
 			FMidiEvent _midiEvent;
@@ -165,8 +172,12 @@ void UMidiComponent::onStart(bool fromBeginning) {
 	if (InBackground) {
 		mWorker = new FMidiProcessorWorker(&mProcessor);
 	}
+	else
+		if (mProcessor.isGameTime)
+			mProcessor.setBeginTime(GetWorld()->TimeSeconds * 1000.0f);
 
-	OnStart.Broadcast(fromBeginning); }
+	OnStart.Broadcast(fromBeginning); 
+}
 void UMidiComponent::onStop(bool finish) { 
 	// MultiThread
 	if (mWorker) {
@@ -176,13 +187,18 @@ void UMidiComponent::onStop(bool finish) {
 	mWorker = NULL;
 	mQueue.Empty();
 	
-	OnStop.Broadcast(finish); }
+	OnStop.Broadcast(finish); 
+}
 
 //-----------------------------------
 
-void UMidiComponent::start(bool background) {
-	if (!isRunning())
+void UMidiComponent::start(bool background, bool UseGameTime) {
+	if (!isRunning()) {
 		InBackground = background;
+		mProcessor.isGameTime = UseGameTime;
+	}
+
+
 	mProcessor.start();
 }
 

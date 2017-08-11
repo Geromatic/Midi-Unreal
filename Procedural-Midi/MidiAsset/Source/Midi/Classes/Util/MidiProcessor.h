@@ -41,17 +41,26 @@ public:
 
 	void setListener(MidiEventListener* listener);
 
-	void process();
-
-	//Variable that can fix playback speed
+	// Sets the play back speed
 	double PlaySpeed;
+
+	// use real time clock or game time?
+	bool isGameTime = false;
+
+	void setBeginTime(double time) {
+		mLastMs = time;
+	}
+
+	void update(double deltaTime);
 
 protected:
 	void dispatch(MidiEvent * _event);
 
 private:
+	void process();
 	TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
-	uint32 mLastMs;
+
+	double mLastMs;
 	MidiEventListener* mListener;
 
 	class MidiTrackEventQueue

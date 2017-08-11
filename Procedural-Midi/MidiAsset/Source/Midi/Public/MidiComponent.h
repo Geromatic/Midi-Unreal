@@ -39,34 +39,44 @@ public:
 	
 // MIDI
 
-//Changes the Speed of MIDI playback
+	/* Changes the Speed of MIDI playback */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
-	float PlaySpeed = 1;
+	float PlaySpeed;
 
-	// Ignores Note OFF events and replaces with Note ON with Velocity = 0
+	/* Ignores Note OFF events and replaces with Note ON with Velocity = 0 */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
 	bool SimplifyNote = true;
 
-	// Get Running in Background
+	/* Get Running in Background */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MIDI|Processor")
 	bool InBackground = false;
-	
-	// loads the Midi Asset Data
+
+	/**
+	* loads a Midi Asset Data
+	* @param MidiAsset - The UMidiAsset Object
+	*/
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
 	void LoadAsset(class UMidiAsset* MidiAsset);
 	
+	/**
+	* Loads a MIDI file
+	* @param path - The path to the file
+	*/
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
 	void LoadFile(FString path);
 
-	// Experimental
-	// google tinymml
+	/**
+	* Load a MML Script/String - Experimental
+	* google tinymml
+	* @param sheet - The MML script in string format 
+	*/
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
-	void LoadMML(FString path);
+	void LoadMML(FString sheet);
 
 // Other
 //-----------------------
 
-private:
+//private:
 	MidiFile* mMidiFile;
 	MidiProcessor mProcessor;
 
@@ -82,26 +92,34 @@ private:
 	void onStop(bool finish);
 
 public:
-	// start MIDI playback
+	/**
+	* start MIDI playback
+	* @param background - Plays the MIDI without game affecting [Experimental]
+	* @param UseGameTime - use real time or game time to process MIDI
+	*/
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
-	void start(bool background);
-	// stop MIDI playback
+	void start(bool background, bool UseGameTime = true);
+
+	/* stop MIDI playback */
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
 	void stop();
-	// restart MIDI playback
+
+	/* restart MIDI playback */
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
 	void reset();
 
+	/* Did the MIDI alreay started? */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	bool isStarted();
-	// check if MIDI is playing
+
+	/* check if MIDI is playing */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	bool isRunning();
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	int GetResolution();
 	
-		// Returns midi file duration in seconds
+	/* Returns MIDI file duration in seconds */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	float GetDuration();
 
@@ -110,9 +128,11 @@ protected:
 	FEventStart OnStart;
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
 	FEventStop OnStop;
-	// Called when a Midi Event is received
+
+	/* Called when a Midi Event is received */
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
 	FEventMidiEvent OnMidiEvent;
 
+private:
 	FMidiProcessorWorker* mWorker = NULL;
 };
