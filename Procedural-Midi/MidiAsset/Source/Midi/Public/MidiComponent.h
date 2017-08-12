@@ -45,11 +45,7 @@ public:
 
 	/* Ignores Note OFF events and replaces with Note ON with Velocity = 0 */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
-	bool SimplifyNote = true;
-
-	/* Get Running in Background */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MIDI|Processor")
-	bool InBackground = false;
+	bool SimplifyNote = false;
 
 	/**
 	* loads a Midi Asset Data
@@ -135,4 +131,7 @@ protected:
 
 private:
 	FMidiProcessorWorker* mWorker = NULL;
+	
+	/* Get Running in Background */
+	bool InBackground = false;
 };
