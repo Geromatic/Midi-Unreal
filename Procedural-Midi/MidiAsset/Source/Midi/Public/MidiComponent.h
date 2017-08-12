@@ -94,11 +94,11 @@ public:
 public:
 	/**
 	* start MIDI playback
-	* @param background - Plays the MIDI without game affecting [Experimental]
+	* @param background - Plays the MIDI without game affecting
 	* @param UseGameTime - use real time or game time to process MIDI
 	*/
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
-	void start(bool background, bool UseGameTime = true);
+	void start(bool background = true, bool UseGameTime = true);
 
 	/* stop MIDI playback */
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
