@@ -72,14 +72,11 @@ public:
 // Other
 //-----------------------
 
-//private:
+private:
 	MidiFile* mMidiFile;
 	MidiProcessor mProcessor;
-
-	bool canInit();
 	
-	// Handle Data Racing
-	TQueue<FMidiEvent> mQueue;
+	bool canInit();
 
 	// MIDI Event Listener
 
@@ -130,8 +127,13 @@ protected:
 	FEventMidiEvent OnMidiEvent;
 
 private:
+
+	// Thread
 	FMidiProcessorWorker* mWorker = NULL;
 	
 	/* Get Running in Background */
 	bool InBackground = false;
+	
+		// Handle Data Racing
+	TQueue<FMidiEvent> mQueue;
 };
