@@ -125,15 +125,6 @@ void UMidiComponent::LoadFile(FString path) {
 void UMidiComponent::LoadMML(FString path) {
 	if (!canInit()) return;
 
-	char* a = new char[path.Len()];
-	for (int i = 0; i < path.Len(); i++)
-		a[i] = path[i];
-
-	// TODO figure out better method of parsing MML
-	//mMidiFile = Lab::MidiSong::parseMML(a, (int)path.Len(), false);
-	//delete[] a;
-	//mProcessor.load(*mMidiFile);
-
 	Lab::MidiSong song;
 	song.trackNumber = 0;
 	song.LoadString(path);
