@@ -127,14 +127,17 @@ void ChannelEvent::writeToFile(FMemoryWriter & output, bool writeType){
 	}
 }
 ChannelEvent * ChannelEvent::parseChannelEvent(long tick, long delta, int type, int channel, FBufferReader & input) {
-
+	// Get Data1 value
 	int val1 = 0;
 	input.Serialize(&val1, 1);
+
+	// Get Data2 value if its not a PROGRAM_CHANGE or CHANNEL_AFTERTOUCH event
 	int val2 = 0;
 	if (type != PROGRAM_CHANGE && type != CHANNEL_AFTERTOUCH) {
 		input.Serialize(&val2, 1);
 	}
 
+	// Create event
 	switch (type) {
 	case NOTE_OFF:
 		return new NoteOff(tick, delta, channel, val1, val2);

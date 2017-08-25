@@ -72,6 +72,7 @@ bool MidiEvent::requiresStatusByte(MidiEvent * prevEvent) {
 		return true;
 	}
 
+	// make sure both events are not the same
 	if (this->getType() == prevEvent->getType()) {
 		return false;
 	}
@@ -82,14 +83,15 @@ void MidiEvent::writeToFile(FMemoryWriter & output, bool writeType){
 	output.Serialize(mDelta->getBytes(), mDelta->getByteCount());
 }
 
+// static variables to track continuous events
 int MidiEvent::sId = -1;
 int MidiEvent::sType = -1;
 int MidiEvent::sChannel = -1;
 
 MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
-
 	bool reset = false;
 	
+	// ID event
 	int id = 0;
 	input.Serialize(&id, 1);
 	if (!verifyIdentifier(id)) {
@@ -98,14 +100,17 @@ MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
 		reset = true;
 	}
 
+	// Channel Event
 	if (sType >= 0x8 && sType <= 0xE) {
 
 		return ChannelEvent::parseChannelEvent(tick, delta, sType, sChannel, input);
 	}
+	// Meta Event
 	else if (sId == 0xFF) {
 
 		return MetaEvent::parseMetaEvent(tick, delta, input);
 	}
+	// System Exclusive Event
 	else if (sId == 0xF0 || sId == 0xF7) {
 
 		VariableLengthInt size(input);
@@ -113,10 +118,12 @@ MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
 		input.Serialize(data, size.getValue());
 		return new SystemExclusiveEvent(sId, tick, delta, data);
 	}
+	// Unknown Event
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Unknown Status Type: %d"), sId);
 
 		if (reset) {
+			// ignore next byte
 			input.Seek(input.Tell() + 1);
 		}
 	}
@@ -160,6 +167,7 @@ int MidiEvent::CompareTo(MidiEvent *other)
 	return 0;
 }
 
+// Just a way to return the name of the event
 string getMidiClassName(int type) {
 
 	// ChannelEvent

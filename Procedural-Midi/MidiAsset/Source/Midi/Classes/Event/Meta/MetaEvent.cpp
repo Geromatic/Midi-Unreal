@@ -50,9 +50,11 @@ void MetaEvent::writeToFile(FMemoryWriter & output) {
 
 MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & input) {
 
+	// Get the type of event
 	int type = 0;
 	input.Serialize(&type, 1);
 
+	// Set whether event is a text type event
 	bool isText = false;
 	switch (type) {
 	case SEQUENCE_NUMBER:
@@ -77,15 +79,19 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 	}
 
 	if (isText) {
-
+		// Get the message length
 		VariableLengthInt * length = new VariableLengthInt(input);
 		char * buffer = new char[length->getValue()];
-		for (int i = 0; i < length->getValue(); i++)
+		// clear out buffer in case
+		for (int i = 0; i < length->getValue(); i++) {
 			buffer[i] = 0;
+		}
 
+		// Read the string value
 		input.Serialize(buffer, length->getValue());
 		string text = buffer;
 
+		// remove unneeded data
 		switch (type)
 		{
 		case TEXT_EVENT:
@@ -130,6 +136,7 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 	case MIDI_CHANNEL_PREFIX:
 		return MidiChannelPrefix::parseMidiChannelPrefix(tick, delta, input);
 	case END_OF_TRACK:
+		// ignore next byte
 		input.Seek(input.Tell() + 1); // Size = 0;
 
 		return new EndOfTrack(tick, delta);
@@ -142,6 +149,8 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 	case KEY_SIGNATURE:
 		return KeySignature::parseKeySignature(tick, delta, input);
 	}
+
+	// This should never run else something has gone wrong
 	UE_LOG(LogTemp, Error, TEXT("Completely broken in MetaEvent.parseMetaEvent()"));
 	return NULL;
 }

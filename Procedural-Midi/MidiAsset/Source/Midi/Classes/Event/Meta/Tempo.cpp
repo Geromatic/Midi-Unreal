@@ -51,7 +51,7 @@ void Tempo::writeToFile(FMemoryWriter & output) {
 
 Tempo * Tempo::parseTempo(long tick, long delta, FBufferReader & input) {
 
-	input.Seek(input.Tell() + 1);		// Size = 3;;
+	input.Seek(input.Tell() + 1);		// Size = 3
 
 	char buffer[3] = { 0 };
 	input.Serialize(buffer, 3);
