@@ -45,11 +45,7 @@ public:
 
 	/* Ignores Note OFF events and replaces with Note ON with Velocity = 0 */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
-	bool SimplifyNote = true;
-
-	/* Get Running in Background */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "MIDI|Processor")
-	bool InBackground = false;
+	bool SimplifyNote = false;
 
 	/**
 	* loads a Midi Asset Data
@@ -76,14 +72,11 @@ public:
 // Other
 //-----------------------
 
-//private:
+private:
 	MidiFile* mMidiFile;
 	MidiProcessor mProcessor;
-
-	bool canInit();
 	
-	// Handle Data Racing
-	TQueue<FMidiEvent> mQueue;
+	bool canInit();
 
 	// MIDI Event Listener
 
@@ -94,7 +87,7 @@ public:
 public:
 	/**
 	* start MIDI playback
-	* @param background - Plays the MIDI without game affecting [Experimental]
+	* @param background - Plays the MIDI without game affecting
 	* @param UseGameTime - use real time or game time to process MIDI
 	*/
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
@@ -134,5 +127,13 @@ protected:
 	FEventMidiEvent OnMidiEvent;
 
 private:
+
+	// Thread
 	FMidiProcessorWorker* mWorker = NULL;
+	
+	/* Get Running in Background */
+	bool InBackground = false;
+	
+		// Handle Data Racing
+	TQueue<FMidiEvent> mQueue;
 };
