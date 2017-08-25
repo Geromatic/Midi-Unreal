@@ -42,10 +42,15 @@ void SequencerSpecificEvent::writeToFile(FMemoryWriter & output) {
 }
 
 int SequencerSpecificEvent::CompareTo(MidiEvent *other) {
-
+	// Compare time
 	int value = MidiEvent::CompareTo(other);
 	if (value != 0)
 		return value;
+
+	// events are not the same
+	if (!(other->getType() == this->getType())) {
+		return 1;
+	}
 
 	SequencerSpecificEvent * o = static_cast<SequencerSpecificEvent*>(other);
 

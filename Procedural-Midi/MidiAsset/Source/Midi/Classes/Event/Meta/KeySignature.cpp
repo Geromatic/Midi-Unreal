@@ -55,10 +55,15 @@ KeySignature * KeySignature::parseKeySignature(long tick, long delta, FBufferRea
 }
 
 int KeySignature::CompareTo(MidiEvent *other) {
-
+	// Compare time
 	int value = MidiEvent::CompareTo(other);
 	if (value != 0)
 		return value;
+
+	// events are not the same
+	if (!(other->getType() == this->getType())) {
+		return 1;
+	}
 
 	KeySignature * o = static_cast<KeySignature*>(other);
 	if (mKey != o->mKey) {

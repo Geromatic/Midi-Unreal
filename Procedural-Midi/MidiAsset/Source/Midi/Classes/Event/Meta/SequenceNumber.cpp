@@ -44,10 +44,15 @@ SequenceNumber * SequenceNumber::parseSequenceNumber(long tick, long delta, FBuf
 }
 
 int SequenceNumber::CompareTo(MidiEvent *other) {
-
+	// Compare time
 	int value = MidiEvent::CompareTo(other);
 	if (value != 0)
 		return value;
+
+	// events are not the same
+	if (!(other->getType() == this->getType())) {
+		return 1;
+	}
 
 	SequenceNumber * o = static_cast<SequenceNumber*>(other);
 

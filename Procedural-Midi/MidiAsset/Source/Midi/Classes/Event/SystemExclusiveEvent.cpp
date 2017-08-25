@@ -69,11 +69,12 @@ void SystemExclusiveEvent::writeToFile(FMemoryWriter & output, bool writeType) {
 }
 
 int SystemExclusiveEvent::CompareTo(MidiEvent *other) {
-
+	// Compare time
 	int value = MidiEvent::CompareTo(other);
 	if (value != 0)
 		return value;
 
+	// Events are the same
 	if (other->getType() == this->getType()) {
 		string curr = mData;
 		string comp = (static_cast<SystemExclusiveEvent*>(other)->mData);

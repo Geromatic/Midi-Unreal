@@ -12,12 +12,7 @@ VariableLengthInt::VariableLengthInt(int value) {
 }
 
 VariableLengthInt::VariableLengthInt(FBufferReader & input) {
-
 	parseBytes(input);
-}
-
-VariableLengthInt::~VariableLengthInt()
-{
 }
 
 void VariableLengthInt::setValue(int value) {
@@ -58,6 +53,7 @@ void VariableLengthInt::parseBytes(FBufferReader & input) {
 		}
 		ints[mSizeInBytes - 1] = (b & 0x7F);
 
+		// read next byte
 		input.Serialize(&b, 1);
 	}
 

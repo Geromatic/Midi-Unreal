@@ -21,6 +21,15 @@ void EndOfTrack::writeToFile(FMemoryWriter & output) {
 }
 
 int EndOfTrack::CompareTo(MidiEvent *other) {
+	// Compare time
+	int value = MidiEvent::CompareTo(other);
+	if (value != 0)
+		return value;
 
-	return MidiEvent::CompareTo(other);
+	// events are not the same
+	if (!(other->getType() == this->getType())) {
+		return 1;
+	}
+
+	return 0;
 }

@@ -87,10 +87,15 @@ int TimeSignature::log2(int den) {
 }
 
 int TimeSignature::CompareTo(MidiEvent *other) {
-
+	// Compare time
 	int value = MidiEvent::CompareTo(other);
 	if (value != 0)
 		return value;
+
+	// events are not the same
+	if (!(other->getType() == this->getType())) {
+		return 1;
+	}
 
 	TimeSignature * o = static_cast<TimeSignature*>(other);
 

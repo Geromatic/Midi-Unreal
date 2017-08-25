@@ -8,7 +8,7 @@
 using namespace std;
 
 /**
- * 
+ * Variable Length Integer
  */
 class MIDI_API VariableLengthInt
 {
@@ -19,7 +19,6 @@ class MIDI_API VariableLengthInt
 public:
 	VariableLengthInt(int value);
 	VariableLengthInt(FBufferReader & input);
-	~VariableLengthInt();
 
 	void setValue(int value);
 	int getValue();

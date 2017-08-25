@@ -61,10 +61,15 @@ Tempo * Tempo::parseTempo(long tick, long delta, FBufferReader & input) {
 }
 
 int Tempo::CompareTo(MidiEvent *other) {
+	// Compare time
+	int value = MidiEvent::CompareTo(other);
+	if (value != 0)
+		return value;
 
-	int checker = MidiEvent::CompareTo(other);
-	if (checker != 0)
-		return checker;
+	// events are not the same
+	if (!(other->getType() == this->getType())) {
+		return 1;
+	}
 
 	Tempo * o = static_cast<Tempo*>(other);
 

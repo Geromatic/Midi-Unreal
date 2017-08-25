@@ -34,13 +34,17 @@ void TextualMetaEvent::writeToFile(FMemoryWriter & output) {
 }
 
 int TextualMetaEvent::CompareTo(MidiEvent *other) {
-
+	// Compare time
 	int value = MidiEvent::CompareTo(other);
 	if (value != 0)
 		return value;
 
-	TextualMetaEvent * o = static_cast<TextualMetaEvent*>(other);
+	// events are not the same
+	if (!(other->getType() == this->getType())) {
+		return 1;
+	}
 
+	TextualMetaEvent * o = static_cast<TextualMetaEvent*>(other);
 	return mText.compare(o->mText);
 }
 

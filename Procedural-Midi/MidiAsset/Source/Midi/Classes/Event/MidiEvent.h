@@ -49,6 +49,11 @@ private:
 public:
 	static MidiEvent * parseEvent(long tick, long delta, FBufferReader & input);
 
+	/* Compare MIDI events
+	*  0:	Current event time is the same as Other
+	*  -1:	Current event time is less then Other
+	*  1:	Current event time is greater then other
+	*/
 	virtual int CompareTo(MidiEvent *other);
 
 private:

@@ -68,11 +68,17 @@ int ChannelEvent::getEventSize() {
 }
 
 int ChannelEvent::CompareTo(MidiEvent *other) {
-
+	// Compare time
 	int value = MidiEvent::CompareTo(other);
 	if (value != 0)
 		return value;
 
+	// check if other event is [not] a ChannelEvent
+	if (!(other->getType() >= NOTE_OFF && other->getType() <= PITCH_BEND)) {
+		return 1;
+	}
+
+	// Event should be in the Channel Event category
 	ChannelEvent * o = static_cast<ChannelEvent*>(other);
 	if (mType != o->getType()) {
 

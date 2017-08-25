@@ -94,5 +94,15 @@ SmpteOffset * SmpteOffset::parseSmpteOffset(long tick, long delta, FBufferReader
 }
 
 int SmpteOffset::CompareTo(MidiEvent *other) {
-	return MidiEvent::CompareTo(other);
+	// Compare time
+	int value = MidiEvent::CompareTo(other);
+	if (value != 0)
+		return value;
+
+	// events are not the same
+	if (!(other->getType() == this->getType())) {
+		return 1;
+	}
+
+	return 0;
 }

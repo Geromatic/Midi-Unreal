@@ -125,7 +125,6 @@ MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
 }
 
 bool MidiEvent::verifyIdentifier(int id) {
-
 	sId = id;
 
 	int type = id >> 4;
@@ -156,10 +155,6 @@ int MidiEvent::CompareTo(MidiEvent *other)
 	}
 	if (mDelta->getValue() != other->getDelta()) {
 		return mDelta->getValue() < other->getDelta() ? 1 : -1;
-	}
-
-	if (!(other->getType() == this->getType())) {
-		return 1;
 	}
 
 	return 0;

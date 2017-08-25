@@ -370,24 +370,6 @@ namespace Lab {
 
 		return mMidiFile;
     }
-    
-    void MidiSong::parseMML(char const*const path, bool verbose)
-    {
-		/*
-        FILE* f = fopen(path, "rb");
-        if (f) {
-            fseek(f, 0, SEEK_END);
-            int l = ftell(f);
-            fseek(f, 0, SEEK_SET);
-            char* a = new char[l];
-            fread(a, 1, l, f);
-            fclose(f);
-            
-            parseMML(a, l, verbose);
-            delete [] a;
-        }
-		*/
-    }
 
 	// ----------------------------------------
 
@@ -413,45 +395,6 @@ namespace Lab {
 		p->bpm = bpm;
 		p->bticks = bticks;
 	}
-
-
-	/*
-	static void note_sound(CHORD *p, int ticks, MidiSong* component)
-	{
-		uint32_t ms = get_note_length_ms(p, ticks);
-		uint32_t duration = MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
-		for (int i = 0; i < p->count; i++) {
-			component->track->insertNote(component->trackNumber, p->freqlist[i] & 0x7f, 127, component->ticks, duration);
-		}
-		component->ticks += duration;
-
-
-		//const int volume = 127;
-
-		//uint32_t ms = get_note_length_ms(p, ticks);
-		//uint32_t duration = MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
-		//uint32_t cnt_ms = 0;
-
-		//uint32_t t = component->ticks;
-		//while (1) {
-		//	uint8_t i;
-		//	for (i = 0; i < p->count; i++) {
-		//		component->track->insertNote(component->trackNumber, p->freqlist[i] & 0x7f, volume, component->ticks + cnt_ms, CHORD_SPLIT_TIME_MS);
-		//		cnt_ms += CHORD_SPLIT_TIME_MS;
-		//		if (ms <= cnt_ms) {
-		//			component->ticks += cnt_ms;
-		//			return;
-		//		}
-		//	}
-		//	cnt_ms += CHORD_SPLIT_TIME_MS;
-
-		//	if (ms <= cnt_ms) {
-		//		component->ticks += cnt_ms;
-		//		return;
-		//	}
-		//}
-	}
-	*/
 
 	static void note_sound(CHORD *p, int ticks, int number, MidiSong* component)
 	{

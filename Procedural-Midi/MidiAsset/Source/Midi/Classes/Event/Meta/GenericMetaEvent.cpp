@@ -31,7 +31,7 @@ void GenericMetaEvent::writeToFile(FMemoryWriter & output) {
 }
 
 int GenericMetaEvent::CompareTo(MidiEvent *other) {
-
+	// Compare time
 	int value = MidiEvent::CompareTo(other);
 	if (value != 0)
 		return value;
