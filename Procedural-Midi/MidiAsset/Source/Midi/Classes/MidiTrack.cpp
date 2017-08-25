@@ -115,6 +115,15 @@ void MidiTrack::insertNote(int channel, int pitch, int velocity, long tick, long
 	insertEvent(new NoteOn(tick + duration, channel, pitch, 0));
 }
 
+// sort MIDI predicate
+inline static bool ConstPredicate(MidiEvent& ip1, MidiEvent& ip2)
+{
+	int value = ip1.CompareTo(&ip2);
+
+	// somehow value should be less then else it flips the MIDI file
+	return value < 0;
+}
+
 void MidiTrack::insertEvent(MidiEvent * newEvent) {
 
 	if (newEvent == NULL) {
@@ -155,6 +164,9 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 		next->setDelta(next->getTick() - newEvent->getTick());
 	}
 
+	// TODO allow to resort
+	mEvents.Sort(ConstPredicate);
+
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == MetaEvent::END_OF_TRACK) {
 		if (next != NULL) {
@@ -181,14 +193,18 @@ bool MidiTrack::removeEvent(MidiEvent * E) {
 		next = NULL;
 	}
 
+	bool isRemoved = mEvents.Remove(curr) > 0;
+	// make sure to delete ptr
+	delete curr;
+
 	if (next == NULL) {
 		// Either the event was not found in the track,
 		// or this is the last event in the track.
 		// Either way, we won't need to update any delta times
-		return mEvents.Remove(curr) > 0;
+		return isRemoved;
 	}
 
-	if (!mEvents.Remove(curr)) {
+	if (!isRemoved) {
 		return false;
 	}
 
