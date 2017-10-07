@@ -57,15 +57,15 @@ bool SystemExclusiveEvent::requiresStatusByte(MidiEvent* prevEvent) {
 	return true;
 }
 
-void SystemExclusiveEvent::writeToFile(FMemoryWriter & output, bool writeType) {
+void SystemExclusiveEvent::writeToFile(ostream & output, bool writeType) {
 	MidiEvent::writeToFile(output, writeType);
 
 	// TODO
 	if (writeType) {
-		output.Serialize(&mType, 1);
+		output.put(mType);
 	}
-	output.Serialize(mLength->getBytes(), mLength->getByteCount());
-	output.Serialize(mData, sizeof(&mData));
+	output.write(mLength->getBytes(), mLength->getByteCount());
+	output.write(mData, sizeof(&mData));
 }
 
 int SystemExclusiveEvent::CompareTo(MidiEvent *other) {

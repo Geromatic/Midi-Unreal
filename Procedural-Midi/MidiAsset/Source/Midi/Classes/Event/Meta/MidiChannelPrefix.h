@@ -23,8 +23,8 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 
-	static MidiChannelPrefix * parseMidiChannelPrefix(long tick, long delta, FBufferReader & input);
+	static MidiChannelPrefix * parseMidiChannelPrefix(long tick, long delta, istream & input);
 	int CompareTo(MidiEvent *other);
 };

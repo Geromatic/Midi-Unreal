@@ -21,9 +21,9 @@ public:
 	int getSequenceNumber();
 
 public:
-	void writeToFile(FMemoryWriter& output);
+	void writeToFile(ostream& output);
 
-	static SequenceNumber * parseSequenceNumber(long tick, long delta, FBufferReader & input);
+	static SequenceNumber * parseSequenceNumber(long tick, long delta, istream & input);
 	int CompareTo(MidiEvent *other);
 protected:
 	int getEventSize();

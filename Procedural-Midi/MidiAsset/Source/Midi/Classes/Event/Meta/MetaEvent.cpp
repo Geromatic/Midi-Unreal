@@ -36,23 +36,23 @@ MetaEvent::~MetaEvent()
 	mLength = NULL;
 }
 
-void MetaEvent::writeToFile(FMemoryWriter & output, bool writeType) {
+void MetaEvent::writeToFile(ostream & output, bool writeType) {
 	this->writeToFile(output);
 }
 
-void MetaEvent::writeToFile(FMemoryWriter & output) {
+void MetaEvent::writeToFile(ostream & output) {
 	MidiEvent::writeToFile(output, true);
 	
 	int status = 0XFF;
-	output.Serialize(&status, 1);
-	output.Serialize(&mType, 1);
+	output.put(status);
+	output.put(mType);
 }
 
-MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & input) {
+MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {
 
 	// Get the type of event
 	int type = 0;
-	input.Serialize(&type, 1);
+	type = input.get();
 
 	// Set whether event is a text type event
 	bool isText = false;
@@ -88,7 +88,7 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 		}
 
 		// Read the string value
-		input.Serialize(buffer, length->getValue());
+		input.read(buffer, length->getValue());
 		string text = buffer;
 
 		// remove unneeded data
@@ -137,7 +137,7 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 		return MidiChannelPrefix::parseMidiChannelPrefix(tick, delta, input);
 	case END_OF_TRACK:
 		// ignore next byte
-		input.Seek(input.Tell() + 1); // Size = 0;
+		input.ignore(); // Size = 0;
 
 		return new EndOfTrack(tick, delta);
 	case TEMPO:
@@ -151,6 +151,6 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, FBufferReader & inp
 	}
 
 	// This should never run else something has gone wrong
-	UE_LOG(LogTemp, Error, TEXT("Completely broken in MetaEvent.parseMetaEvent()"));
+	printf("Completely broken in MetaEvent.parseMetaEvent()");
 	return NULL;
 }

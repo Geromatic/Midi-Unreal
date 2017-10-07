@@ -34,11 +34,11 @@ int SequencerSpecificEvent::getEventSize() {
 	return 2 + mLength->getByteCount() + sizeof(&mData);
 }
 
-void SequencerSpecificEvent::writeToFile(FMemoryWriter & output) {
+void SequencerSpecificEvent::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	output.Serialize(mLength->getBytes(), mLength->getByteCount());
-	output.Serialize(mData, sizeof(&mData));
+	output.write(mLength->getBytes(), mLength->getByteCount());
+	output.write(mData, sizeof(&mData));
 }
 
 int SequencerSpecificEvent::CompareTo(MidiEvent *other) {

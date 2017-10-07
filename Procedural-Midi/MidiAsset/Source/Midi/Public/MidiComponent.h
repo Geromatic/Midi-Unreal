@@ -91,7 +91,7 @@ public:
 	* @param UseGameTime - use real time or game time to process MIDI
 	*/
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")
-	void start(bool background = false, bool UseGameTime = false);
+	void start(bool background = true, bool UseGameTime = true);
 
 	/* stop MIDI playback */
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Processor")

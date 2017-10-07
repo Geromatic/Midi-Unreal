@@ -24,7 +24,7 @@ public:
 
 	bool requiresStatusByte(MidiEvent* prevEvent);
 
-	void writeToFile(FMemoryWriter & output, bool writeType);
+	void writeToFile(ostream & output, bool writeType);
 	int CompareTo(MidiEvent *other);
 protected:
 	int getEventSize();

@@ -58,70 +58,71 @@ protected:
 
 private:
 	void process();
-	TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
+	vector<vector<MidiEvent*>::iterator > mCurrEvents;
+	vector<vector<MidiEvent*>::iterator > mCurrEventsEnd;
 
 	double mLastMs;
 	MidiEventListener* mListener;
 
-	class MidiTrackEventQueue
-	{
-	private:
-		MidiTrack* mTrack;
-		TArray<MidiEvent*>::TIterator mIterator;
-		TArray<MidiEvent*> mEventsToDispatch;
-		MidiEvent* mNext;
+	//class MidiTrackEventQueue
+	//{
+	//private:
+	//	MidiTrack* mTrack;
+	//	set<MidiEvent*>::iterator mIterator;
+	//	TArray<MidiEvent*> mEventsToDispatch;
+	//	MidiEvent* mNext;
 
-	public:
-		MidiTrackEventQueue(MidiTrack* track) : mIterator(track->getEvents().CreateIterator()), mNext(NULL)
-		{
-			mTrack = track;
+	//public:
+	//	MidiTrackEventQueue(MidiTrack* track) : mIterator(track->getEvents().begin()), mNext(NULL)
+	//	{
+	//		mTrack = track;
 
-			if (mIterator)
-			{
-				mNext = *mIterator;
-			}
-		}
+	//		if (mIterator)
+	//		{
+	//			mNext = *mIterator;
+	//		}
+	//	}
 
-		TArray<MidiEvent*>& getNextEventsUpToTick(double tick)
-		{
-			mEventsToDispatch.Empty();
+	//	TArray<MidiEvent*>& getNextEventsUpToTick(double tick)
+	//	{
+	//		mEventsToDispatch.Empty();
 
-			while (mNext != NULL)
-			{
+	//		while (mNext != NULL)
+	//		{
 
-				if (mNext->getTick() <= tick)
-				{
-					mEventsToDispatch.Add(mNext);
+	//			if (mNext->getTick() <= tick)
+	//			{
+	//				mEventsToDispatch.Add(mNext);
 
-					if (++mIterator)
-					{
-						mNext = *mIterator;
-					}
-					else
-					{
-						mNext = NULL;
-					}
-				}
-				else
-				{
-					break;
-				}
-			}
+	//				if (++mIterator)
+	//				{
+	//					mNext = *mIterator;
+	//				}
+	//				else
+	//				{
+	//					mNext = NULL;
+	//				}
+	//			}
+	//			else
+	//			{
+	//				break;
+	//			}
+	//		}
 
-			return mEventsToDispatch;
-		}
+	//		return mEventsToDispatch;
+	//	}
 
-		bool hasMoreEvents()
-		{
-			return mNext != NULL;
-		}
+	//	bool hasMoreEvents()
+	//	{
+	//		return mNext != NULL;
+	//	}
 
-		void Reset() {
-			mIterator.Reset();
-			if (mIterator)
-			{
-				mNext = *mIterator;
-			}
-		}
-	};
+	//	void Reset() {
+	//		mIterator.Reset();
+	//		if (mIterator)
+	//		{
+	//			mNext = *mIterator;
+	//		}
+	//	}
+	//};
 };

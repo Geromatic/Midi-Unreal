@@ -26,11 +26,11 @@ int TextualMetaEvent::getEventSize() {
 	return 2 + mLength->getByteCount() + (int)mText.length();
 }
 
-void TextualMetaEvent::writeToFile(FMemoryWriter & output) {
+void TextualMetaEvent::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	output.Serialize(mLength->getBytes(), mLength->getByteCount());
-	output.Serialize((char*)mText.c_str(), mText.length());
+	output.write(mLength->getBytes(), mLength->getByteCount());
+	output.write((char*)mText.c_str(), mText.length());
 }
 
 int TextualMetaEvent::CompareTo(MidiEvent *other) {

@@ -51,8 +51,8 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 
-	static SmpteOffset * parseSmpteOffset(long tick, long delta, FBufferReader & input);
+	static SmpteOffset * parseSmpteOffset(long tick, long delta, istream & input);
 	int CompareTo(MidiEvent *other);
 };

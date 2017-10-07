@@ -11,7 +11,7 @@ VariableLengthInt::VariableLengthInt(int value) {
 	setValue(value);
 }
 
-VariableLengthInt::VariableLengthInt(FBufferReader & input) {
+VariableLengthInt::VariableLengthInt(istream & input) {
 	parseBytes(input);
 }
 
@@ -30,7 +30,7 @@ char * VariableLengthInt::getBytes() {
 	return mBytes;
 }
 
-void VariableLengthInt::parseBytes(FBufferReader & input) {
+void VariableLengthInt::parseBytes(istream & input) {
 	for (int i = 0; i < 4; i++) {
 		mBytes[i] = 0;
 	}
@@ -42,7 +42,7 @@ void VariableLengthInt::parseBytes(FBufferReader & input) {
 	int shift = 0;
 
 	int b = 0;
-	input.Serialize(&b, 1);
+	b = input.get();
 	while (mSizeInBytes < 4) {
 		mSizeInBytes++;
 
@@ -54,7 +54,7 @@ void VariableLengthInt::parseBytes(FBufferReader & input) {
 		ints[mSizeInBytes - 1] = (b & 0x7F);
 
 		// read next byte
-		input.Serialize(&b, 1);
+		b = input.get();
 	}
 
 	for (int i = 1; i < mSizeInBytes; i++) {

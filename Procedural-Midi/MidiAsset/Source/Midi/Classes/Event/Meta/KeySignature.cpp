@@ -34,22 +34,22 @@ int KeySignature::getEventSize() {
 	return 5;
 }
 
-void KeySignature::writeToFile(FMemoryWriter & output) {
+void KeySignature::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.Serialize(&size, 1);
-	output.Serialize(&mKey, 1);
-	output.Serialize(&mScale, 1);
+	output.put(size);
+	output.put(mKey);
+	output.put(mScale);
 }
 
-KeySignature * KeySignature::parseKeySignature(long tick, long delta, FBufferReader & input) {
+KeySignature * KeySignature::parseKeySignature(long tick, long delta, istream & input) {
 
-	input.Seek(input.Tell() + 1);		// Size = 2;
+	input.ignore();		// Size = 2;
 
 	int key = 0, scale = 0;
-	input.Serialize(&key, 1);
-	input.Serialize(&scale, 1);
+	key = input.get();
+	scale = input.get();
 
 	return new KeySignature(tick, delta, key, scale);
 }

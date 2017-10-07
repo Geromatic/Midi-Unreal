@@ -21,6 +21,6 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 	int CompareTo(MidiEvent *other);
 };

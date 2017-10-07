@@ -10,6 +10,8 @@
 #include "Event/Meta/Tempo.h"
 #include "Event/Meta/EndOfTrack.h"
 
+#include <algorithm>    // std::sort
+
 const char MidiTrack::IDENTIFIER[] = { 'M', 'T', 'r', 'k' };
 
 MidiTrack* MidiTrack::createTempoTrack() {
@@ -28,51 +30,61 @@ MidiTrack::MidiTrack() {
 	mClosed = false;
 }
 
-MidiTrack::MidiTrack(FBufferReader & input)
+MidiTrack::MidiTrack(istream & input)
 {
 	mSize = 0;
 	mSizeNeedsRecalculating = false;
 	mClosed = false;
 
 	char buffer[4] = { 0 };
-	input.Serialize(buffer, 4);
+	input.read(buffer, 4);
 
 	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4)) {
-		UE_LOG(LogTemp, Warning, TEXT("Track identifier did not match MTrk!"));
+		printf("Track identifier did not match MTrk!");
 		return;
 	}
 
-	input.Serialize(buffer, 4);
+	input.read(buffer, 4);
 	mSize = MidiUtil::bytesToInt(buffer, 0, 4);
 
 	this->readTrackData(input);
 }
 MidiTrack::~MidiTrack()
 {
-	for (int i = 0; i < mEvents.Num(); i++)
-	{
-		delete mEvents[i];
-		mEvents[i] = NULL;
+	std::vector<MidiEvent*>::iterator it;
+	for (it = mEvents.begin();
+		it != mEvents.end();
+		it++) {
+		delete *it;
 	}
 }
 
-void MidiTrack::readTrackData(FBufferReader & input)
+// sort MIDI predicate
+inline static bool ConstPredicate(const MidiEvent* ip1, const MidiEvent* ip2)
+{
+	int value = ((MidiEvent*)ip1)->CompareTo((MidiEvent*)ip2);
+
+	// somehow value should be less then else it flips the MIDI file
+	return value < 0;
+}
+
+void MidiTrack::readTrackData(istream & input)
 {
 	long totalTicks = 0;
 
-	while (!input.AtEnd()) {
+	while (!input.eof()) {
 
 		VariableLengthInt delta(input);
 		totalTicks += delta.getValue();
 
 		MidiEvent * E = MidiEvent::parseEvent(totalTicks, delta.getValue(), input);
 		if (E == NULL) {
-			UE_LOG(LogTemp, Warning, TEXT("Event skipped!"));
+			printf("Event skipped!");
 			continue;
 		}
 
 		if (VERBOSE) {
-			UE_LOG(LogTemp, Display, TEXT("%s"), E->ToString().c_str());
+			printf("%s", E->ToString().c_str());
 		}
 
 		// Not adding the EndOfTrack event here allows the track to be edited
@@ -80,17 +92,19 @@ void MidiTrack::readTrackData(FBufferReader & input)
 		if (E->getType() == MetaEvent::END_OF_TRACK) {
 			break;
 		}
-		mEvents.Add(E);
+		mEvents.push_back(E);
 	}
 
+	// TODO allow to resort
+	std::sort(mEvents.begin(), mEvents.end(), ConstPredicate);
 }
 
-TArray<MidiEvent*>& MidiTrack::getEvents() {
+vector<MidiEvent*>& MidiTrack::getEvents() {
 	return mEvents;
 }
 
 int MidiTrack::getEventCount() {
-	return (int)mEvents.Num();
+	return (int)mEvents.size();
 }
 
 int MidiTrack::getSize() {
@@ -101,11 +115,11 @@ int MidiTrack::getSize() {
 }
 
 long MidiTrack::getLengthInTicks() {
-	if (mEvents.Num() == 0) {
+	if (mEvents.size() == 0) {
 		return 0;
 	}
 
-	MidiEvent * E = mEvents.Last();
+	MidiEvent * E = *(--mEvents.end());
 	return E->getTick();
 }
 
@@ -115,15 +129,6 @@ void MidiTrack::insertNote(int channel, int pitch, int velocity, long tick, long
 	insertEvent(new NoteOn(tick + duration, channel, pitch, 0));
 }
 
-// sort MIDI predicate
-inline static bool ConstPredicate(MidiEvent& ip1, MidiEvent& ip2)
-{
-	int value = ip1.CompareTo(&ip2);
-
-	// somehow value should be less then else it flips the MIDI file
-	return value < 0;
-}
-
 void MidiTrack::insertEvent(MidiEvent * newEvent) {
 
 	if (newEvent == NULL) {
@@ -131,14 +136,16 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	}
 
 	if (mClosed) {
-		UE_LOG(LogTemp, Error, TEXT("Error: Cannot add an event to a closed track."));
+		printf("Error: Cannot add an event to a closed track.");
 		return;
 	}
 
 	MidiEvent * prev = NULL, *next = NULL;
-
-	for (int it = 0; it < mEvents.Num(); it++) {
-		next = mEvents[it];
+	std::vector<MidiEvent*>::iterator it;
+	for (it = mEvents.begin(); 
+		it != mEvents.end();
+		it++) {
+		next = *it;
 
 		if (next->getTick() > newEvent->getTick()) {
 			break;
@@ -148,7 +155,7 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 		next = NULL;
 	}
 
-	mEvents.Add(newEvent);
+	mEvents.insert(--it, newEvent);
 	mSizeNeedsRecalculating = true;
 
 	// Set its delta time based on the previous event (or itself if no previous event exists)
@@ -165,12 +172,12 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	}
 
 	// TODO allow to resort
-	mEvents.Sort(ConstPredicate);
+	std::sort(mEvents.begin(), mEvents.end(), ConstPredicate);
 
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == MetaEvent::END_OF_TRACK) {
 		if (next != NULL) {
-			UE_LOG(LogTemp, Error, TEXT("Attempting to insert EndOfTrack before an existing event.  Use closeTrack() when finished with MidiTrack."));
+			printf("Attempting to insert EndOfTrack before an existing event.  Use closeTrack() when finished with MidiTrack.");
 			return;
 		}
 		mClosed = true;
@@ -180,9 +187,11 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 bool MidiTrack::removeEvent(MidiEvent * E) {
 
 	MidiEvent * prev = NULL, *curr = NULL, *next = NULL;
-
-	for (int it = 0; it < mEvents.Num(); it++) {
-		next = mEvents[it];
+	std::vector<MidiEvent*>::iterator it;
+	for (it = mEvents.begin();
+		it != mEvents.end();
+		it++) {
+		next = *it;
 
 		if (E == curr) {
 			break;
@@ -193,7 +202,7 @@ bool MidiTrack::removeEvent(MidiEvent * E) {
 		next = NULL;
 	}
 
-	bool isRemoved = mEvents.Remove(curr) > 0;
+	bool isRemoved = mEvents.erase(--it) != mEvents.end();//> 0;
 	// make sure to delete ptr
 	delete curr;
 
@@ -219,8 +228,8 @@ bool MidiTrack::removeEvent(MidiEvent * E) {
 
 void MidiTrack::closeTrack() {
 	long lastTick = 0;
-	if (mEvents.Num() > 0) {
-		MidiEvent * last = mEvents.Last();
+	if (mEvents.size() > 0) {
+		MidiEvent * last = *(--mEvents.end());
 		lastTick = last->getTick() + 1;
 	}
 
@@ -228,8 +237,11 @@ void MidiTrack::closeTrack() {
 }
 
 void MidiTrack::dumpEvents() {
-	for (int it = 0; it < mEvents.Num(); it++) {
-		UE_LOG(LogTemp, Display, TEXT("%s"), mEvents[it]->ToString().c_str());
+	std::vector<MidiEvent*>::iterator it;
+	for (it = mEvents.begin();
+		it != mEvents.end();
+		it++) {
+		printf("%s", (*it)->ToString().c_str());
 	}
 }
 
@@ -238,8 +250,11 @@ void MidiTrack::recalculateSize() {
 	mSize = 0;
 
 	MidiEvent * last = NULL;
-	for (int it = 0; it < mEvents.Num(); it++) {
-		MidiEvent * E = mEvents[it];
+	std::vector<MidiEvent*>::iterator it;
+	for (it = mEvents.begin();
+		it != mEvents.end();
+		it++) {
+		MidiEvent * E = *it;
 		mSize += E->getSize();
 
 		// If an event is of the same type as the previous event,
@@ -253,7 +268,7 @@ void MidiTrack::recalculateSize() {
 	mSizeNeedsRecalculating = false;
 }
 
-void MidiTrack::writeToFile(FMemoryWriter & output) {
+void MidiTrack::writeToFile(ostream & output) {
 
 	if (!mClosed) {
 		closeTrack();
@@ -263,15 +278,18 @@ void MidiTrack::writeToFile(FMemoryWriter & output) {
 		recalculateSize();
 	}
 
-	output.Serialize((char*)IDENTIFIER, 4);
-	output.Serialize(MidiUtil::intToBytes(mSize, 4), 4);
+	output.write((char*)IDENTIFIER, 4);
+	output.write(MidiUtil::intToBytes(mSize, 4), 4);
 
 	MidiEvent * lastEvent = NULL;
 
-	for (int it = 0; it < mEvents.Num(); it++) {
-		MidiEvent * _event = mEvents[it];
+	std::vector<MidiEvent*>::iterator it;
+	for (it = mEvents.begin();
+		it != mEvents.end();
+		it++) {
+		MidiEvent * _event = *it;
 		if (VERBOSE) {
-			UE_LOG(LogTemp, Display, TEXT("Writing: %s"), _event->ToString().c_str());
+			printf("Writing: %s", _event->ToString().c_str());
 		}
 
 		_event->writeToFile(output, _event->requiresStatusByte(lastEvent));

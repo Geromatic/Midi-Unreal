@@ -21,20 +21,20 @@ int MidiChannelPrefix::getEventSize() {
 	return 4;
 }
 
-void MidiChannelPrefix::writeToFile(FMemoryWriter & output) {
+void MidiChannelPrefix::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.Serialize(&size, 1);
-	output.Serialize(&mChannel, 1);
+	output.put(size);
+	output.put(mChannel);
 }
 
-MidiChannelPrefix * MidiChannelPrefix::parseMidiChannelPrefix(long tick, long delta, FBufferReader & input) {
+MidiChannelPrefix * MidiChannelPrefix::parseMidiChannelPrefix(long tick, long delta, istream & input) {
 
-	input.Seek(input.Tell() + 1);		// Size = 1;
+	input.ignore();		// Size = 1;
 
 	int channel = 0;
-	input.Serialize(&channel, 1);
+	channel = input.get();
 
 	return new MidiChannelPrefix(tick, delta, channel);
 }

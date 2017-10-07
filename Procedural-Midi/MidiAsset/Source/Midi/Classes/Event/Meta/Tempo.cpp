@@ -41,20 +41,20 @@ int Tempo::getEventSize() {
 	return 6;
 }
 
-void Tempo::writeToFile(FMemoryWriter & output) {
+void Tempo::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.Serialize(&size, 1);
-	output.Serialize(MidiUtil::intToBytes(mMPQN, 3), 3);
+	output.put(size);
+	output.write(MidiUtil::intToBytes(mMPQN, 3), 3);
 }
 
-Tempo * Tempo::parseTempo(long tick, long delta, FBufferReader & input) {
+Tempo * Tempo::parseTempo(long tick, long delta, istream & input) {
 
-	input.Seek(input.Tell() + 1);		// Size = 3
+	input.ignore();		// Size = 3
 
 	char buffer[3] = { 0 };
-	input.Serialize(buffer, 3);
+	input.read(buffer, 3);
 	int mpqn = MidiUtil::bytesToInt(buffer, 0, 3);
 
 	return new Tempo(tick, delta, mpqn);

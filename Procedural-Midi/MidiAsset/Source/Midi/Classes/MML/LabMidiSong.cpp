@@ -364,8 +364,8 @@ namespace Lab {
                 break;
             }
         } while (curr < end);
-		TArray<MidiTrack*> trks = mMidiFile->getTracks();
-		for (int i = 0; i < trks.Num(); i++)
+		vector<MidiTrack*> trks = mMidiFile->getTracks();
+		for (int i = 0; i < trks.size(); i++)
 			trks[i]->closeTrack();
 
 		return mMidiFile;
@@ -448,7 +448,7 @@ namespace Lab {
 	}
 
 	// Called when the game starts
-	void MidiSong::LoadString(const FString &data)
+	void MidiSong::LoadString(const string &data)
 	{
 
 		track = new MidiTrack();
@@ -467,17 +467,11 @@ namespace Lab {
 		chord_init(&chord, tempo_default, mml_opt.bticks);
 		chord.count = 0;
 
-
-		TArray<TCHAR> CharData = data.GetCharArray();
-		char * MMLDataChar = new char[CharData.Num()];
-		for (int i = 0; i < CharData.Num(); i++)
-			MMLDataChar[i] = CharData[i];
-		mml_setup(&mml, &mml_opt, (char*)MMLDataChar);
+		mml_setup(&mml, &mml_opt, (char*)data.c_str());
 		
 		MML_RESULT cher;
 		while ( (cher = mml_fetch(&mml)) == MML_RESULT_OK) {
 		}
-		delete[] MMLDataChar;
 		note_clear(&chord);
 	}
     

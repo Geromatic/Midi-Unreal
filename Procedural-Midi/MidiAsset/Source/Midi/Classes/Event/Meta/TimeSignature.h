@@ -42,9 +42,9 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 
-	static TimeSignature * parseTimeSignature(long tick, long delta, FBufferReader & input);
+	static TimeSignature * parseTimeSignature(long tick, long delta, istream & input);
 
 private:
 	int log2(int den);

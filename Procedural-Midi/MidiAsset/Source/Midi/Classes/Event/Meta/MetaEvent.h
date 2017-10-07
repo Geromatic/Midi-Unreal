@@ -22,30 +22,30 @@ protected:
 
 	virtual int getEventSize() = 0;
 public:
-	virtual void writeToFile(FMemoryWriter & output, bool writeType);
+	virtual void writeToFile(ostream & output, bool writeType);
 
 protected:
-	virtual void writeToFile(FMemoryWriter & output);
+	virtual void writeToFile(ostream & output);
 
 public:
-	static MetaEvent * parseMetaEvent(long tick, long delta, FBufferReader & input);
+	static MetaEvent * parseMetaEvent(long tick, long delta, istream & input);
 
 protected:
 	class MetaEventData
 	{
 	public:
-		int type;
+		char type;
 		VariableLengthInt* length;
 		char* data;
 
-		MetaEventData(FBufferReader& input) : type(0), length(NULL), data(NULL)
+		MetaEventData(istream& input) : type(0), length(NULL), data(NULL)
 		{
-			input.Serialize(&type, 1);
+			type = input.get();
 			length = new VariableLengthInt(input);
 			data = new char[length->getValue()];
 			if (length->getValue() > 0)
 			{
-				input.Serialize(&data, length->getValue());
+				input.read(data, length->getValue());
 			}
 		}
 	};

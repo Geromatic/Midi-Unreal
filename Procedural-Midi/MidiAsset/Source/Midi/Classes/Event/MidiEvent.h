@@ -39,7 +39,7 @@ public:
 
 	virtual bool requiresStatusByte(MidiEvent * prevEvent);
 
-	virtual void writeToFile(FMemoryWriter & output, bool writeType);
+	virtual void writeToFile(ostream & output, bool writeType);
 
 private:
 	static int sId;
@@ -47,7 +47,7 @@ private:
 	static int sChannel;
 
 public:
-	static MidiEvent * parseEvent(long tick, long delta, FBufferReader & input);
+	static MidiEvent * parseEvent(long tick, long delta, istream & input);
 
 	/* Compare MIDI events
 	*  0:	Current event time is the same as Other
