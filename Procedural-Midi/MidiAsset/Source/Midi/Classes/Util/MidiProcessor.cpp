@@ -9,13 +9,9 @@
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-// cross platform time
-//#include <chrono>
-//double getMilliseconds() {
-//	using std::chrono::high_resolution_clock;
-//	auto clk = std::chrono::high_resolution_clock::now();
-//	return std::chrono::duration_cast<std::chrono::milliseconds>(clk.time_since_epoch()).count();
-//}
+// system processor clock
+#include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
+
 MidiProcessor::MidiProcessor() : PlaySpeed(1.0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
@@ -60,7 +56,7 @@ void MidiProcessor::load(MidiFile & file) {
 void MidiProcessor::start() {
 	if (mRunning) return;
 	
-	mLastMs = FPlatformTime::Cycles();
+	mLastMs = clock();
 	mRunning = true;
 
 	mListener->onStart(mMsElapsed == 0);
@@ -119,19 +115,13 @@ void MidiProcessor::dispatch(MidiEvent * _event) {
 	}
 	mListener->onEvent(_event);
 }
-
-void MidiProcessor::update(double deltaTime = -1) {
+// Processes the MIDI file every tick
+void MidiProcessor::update(const double& deltaTime = clock()) {
 	if (!mRunning)
 		return;
 
 	double now = deltaTime;
 	double msElapsed = now - mLastMs;
-	// use system real time if delta < 0 // TODO decouple
-	if (deltaTime < 0) {
-		now = FPlatformTime::Cycles();
-		msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
-	}
-
 	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlaySpeed;
 	if (ticksElapsed < 1) {
 		return;

@@ -18,10 +18,10 @@ long MidiUtil::ticksToMs(long ticks, float bpm, int resolution) {
 	return ticksToMs(ticks, bpmToMpqn(bpm), resolution);
 }
 
-double MidiUtil::msToTicks(float ms, int mpqn, int ppq) {
+double MidiUtil::msToTicks(double ms, int mpqn, int ppq) {
 	return ((ms * 1000.0) * ppq) / mpqn;
 }
-double MidiUtil::msToTicks(float ms, float bpm, int ppq) {
+double MidiUtil::msToTicks(double ms, float bpm, int ppq) {
 	return msToTicks(ms, bpmToMpqn(bpm), ppq);
 }
 

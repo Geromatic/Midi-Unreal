@@ -51,7 +51,7 @@ public:
 		mLastMs = time;
 	}
 
-	void update(double deltaTime);
+	void update(const double& deltaTime);
 
 protected:
 	void dispatch(MidiEvent * _event);
