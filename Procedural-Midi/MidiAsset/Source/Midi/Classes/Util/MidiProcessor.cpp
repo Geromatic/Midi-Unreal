@@ -121,7 +121,7 @@ void MidiProcessor::update(double deltaTime = -1) {
 		msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
 	}
 
-	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlaySpeed;
+	double ticksElapsed = ( (msElapsed * 1000.0) * mPPQ) / mMPQN ) * PlaySpeed;//MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlaySpeed;
 	if (ticksElapsed < 1) {
 		return;
 	}
