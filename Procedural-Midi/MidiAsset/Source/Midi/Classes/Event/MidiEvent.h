@@ -11,7 +11,7 @@
  * abstract base class for midi events
  * A event that 'is a piece of data sent to a MIDI device to prompt it to do something at a certain time.'
  */
-class MIDI_API MidiEvent
+class MidiEvent
 {
 protected:
 	// MidiEvent Class

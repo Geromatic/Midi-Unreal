@@ -9,7 +9,7 @@
 /**
  * 
  */
-class MIDI_API MidiTrack
+class MidiTrack
 {
 	static const bool VERBOSE = false;
 public:

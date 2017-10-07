@@ -10,7 +10,7 @@ using namespace std;
 /**
  * Abstract Channel MIDI Event
  */
-class MIDI_API ChannelEvent : public MidiEvent
+class ChannelEvent : public MidiEvent
 {
 
 protected:

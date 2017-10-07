@@ -10,7 +10,7 @@ using namespace std;
 /**
  * Variable Length Integer
  */
-class MIDI_API VariableLengthInt
+class VariableLengthInt
 {
 	int mValue;
 	char mBytes[4];

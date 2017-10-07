@@ -9,7 +9,7 @@
  * Generic Meta Event
  * Class that holds unrecognized MIDI events
  */
-class MIDI_API GenericMetaEvent : public MetaEvent
+class GenericMetaEvent : public MetaEvent
 {
 	char* mData;
 

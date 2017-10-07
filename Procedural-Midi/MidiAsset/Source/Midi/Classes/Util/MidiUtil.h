@@ -6,7 +6,7 @@
 /**
  * 
  */
-class MIDI_API MidiUtil
+class MidiUtil
 {
 
 public:

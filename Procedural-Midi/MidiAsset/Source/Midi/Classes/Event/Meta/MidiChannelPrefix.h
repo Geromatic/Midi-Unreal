@@ -9,7 +9,7 @@
  * MIDI Channel Prefix Meta Event
  * A event that 'specifies a MIDI channel so that meta messages that follow are specific to a channel.'
  */
-class MIDI_API MidiChannelPrefix : public MetaEvent
+class MidiChannelPrefix : public MetaEvent
 {
 	int mChannel;
 

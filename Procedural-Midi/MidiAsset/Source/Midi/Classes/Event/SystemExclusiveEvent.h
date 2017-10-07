@@ -9,7 +9,7 @@
  * System Exclusive MIDI Event
  * SysEx events may not be properly handled by this library.
  */
-class MIDI_API SystemExclusiveEvent : public MidiEvent
+class SystemExclusiveEvent : public MidiEvent
 {
 	VariableLengthInt * mLength;
 	char * mData;

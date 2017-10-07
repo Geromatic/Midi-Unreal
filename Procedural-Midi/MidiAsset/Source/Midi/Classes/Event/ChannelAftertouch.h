@@ -9,7 +9,7 @@
  * Channel Aftertouch Channel Event
  * A event that can 'apply pressure to a MIDI channel, similar to applying pressure to electronic keyboard keys.'
  */
-class MIDI_API ChannelAftertouch : public ChannelEvent
+class ChannelAftertouch : public ChannelEvent
 {
 public:
 	ChannelAftertouch(long tick, int channel, int amount);

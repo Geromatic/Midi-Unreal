@@ -155,7 +155,7 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 		next = NULL;
 	}
 
-	mEvents.insert(--it, newEvent);
+	mEvents.insert(it, newEvent);
 	mSizeNeedsRecalculating = true;
 
 	// Set its delta time based on the previous event (or itself if no previous event exists)
@@ -186,6 +186,8 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 
 bool MidiTrack::removeEvent(MidiEvent * E) {
 
+	bool isRemoved = false;
+
 	MidiEvent * prev = NULL, *curr = NULL, *next = NULL;
 	std::vector<MidiEvent*>::iterator it;
 	for (it = mEvents.begin();
@@ -194,6 +196,9 @@ bool MidiTrack::removeEvent(MidiEvent * E) {
 		next = *it;
 
 		if (E == curr) {
+			mEvents.erase(--it);
+			isRemoved = true;
+			delete curr;
 			break;
 		}
 
@@ -201,10 +206,6 @@ bool MidiTrack::removeEvent(MidiEvent * E) {
 		curr = next;
 		next = NULL;
 	}
-
-	bool isRemoved = mEvents.erase(--it) != mEvents.end();//> 0;
-	// make sure to delete ptr
-	delete curr;
 
 	if (next == NULL) {
 		// Either the event was not found in the track,

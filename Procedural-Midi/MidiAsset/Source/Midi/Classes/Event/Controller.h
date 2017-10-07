@@ -9,7 +9,7 @@
  * Controller Channel Event
  * A event that can 'affect a controller, such as a slider, knob, or switch.'
  */
-class MIDI_API Controller : public ChannelEvent
+class Controller : public ChannelEvent
 {
 public:
 	Controller(long tick, int channel, int controllerType, int value);

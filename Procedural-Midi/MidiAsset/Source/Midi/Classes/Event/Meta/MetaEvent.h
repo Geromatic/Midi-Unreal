@@ -12,7 +12,7 @@ using namespace std;
  * Abstract Meta MIDI Event
  * A abstract event for 'messages that contains information about the MIDI sequence and that are not to be sent over MIDI ports.'
  */
-class MIDI_API MetaEvent : public MidiEvent
+class MetaEvent : public MidiEvent
 {
 protected:
 	VariableLengthInt * mLength;

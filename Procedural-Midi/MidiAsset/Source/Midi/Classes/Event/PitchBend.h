@@ -9,7 +9,7 @@
  * Pitch Bend Channel Event
  * A event that can 'change a channel pitch up or down.'
  */
-class MIDI_API PitchBend : public ChannelEvent
+class PitchBend : public ChannelEvent
 {
 public:
 	PitchBend(long tick, int channel, int lsb, int msb);

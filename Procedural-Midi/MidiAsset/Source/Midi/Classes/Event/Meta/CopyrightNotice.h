@@ -9,7 +9,7 @@
  * Copyright Notice Textual Meta Event
  * A event that 'places a copyright notice in a MIDI file.'
  */
-class MIDI_API CopyrightNotice : public TextualMetaEvent
+class CopyrightNotice : public TextualMetaEvent
 {
 public:
 	CopyrightNotice(long tick, long delta, string text);

@@ -9,7 +9,7 @@
  * Time Signature Meta Event
  * A Event that 'defines the musical time signature of a MIDI sequence.'
  */
-class MIDI_API TimeSignature : public MetaEvent
+class TimeSignature : public MetaEvent
 {
 public:
 	static const int METER_EIGHTH = 12;

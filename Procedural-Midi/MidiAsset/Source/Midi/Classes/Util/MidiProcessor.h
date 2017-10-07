@@ -11,7 +11,7 @@
 /**
 *	Loads and plays back a MIDI file
 */
-class MIDI_API MidiProcessor
+class MidiProcessor
 {
 	static const int PROCESS_RATE_MS = 8;
 

@@ -9,7 +9,7 @@
  * Note On Channel Event
  * A event that can 'play a note and start sounding it.'
  */
-class MIDI_API NoteOn : public ChannelEvent
+class NoteOn : public ChannelEvent
 {
 public:
 	NoteOn(long tick, int channel, int note, int velocity);

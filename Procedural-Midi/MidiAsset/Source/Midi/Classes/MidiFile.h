@@ -10,7 +10,7 @@
 /**
  * 
  */
-class MIDI_API MidiFile
+class MidiFile
 {
 	int mType;
 	int mTrackCount;
