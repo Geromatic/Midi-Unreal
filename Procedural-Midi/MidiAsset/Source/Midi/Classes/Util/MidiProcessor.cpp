@@ -9,10 +9,7 @@
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-// system processor clock
-#include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
-
-MidiProcessor::MidiProcessor() : PlaySpeed(1.0) {
+MidiProcessor::MidiProcessor() : PlayRate(1.0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
 
@@ -53,10 +50,10 @@ void MidiProcessor::load(MidiFile & file) {
 	}
 }
 
-void MidiProcessor::start() {
+void MidiProcessor::start(const double& deltaTime /*= clock()*/) {
 	if (mRunning) return;
 	
-	mLastMs = clock();
+	mLastMs = deltaTime;// clock();
 	mRunning = true;
 
 	mListener->onStart(mMsElapsed == 0);
@@ -116,13 +113,13 @@ void MidiProcessor::dispatch(MidiEvent * _event) {
 	mListener->onEvent(_event);
 }
 // Processes the MIDI file every tick
-void MidiProcessor::update(const double& deltaTime = clock()) {
+void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
 	if (!mRunning)
 		return;
 
 	double now = deltaTime;
 	double msElapsed = now - mLastMs;
-	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlaySpeed;
+	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlayRate;
 	if (ticksElapsed < 1) {
 		return;
 	}

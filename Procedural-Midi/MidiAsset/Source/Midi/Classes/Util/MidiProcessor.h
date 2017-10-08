@@ -8,6 +8,9 @@
 #include "MetronomeTick.h"
 #include "MidiEventListener.h"
 
+// system processor clock
+#include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
+
 /**
 *	Loads and plays back a MIDI file
 */
@@ -32,7 +35,7 @@ public:
 
 	void load(MidiFile & file);
 
-	void start();
+	void start(const double& deltaTime = clock());
 	void stop();
 	void reset();
 
@@ -41,17 +44,14 @@ public:
 
 	void setListener(MidiEventListener* listener);
 
-	// Sets the play back speed
-	double PlaySpeed;
-
-	// use real time clock or game time?
-	bool isGameTime = false;
-
-	void setBeginTime(double time) {
+	// Sets the play back rate
+	double PlayRate;
+	/*TODO set time if using user based clock*/
+	void setStartClock(double time) {
 		mLastMs = time;
 	}
 
-	void update(const double& deltaTime);
+	void update(const double& deltaTime = clock());
 
 protected:
 	void dispatch(MidiEvent * _event);
@@ -64,64 +64,54 @@ private:
 	double mLastMs;
 	MidiEventListener* mListener;
 
-	//class MidiTrackEventQueue
+	//class MidiTrackEventIterator
 	//{
 	//private:
 	//	MidiTrack* mTrack;
-	//	set<MidiEvent*>::iterator mIterator;
-	//	TArray<MidiEvent*> mEventsToDispatch;
-	//	MidiEvent* mNext;
+	//	vector<MidiEvent*>::iterator mIterator;
+	//	vector<MidiEvent*>::iterator mEnd;
+	//	MidiEvent* mEvent;
 
 	//public:
-	//	MidiTrackEventQueue(MidiTrack* track) : mIterator(track->getEvents().begin()), mNext(NULL)
+	//	MidiTrackEventIterator(MidiTrack* track) :mEvent(NULL)
 	//	{
 	//		mTrack = track;
 
-	//		if (mIterator)
+	//		this->Reset();
+	//	}
+
+	//	void Next()
+	//	{
+	//		if (mIterator != mEnd)
 	//		{
-	//			mNext = *mIterator;
+	//			mEvent = *mIterator;
+	//			mIterator++;
+	//		}
+	//		else
+	//		{
+	//			mEvent = NULL;
 	//		}
 	//	}
 
-	//	TArray<MidiEvent*>& getNextEventsUpToTick(double tick)
+	//	MidiEvent* getEvent()
 	//	{
-	//		mEventsToDispatch.Empty();
-
-	//		while (mNext != NULL)
-	//		{
-
-	//			if (mNext->getTick() <= tick)
-	//			{
-	//				mEventsToDispatch.Add(mNext);
-
-	//				if (++mIterator)
-	//				{
-	//					mNext = *mIterator;
-	//				}
-	//				else
-	//				{
-	//					mNext = NULL;
-	//				}
-	//			}
-	//			else
-	//			{
-	//				break;
-	//			}
-	//		}
-
-	//		return mEventsToDispatch;
+	//		return  mEvent;
 	//	}
 
-	//	bool hasMoreEvents()
+	//	bool hasMoreEvents() const
 	//	{
-	//		return mNext != NULL;
+	//		return mEvent != NULL;
 	//	}
 
 	//	void Reset() {
-	//		mIterator.Reset();
-	//		if (mIterator)
+	//		mEvent = NULL;
+
+	//		mIterator = mTrack->getEvents().begin();
+	//		mEnd = mTrack->getEvents().end();
+
+	//		if (mIterator != mEnd)
 	//		{
-	//			mNext = *mIterator;
+	//			mEvent = *mIterator;
 	//		}
 	//	}
 	//};

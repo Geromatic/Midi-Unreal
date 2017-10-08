@@ -63,12 +63,12 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	if (mProcessor.PlaySpeed != PlaySpeed)
-		mProcessor.PlaySpeed = PlaySpeed;
+	if (mProcessor.PlayRate != PlaySpeed)
+		mProcessor.PlayRate = PlaySpeed;
 
 	if (!InBackground) {
 		// update time
-		if (mProcessor.isGameTime) {
+		if (isGameTime) {
 			mProcessor.update(GetWorld()->TimeSeconds * 1000.0f);
 		}
 		else
@@ -177,11 +177,11 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 void UMidiComponent::onStart(bool fromBeginning) { 
 	// MultiThread
 	if (InBackground) {
-		mWorker = new FMidiProcessorWorker(&mProcessor);
+		mWorker = new FMidiProcessorWorker(&mProcessor, this->isGameTime);
 	}
-	else
-		if (mProcessor.isGameTime)
-			mProcessor.setBeginTime(GetWorld()->TimeSeconds * 1000.0f);
+	//else
+	//	if (isGameTime)
+	//		mProcessor.setStartClock(GetWorld()->TimeSeconds * 1000.0f);
 
 	OnStart.Broadcast(fromBeginning); 
 }
@@ -202,11 +202,13 @@ void UMidiComponent::onStop(bool finish) {
 void UMidiComponent::start(bool background, bool UseGameTime) {
 	if (!isRunning()) {
 		InBackground = background;
-		mProcessor.isGameTime = UseGameTime;
+		this->isGameTime = UseGameTime;
 	}
 
-
-	mProcessor.start();
+	if(UseGameTime)
+		mProcessor.start(GetWorld()->TimeSeconds * 1000.0f);
+	else
+		mProcessor.start();
 }
 
 void UMidiComponent::stop() {
@@ -258,7 +260,7 @@ float UMidiComponent::GetDuration()
 		while (true) {
 
 			const double msElapsed = 1.0;
-			double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * mProcessor.PlaySpeed;
+			double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * mProcessor.PlayRate;
 
 			mMsElapsed += msElapsed;
 			mTicksElapsed += ticksElapsed;

@@ -12,9 +12,11 @@ bool FMidiProcessorWorker::IsFinished() const
 }
 
 //Constructor / Destructor
-FMidiProcessorWorker::FMidiProcessorWorker(MidiProcessor* IN_PC) 
+FMidiProcessorWorker::FMidiProcessorWorker(MidiProcessor* IN_PC, bool UseGameTime)
 	: ThePC(IN_PC)
 {
+	this->isGameTime = UseGameTime;
+
 	Thread = FRunnableThread::Create(this, TEXT("FMidiProcessorWorker"), 0, TPri_BelowNormal); //windows default = 8mb for thread, could specify more
 }
 
@@ -31,12 +33,12 @@ uint32 FMidiProcessorWorker::Run() {
 	if (!world)
 		return 0;
 
-	if(ThePC->isGameTime)
-		ThePC->setBeginTime(world->TimeSeconds * 1000.0f);
+	if(isGameTime)
+		ThePC->setStartClock(world->TimeSeconds * 1000.0f);
 
 	while (!IsFinished())
 	{
-		if (ThePC->isGameTime)
+		if (isGameTime)
 			ThePC->update(world->TimeSeconds * 1000.0f);
 		else
 			ThePC->update();
