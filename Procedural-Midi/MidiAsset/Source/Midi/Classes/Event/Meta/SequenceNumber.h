@@ -9,7 +9,7 @@
  * Sequence Number Meta Event
  * A event that 'defines the number of a sequence in type 0 and 1 MIDI files, or the pattern number in type 2 MIDI files.'
  */
-class MIDI_API SequenceNumber : public MetaEvent
+class SequenceNumber : public MetaEvent
 {
 	int mNumber;
 
@@ -21,9 +21,9 @@ public:
 	int getSequenceNumber();
 
 public:
-	void writeToFile(FMemoryWriter& output);
+	void writeToFile(ostream& output);
 
-	static SequenceNumber * parseSequenceNumber(long tick, long delta, FBufferReader & input);
+	static SequenceNumber * parseSequenceNumber(long tick, long delta, istream & input);
 	int CompareTo(MidiEvent *other);
 protected:
 	int getEventSize();

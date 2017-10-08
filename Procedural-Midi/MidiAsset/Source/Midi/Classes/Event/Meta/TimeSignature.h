@@ -9,7 +9,7 @@
  * Time Signature Meta Event
  * A Event that 'defines the musical time signature of a MIDI sequence.'
  */
-class MIDI_API TimeSignature : public MetaEvent
+class TimeSignature : public MetaEvent
 {
 public:
 	static const int METER_EIGHTH = 12;
@@ -42,9 +42,9 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 
-	static TimeSignature * parseTimeSignature(long tick, long delta, FBufferReader & input);
+	static TimeSignature * parseTimeSignature(long tick, long delta, istream & input);
 
 private:
 	int log2(int den);

@@ -9,7 +9,7 @@
  * Sequencer Specific Meta Event
  * A event that 'carries information that is specific to a MIDI sequencer produced by a certain MIDI manufacturer.'
  */
-class MIDI_API SequencerSpecificEvent : public MetaEvent
+class SequencerSpecificEvent : public MetaEvent
 {
 	char * mData;
 
@@ -24,6 +24,6 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 	int CompareTo(MidiEvent *other);
 };

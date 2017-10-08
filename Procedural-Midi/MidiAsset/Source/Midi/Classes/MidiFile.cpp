@@ -24,35 +24,33 @@ MidiFile::MidiFile(int resolution)
 	mType = 0;
 }
 
-MidiFile::MidiFile(int resolution, const TArray<MidiTrack*>& tracks)
+MidiFile::MidiFile(int resolution, const vector<MidiTrack*>& tracks)
 {
 	mResolution = resolution >= 0 ? resolution : DEFAULT_RESOLUTION;
 
-	mTracks.Append(tracks);
-	mTrackCount = tracks.Num();
+	mTracks.insert(mTracks.end(), tracks.begin(), tracks.end());
+	mTrackCount = tracks.size();
 	mType = mTrackCount > 1 ? 1 : 0;
 }
 
-MidiFile::MidiFile(FBufferReader& input)
+MidiFile::MidiFile(istream& input)
 {
 	//FBufferReader reader(data, size, false);
 
 	char buffer[(int)HEADER_SIZE] = { 0 };
-	input.Serialize(buffer, HEADER_SIZE);
+	input.read(buffer, HEADER_SIZE);
 
 	initFromBuffer(buffer);
 
 	for (int i = 0; i < mTrackCount; i++)
 	{
-		mTracks.Add(new MidiTrack(input));
+		mTracks.push_back(new MidiTrack(input));
 	}
-
-	input.Close();
 }
 
 MidiFile::~MidiFile()
 {
-	for (int i = 0; i < mTracks.Num(); i++)
+	for (int i = 0; i < mTracks.size(); i++)
 	{
 		delete mTracks[i];
 		mTracks[i] = NULL;
@@ -100,7 +98,7 @@ int MidiFile::getResolution()
 long MidiFile::getLengthInTicks()
 {
 	long length = 0;
-	for (int i = 0; i < mTracks.Num(); i++)
+	for (int i = 0; i < mTracks.size(); i++)
 	{
 		MidiTrack * T = mTracks[i];
 		long l = T->getLengthInTicks();
@@ -112,69 +110,70 @@ long MidiFile::getLengthInTicks()
 	return length;
 }
 
-TArray<MidiTrack*>& MidiFile::getTracks()
+vector<MidiTrack*>& MidiFile::getTracks()
 {
 	return mTracks;
 }
 
 void MidiFile::addTrack(MidiTrack* T)
 {
-	addTrack(T, (int)mTracks.Num());
+	addTrack(T, (int)mTracks.size());
 }
 
 void MidiFile::addTrack(MidiTrack *T, int pos) {
 
-	if (pos > mTracks.Num())
+	if (pos > mTracks.size())
 	{
-		pos = (int)mTracks.Num();
+		pos = (int)mTracks.size();
 	}
 	else if (pos < 0)
 	{
 		pos = 0;
 	}
 
-	mTracks.Insert(T, pos);
-	mTrackCount = (int)mTracks.Num();
+	mTracks.insert(mTracks.begin() + pos, T);
+	mTrackCount = (int)mTracks.size();
 	mType = mTrackCount > 1 ? 1 : 0;
 }
 
 void MidiFile::removeTrack(int pos)
 {
-	if (pos < 0 || pos >= mTracks.Num())
+	if (pos < 0 || pos >= mTracks.size())
 	{
 		return;
 	}
-	mTracks.RemoveAt(pos);
-	mTrackCount = (int)mTracks.Num();
+	mTracks.erase(mTracks.begin() + pos);
+	mTrackCount = (int)mTracks.size();
 	mType = mTrackCount > 1 ? 1 : 0;
 }
 
-void MidiFile::writeToFile(FMemoryWriter & output)
+void MidiFile::writeToFile(ostream & output)
 {
 	//TArray<uint8> data;
 	//FMemoryWriter writer(data);
 
-	output.Serialize((char*)IDENTIFIER, 4);
-	output.Serialize(MidiUtil::intToBytes(6, 4), 4);
-	output.Serialize(MidiUtil::intToBytes(mType, 2), 2);
-	output.Serialize(MidiUtil::intToBytes(mTrackCount, 2), 2);
-	output.Serialize(MidiUtil::intToBytes(mResolution, 2), 2);
+	output.write((char*)IDENTIFIER, 4);
+	output.write(MidiUtil::intToBytes(6, 4), 4);
+	output.write(MidiUtil::intToBytes(mType, 2), 2);
+	output.write(MidiUtil::intToBytes(mTrackCount, 2), 2);
+	output.write(MidiUtil::intToBytes(mResolution, 2), 2);
 
-	for (int i = 0; i < mTracks.Num(); i++)
+	for (int i = 0; i < mTracks.size(); i++)
 	{
 		MidiTrack * T = mTracks[i];
 		T->writeToFile(output);
 	}
 
-	output.Flush();
-	output.Close();
+	output.flush();
+//	output.close();
 }
 
 void MidiFile::initFromBuffer(char buffer[])
 {
 	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("File identifier not MThd. Exiting"));
+		printf("File identifier not MThd. Exiting");
+		//UE_LOG(LogTemp, Warning, TEXT("File identifier not MThd. Exiting"));
 		mType = 0;
 		mTrackCount = 0;
 		mResolution = DEFAULT_RESOLUTION;

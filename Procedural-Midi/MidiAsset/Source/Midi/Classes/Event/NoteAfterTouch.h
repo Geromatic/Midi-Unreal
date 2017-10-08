@@ -9,7 +9,7 @@
  * Note After Touch
  * A event that can 'apply pressure to a note playing, similar to applying pressure to electronic keyboard keys.'
  */
-class MIDI_API NoteAfterTouch : public ChannelEvent
+class NoteAfterTouch : public ChannelEvent
 {
 public:
 	NoteAfterTouch(long tick, int channel, int note, int amount);

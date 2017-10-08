@@ -13,11 +13,11 @@ int EndOfTrack::getEventSize() {
 	return 3;
 }
 
-void EndOfTrack::writeToFile(FMemoryWriter & output) {
+void EndOfTrack::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.Serialize(&size, 1);
+	output.put(size);
 }
 
 int EndOfTrack::CompareTo(MidiEvent *other) {

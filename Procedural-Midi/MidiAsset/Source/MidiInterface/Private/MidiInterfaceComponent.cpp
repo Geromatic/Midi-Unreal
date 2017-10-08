@@ -191,9 +191,9 @@ void UMidiInterfaceComponent::SendRaw(const TArray<uint8>& Data)
 {
 	std::vector<uint8> msg;
 
-	for (auto& data : Data)
+	for (int i = 0; i < Data.Num(); i++)
 	{
-		msg.push_back(data);
+		msg.push_back(Data[i]);
 	}
 	
 	midiOut.sendMessage(&msg);

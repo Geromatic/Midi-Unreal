@@ -4,11 +4,12 @@
 #pragma once
 
 #include "Event/MidiEvent.h"
+#include <vector>
 
 /**
  * 
  */
-class MIDI_API MidiTrack
+class MidiTrack
 {
 	static const bool VERBOSE = false;
 public:
@@ -20,19 +21,19 @@ private:
 	bool mSizeNeedsRecalculating;
 	bool mClosed;
 
-	TArray<MidiEvent*> mEvents;
+	vector<MidiEvent*> mEvents;
 
 public:
 	static MidiTrack* createTempoTrack();
 
 	MidiTrack();
-	MidiTrack(FBufferReader & input);
+	MidiTrack(istream & input);
 	~MidiTrack();
 
-	TArray<MidiEvent*>& getEvents();
+	vector<MidiEvent*>& getEvents();
 
 private:
-	void readTrackData(FBufferReader & input);
+	void readTrackData(istream & input);
 
 public:
 
@@ -51,7 +52,7 @@ public:
 
 	void dumpEvents();
 
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 
 private:
 	void recalculateSize();

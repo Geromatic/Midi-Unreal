@@ -9,7 +9,7 @@
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-MidiProcessor::MidiProcessor() : PlaySpeed(1.0) {
+MidiProcessor::MidiProcessor() : PlayRate(1.0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
 
@@ -41,17 +41,19 @@ void MidiProcessor::load(MidiFile & file) {
 
 	mMetronome = new MetronomeTick(&sig, mPPQ);
 
-	mCurrEvents.Empty();
-	TArray<MidiTrack*>& tracks = mMidiFile->getTracks();
-	for (int i = 0; i < tracks.Num(); i++) {
-		mCurrEvents.Add(tracks[i]->getEvents().CreateIterator());
+	mCurrEvents.clear();
+	mCurrEventsEnd.clear();
+	vector<MidiTrack*>& tracks = mMidiFile->getTracks();
+	for (int i = 0; i < tracks.size(); i++) {
+		mCurrEvents.push_back(tracks[i]->getEvents().begin());
+		mCurrEventsEnd.push_back(tracks[i]->getEvents().end());
 	}
 }
 
-void MidiProcessor::start() {
+void MidiProcessor::start(const double& deltaTime /*= clock()*/) {
 	if (mRunning) return;
 	
-	mLastMs = FPlatformTime::Cycles();
+	mLastMs = deltaTime;// clock();
 	mRunning = true;
 
 	mListener->onStart(mMsElapsed == 0);
@@ -75,8 +77,9 @@ void MidiProcessor::reset() {
 	if (mMetronome)
 		mMetronome->setTimeSignature(&sig);
 
-	for (int i = 0; i < mCurrEvents.Num(); i++) {
-		mCurrEvents[i].Reset();
+	vector<MidiTrack*>& tracks = mMidiFile->getTracks();
+	for (int i = 0; i < mCurrEvents.size(); i++) {
+		mCurrEvents[i] = tracks[i]->getEvents().begin();
 	}
 }
 
@@ -109,19 +112,14 @@ void MidiProcessor::dispatch(MidiEvent * _event) {
 	}
 	mListener->onEvent(_event);
 }
-
-void MidiProcessor::update(double deltaTime = -1) {
+// Processes the MIDI file every tick
+void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
 	if (!mRunning)
 		return;
 
 	double now = deltaTime;
 	double msElapsed = now - mLastMs;
-	if (deltaTime < 0) {
-		now = FPlatformTime::Cycles();
-		msElapsed = FPlatformTime::ToMilliseconds(now - mLastMs);
-	}
-
-	double ticksElapsed = ( (msElapsed * 1000.0) * mPPQ) / mMPQN ) * PlaySpeed;//MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlaySpeed;
+	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlayRate;
 	if (ticksElapsed < 1) {
 		return;
 	}
@@ -141,20 +139,20 @@ void MidiProcessor::update(double deltaTime = -1) {
 
 void MidiProcessor::process() {
 
-	for (int i = 0; i < mCurrEvents.Num(); i++) {
-		while (mCurrEvents[i]) {
+	for (int i = 0; i < mCurrEvents.size(); i++) {
+		while (mCurrEvents[i] != mCurrEventsEnd[i]) {
 			MidiEvent * _event = *mCurrEvents[i];
 			if (_event->getTick() <= mTicksElapsed) {
 				dispatch(_event);
-				mCurrEvents[i]++;
+				++mCurrEvents[i];
 			}
 			else
 				break;
 		}
 	}
 
-	for (int i = 0; i < mCurrEvents.Num(); i++) {
-		if (mCurrEvents[i])
+	for (int i = 0; i < mCurrEvents.size(); i++) {
+		if (mCurrEvents[i] != mCurrEventsEnd[i])
 		{
 			return;
 		}

@@ -10,7 +10,7 @@ using namespace std;
 /**
  * Variable Length Integer
  */
-class MIDI_API VariableLengthInt
+class VariableLengthInt
 {
 	int mValue;
 	char mBytes[4];
@@ -18,7 +18,7 @@ class MIDI_API VariableLengthInt
 
 public:
 	VariableLengthInt(int value);
-	VariableLengthInt(FBufferReader & input);
+	VariableLengthInt(istream & input);
 
 	void setValue(int value);
 	int getValue();
@@ -27,7 +27,7 @@ public:
 	char* getBytes();
 
 private:
-	void parseBytes(FBufferReader& input);
+	void parseBytes(istream& input);
 	void buildBytes();
 
 public:

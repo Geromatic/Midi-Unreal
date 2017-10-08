@@ -9,7 +9,7 @@
  * End Of Track Meta Event
  * A event that 'denotes the end of a MIDI track.'
  */
-class MIDI_API EndOfTrack : public MetaEvent
+class EndOfTrack : public MetaEvent
 {
 public:
 	EndOfTrack(long tick, long delta);
@@ -18,6 +18,6 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 	int CompareTo(MidiEvent *other);
 };

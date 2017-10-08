@@ -55,7 +55,7 @@ namespace Lab {
         static MidiFile* parseMML(char const*const mmlStr, int length, bool verbose);
 		static void parseMML(char const*const midifilePath, bool verbose);
 
-		void LoadString(const FString &data);
+		void LoadString(const string &data);
 
 		CHORD chord;
 		MML mml;

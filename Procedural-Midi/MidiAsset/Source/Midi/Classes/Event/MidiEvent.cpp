@@ -79,8 +79,8 @@ bool MidiEvent::requiresStatusByte(MidiEvent * prevEvent) {
 	return true;
 }
 
-void MidiEvent::writeToFile(FMemoryWriter & output, bool writeType){
-	output.Serialize(mDelta->getBytes(), mDelta->getByteCount());
+void MidiEvent::writeToFile(ostream & output, bool writeType){
+	output.write(mDelta->getBytes(), mDelta->getByteCount());
 }
 
 // static variables to track continuous events
@@ -88,15 +88,15 @@ int MidiEvent::sId = -1;
 int MidiEvent::sType = -1;
 int MidiEvent::sChannel = -1;
 
-MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
+MidiEvent * MidiEvent::parseEvent(long tick, long delta, istream & input){
 	bool reset = false;
 	
 	// ID event
 	int id = 0;
-	input.Serialize(&id, 1);
+	id = input.get();
 	if (!verifyIdentifier(id)) {
 		// move back one bytes
-		input.Seek(input.Tell() - 1);
+		input.unget();
 		reset = true;
 	}
 
@@ -115,16 +115,17 @@ MidiEvent * MidiEvent::parseEvent(long tick, long delta, FBufferReader & input){
 
 		VariableLengthInt size(input);
 		char * data = new char[size.getValue()];
-		input.Serialize(data, size.getValue());
+		input.read(data, size.getValue());
 		return new SystemExclusiveEvent(sId, tick, delta, data);
 	}
 	// Unknown Event
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("Unknown Status Type: %d"), sId);
+		printf("Unknown Status Type: %d", sId);
+		//UE_LOG(LogTemp, Warning, TEXT("Unknown Status Type: %d"), sId);
 
 		if (reset) {
 			// ignore next byte
-			input.Seek(input.Tell() + 1);
+			input.ignore();
 		}
 	}
 

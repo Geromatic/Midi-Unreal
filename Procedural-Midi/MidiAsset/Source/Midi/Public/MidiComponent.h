@@ -41,7 +41,7 @@ public:
 
 	/* Changes the Speed of MIDI playback */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
-	float PlaySpeed;
+	float PlaySpeed = 1.0;
 
 	/* Ignores Note OFF events and replaces with Note ON with Velocity = 0 */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MIDI|Processor")
@@ -133,7 +133,8 @@ private:
 	
 	/* Get Running in Background */
 	bool InBackground = false;
+	bool isGameTime;
 	
-		// Handle Data Racing
+		// Handle Data Racing 
 	TQueue<FMidiEvent> mQueue;
 };

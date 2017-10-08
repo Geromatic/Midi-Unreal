@@ -8,10 +8,13 @@
 #include "MetronomeTick.h"
 #include "MidiEventListener.h"
 
+// system processor clock
+#include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
+
 /**
 *	Loads and plays back a MIDI file
 */
-class MIDI_API MidiProcessor
+class MidiProcessor
 {
 	static const int PROCESS_RATE_MS = 8;
 
@@ -32,7 +35,7 @@ public:
 
 	void load(MidiFile & file);
 
-	void start();
+	void start(const double& deltaTime = clock());
 	void stop();
 	void reset();
 
@@ -41,87 +44,75 @@ public:
 
 	void setListener(MidiEventListener* listener);
 
-	// Sets the play back speed
-	double PlaySpeed;
-
-	// use real time clock or game time?
-	bool isGameTime = false;
-
-	void setBeginTime(double time) {
+	// Sets the play back rate
+	double PlayRate;
+	/*TODO set time if using user based clock*/
+	void setStartClock(double time) {
 		mLastMs = time;
 	}
 
-	void update(double deltaTime);
+	void update(const double& deltaTime = clock());
 
 protected:
 	void dispatch(MidiEvent * _event);
 
 private:
 	void process();
-	TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
+	vector<vector<MidiEvent*>::iterator > mCurrEvents;
+	vector<vector<MidiEvent*>::iterator > mCurrEventsEnd;
 
 	double mLastMs;
 	MidiEventListener* mListener;
 
-	class MidiTrackEventQueue
-	{
-	private:
-		MidiTrack* mTrack;
-		TArray<MidiEvent*>::TIterator mIterator;
-		TArray<MidiEvent*> mEventsToDispatch;
-		MidiEvent* mNext;
+	//class MidiTrackEventIterator
+	//{
+	//private:
+	//	MidiTrack* mTrack;
+	//	vector<MidiEvent*>::iterator mIterator;
+	//	vector<MidiEvent*>::iterator mEnd;
+	//	MidiEvent* mEvent;
 
-	public:
-		MidiTrackEventQueue(MidiTrack* track) : mIterator(track->getEvents().CreateIterator()), mNext(NULL)
-		{
-			mTrack = track;
+	//public:
+	//	MidiTrackEventIterator(MidiTrack* track) :mEvent(NULL)
+	//	{
+	//		mTrack = track;
 
-			if (mIterator)
-			{
-				mNext = *mIterator;
-			}
-		}
+	//		this->Reset();
+	//	}
 
-		TArray<MidiEvent*>& getNextEventsUpToTick(double tick)
-		{
-			mEventsToDispatch.Empty();
+	//	void Next()
+	//	{
+	//		if (mIterator != mEnd)
+	//		{
+	//			mEvent = *mIterator;
+	//			mIterator++;
+	//		}
+	//		else
+	//		{
+	//			mEvent = NULL;
+	//		}
+	//	}
 
-			while (mNext != NULL)
-			{
+	//	MidiEvent* getEvent()
+	//	{
+	//		return  mEvent;
+	//	}
 
-				if (mNext->getTick() <= tick)
-				{
-					mEventsToDispatch.Add(mNext);
+	//	bool hasMoreEvents() const
+	//	{
+	//		return mEvent != NULL;
+	//	}
 
-					if (++mIterator)
-					{
-						mNext = *mIterator;
-					}
-					else
-					{
-						mNext = NULL;
-					}
-				}
-				else
-				{
-					break;
-				}
-			}
+	//	void Reset() {
+	//		mEvent = NULL;
 
-			return mEventsToDispatch;
-		}
+	//		mIterator = mTrack->getEvents().begin();
+	//		mEnd = mTrack->getEvents().end();
 
-		bool hasMoreEvents()
-		{
-			return mNext != NULL;
-		}
-
-		void Reset() {
-			mIterator.Reset();
-			if (mIterator)
-			{
-				mNext = *mIterator;
-			}
-		}
-	};
+	//		if (mIterator != mEnd)
+	//		{
+	//			mEvent = *mIterator;
+	//		}
+	//	}
+	//};
 };

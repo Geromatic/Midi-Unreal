@@ -113,28 +113,28 @@ bool ChannelEvent::requiresStatusByte(MidiEvent * prevEvent) {
 	return !(mType == ce->getType() && mChannel == ce->getChannel());
 }
 
-void ChannelEvent::writeToFile(FMemoryWriter & output, bool writeType){
+void ChannelEvent::writeToFile(ostream & output, bool writeType){
 	MidiEvent::writeToFile(output, writeType);
 
 	if (writeType) {
 		int typeChannel = (mType << 4) + mChannel;
-		output.Serialize(&typeChannel, 1);
+		output.put(typeChannel);
 	}
 
-	output.Serialize(&mValue1, 1);
+	output.put(mValue1);
 	if (mType != PROGRAM_CHANGE && mType != CHANNEL_AFTERTOUCH) {
-		output.Serialize(&mValue2, 1);
+		output.put(mValue2);
 	}
 }
-ChannelEvent * ChannelEvent::parseChannelEvent(long tick, long delta, int type, int channel, FBufferReader & input) {
+ChannelEvent * ChannelEvent::parseChannelEvent(long tick, long delta, int type, int channel, istream & input) {
 	// Get Data1 value
 	int val1 = 0;
-	input.Serialize(&val1, 1);
+	val1 = input.get();
 
 	// Get Data2 value if its not a PROGRAM_CHANGE or CHANNEL_AFTERTOUCH event
 	int val2 = 0;
 	if (type != PROGRAM_CHANGE && type != CHANNEL_AFTERTOUCH) {
-		input.Serialize(&val2, 1);
+		val2 = input.get();
 	}
 
 	// Create event

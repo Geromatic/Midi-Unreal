@@ -10,7 +10,7 @@
 * An event specifically for MidiProcessor to broadcast metronome ticks so that
 * observers need not rely on time conversions or measure tracking
 */
-class MIDI_API MetronomeTick : public MidiEvent
+class MetronomeTick : public MidiEvent
 {
 	int mResolution;
 	TimeSignature* mSignature;

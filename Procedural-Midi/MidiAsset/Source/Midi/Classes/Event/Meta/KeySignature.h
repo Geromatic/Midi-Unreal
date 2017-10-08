@@ -9,7 +9,7 @@
  * Key Signature Meta Event
  * A event that 'specifies the key signature and scale of a MIDI file.'
  */
-class MIDI_API KeySignature : public MetaEvent
+class KeySignature : public MetaEvent
 {
 	int mKey;
 	int mScale;
@@ -30,8 +30,8 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 
-	static KeySignature * parseKeySignature(long tick, long delta, FBufferReader & input);
+	static KeySignature * parseKeySignature(long tick, long delta, istream & input);
 	int CompareTo(MidiEvent *other);
 };

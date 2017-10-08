@@ -44,26 +44,26 @@ int TimeSignature::getEventSize() {
 	return 7;
 }
 
-void TimeSignature::writeToFile(FMemoryWriter & output) {
+void TimeSignature::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.Serialize(&size, 1);
-	output.Serialize(&mNumerator, 1);
-	output.Serialize(&mDenominator, 1);
-	output.Serialize(&mMeter, 1);
-	output.Serialize(&mDivision, 1);
+	output.put(size);
+	output.put(mNumerator);
+	output.put(mDenominator);
+	output.put(mMeter);
+	output.put(mDivision);
 }
 
-TimeSignature * TimeSignature::parseTimeSignature(long tick, long delta, FBufferReader & input) {
+TimeSignature * TimeSignature::parseTimeSignature(long tick, long delta, istream & input) {
 
-	input.Seek(input.Tell() + 1);		// Size = 4
+	input.ignore();		// Size = 4
 
 	int num = 0, den = 0, met = 0, fps = 0;
-	input.Serialize(&num, 1);
-	input.Serialize(&den, 1);
-	input.Serialize(&met, 1);
-	input.Serialize(&fps, 1);
+	num = input.get();
+	den = input.get();
+	met = input.get();
+	fps = input.get();
 
 	den = (int)pow(2, den);
 

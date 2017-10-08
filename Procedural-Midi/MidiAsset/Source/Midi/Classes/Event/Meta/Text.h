@@ -9,7 +9,7 @@
  * Text Textual Meta Event
  * A event that 'defines some text to be carried within a MIDI file.'
  */
-class MIDI_API Text : public TextualMetaEvent
+class Text : public TextualMetaEvent
 {
 public:
 	Text(long tick, long delta, string text);

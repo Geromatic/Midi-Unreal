@@ -6,15 +6,15 @@
 /**
  * 
  */
-class MIDI_API MidiUtil
+class MidiUtil
 {
 
 public:
 	static long ticksToMs(long ticks, int mpqn, int resolution);
 	static long ticksToMs(long ticks, float bpm, int resolution);
 
-	static double msToTicks(float ms, int mpqn, int ppq);
-	static double msToTicks(float ms, float bpm, int ppq);
+	static double msToTicks(double ms, int mpqn, int ppq);
+	static double msToTicks(double ms, float bpm, int ppq);
 
 	static int bpmToMpqn(float bpm);
 	static float mpqnToBpm(int mpqn);

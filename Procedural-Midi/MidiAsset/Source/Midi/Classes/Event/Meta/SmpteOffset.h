@@ -10,7 +10,7 @@
  * A event that 'specifies an offset for the starting point of a MIDI track from the start of a sequence in terms of SMPTE time.'
  * (hours:minutes:seconds:frames:subframes)
  */
-class MIDI_API SmpteOffset : public MetaEvent
+class SmpteOffset : public MetaEvent
 {
 public:
 	static const int FRAME_RATE_24 = 0;
@@ -51,8 +51,8 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 
-	static SmpteOffset * parseSmpteOffset(long tick, long delta, FBufferReader & input);
+	static SmpteOffset * parseSmpteOffset(long tick, long delta, istream & input);
 	int CompareTo(MidiEvent *other);
 };

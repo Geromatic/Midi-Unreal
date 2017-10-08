@@ -9,7 +9,7 @@
  * Note Off Channel Event
  * A event that can 'release a note and stop playing it.'
  */
-class MIDI_API NoteOff : public ChannelEvent
+class NoteOff : public ChannelEvent
 {
 public:
 	NoteOff(long tick, int channel, int note, int velocity);

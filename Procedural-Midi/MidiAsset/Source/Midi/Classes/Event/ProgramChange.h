@@ -9,7 +9,7 @@
  * Program Change Channel Event
  * A event that can 'assign a program to a MIDI channel, such as an instrument, patch, or preset.;
  */
-class MIDI_API ProgramChange : public ChannelEvent
+class ProgramChange : public ChannelEvent
 {
 public:
 	ProgramChange(long tick, int channel, int program);

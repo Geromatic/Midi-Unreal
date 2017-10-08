@@ -9,7 +9,7 @@
  * Generic Meta Event
  * Class that holds unrecognized MIDI events
  */
-class MIDI_API GenericMetaEvent : public MetaEvent
+class GenericMetaEvent : public MetaEvent
 {
 	char* mData;
 
@@ -21,6 +21,6 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 	int CompareTo(MidiEvent *other);
 };

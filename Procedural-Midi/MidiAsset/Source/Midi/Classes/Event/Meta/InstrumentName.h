@@ -9,7 +9,7 @@
  * Intrument Name Textual Meta Event
  * A event that 'shows the name of the instrument used in the current track.'
  */
-class MIDI_API InstrumentName : public TextualMetaEvent
+class InstrumentName : public TextualMetaEvent
 {
 public:
 	InstrumentName(long tick, long delta, string name);

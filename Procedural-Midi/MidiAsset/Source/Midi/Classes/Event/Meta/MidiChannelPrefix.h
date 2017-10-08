@@ -9,7 +9,7 @@
  * MIDI Channel Prefix Meta Event
  * A event that 'specifies a MIDI channel so that meta messages that follow are specific to a channel.'
  */
-class MIDI_API MidiChannelPrefix : public MetaEvent
+class MidiChannelPrefix : public MetaEvent
 {
 	int mChannel;
 
@@ -23,8 +23,8 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 
-	static MidiChannelPrefix * parseMidiChannelPrefix(long tick, long delta, FBufferReader & input);
+	static MidiChannelPrefix * parseMidiChannelPrefix(long tick, long delta, istream & input);
 	int CompareTo(MidiEvent *other);
 };

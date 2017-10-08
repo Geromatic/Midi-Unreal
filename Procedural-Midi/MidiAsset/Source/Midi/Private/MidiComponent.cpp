@@ -63,12 +63,12 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	if (mProcessor.PlaySpeed != PlaySpeed)
-		mProcessor.PlaySpeed = PlaySpeed;
+	if (mProcessor.PlayRate != PlaySpeed)
+		mProcessor.PlayRate = PlaySpeed;
 
 	if (!InBackground) {
 		// update time
-		if (mProcessor.isGameTime) {
+		if (isGameTime) {
 			mProcessor.update(GetWorld()->TimeSeconds * 1000.0f);
 		}
 		else
@@ -96,6 +96,13 @@ bool UMidiComponent::canInit() {
 	return true;
 }
 
+struct membuf : std::streambuf
+{
+	membuf(char* begin, char* end) {
+		this->setg(begin, begin, end);
+	}
+};
+
 void UMidiComponent::LoadAsset(UMidiAsset* MidiAsset) {
 	if (!canInit()) return;
 	if (!MidiAsset) return;
@@ -104,8 +111,12 @@ void UMidiComponent::LoadAsset(UMidiAsset* MidiAsset) {
 	if (data.Num() == 0)
 		return;
 
-	FBufferReader reader((uint8*)data.GetData(), data.Num(), false);
-	mMidiFile = new MidiFile(reader);
+	char* ptr = (char*)data.GetData();
+
+	membuf sbuf(ptr, ptr + data.Num());
+	std::istream in(&sbuf);
+
+	mMidiFile = new MidiFile(in);
 	mProcessor.load(*mMidiFile);
 }
 
@@ -117,17 +128,22 @@ void UMidiComponent::LoadFile(FString path) {
 	if (result == 0 || data.Num() == 0)
 		return;
 
-	FBufferReader reader((uint8*)data.GetData(), data.Num(), false);
-	mMidiFile = new MidiFile(reader);
+	char* ptr = (char*)data.GetData();
+
+	membuf sbuf(ptr, ptr + data.Num());
+	std::istream in(&sbuf);
+
+	mMidiFile = new MidiFile(in);
 	mProcessor.load(*mMidiFile);
 }
 
 void UMidiComponent::LoadMML(FString path) {
 	if (!canInit()) return;
+	std::string MyStdString(TCHAR_TO_UTF8(*path));
 
 	Lab::MidiSong song;
 	song.trackNumber = 0;
-	song.LoadString(path);
+	song.LoadString(MyStdString);
 	mMidiFile = new MidiFile();
 	mMidiFile->addTrack(song.track);
 	mProcessor.load(*mMidiFile);
@@ -161,11 +177,11 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 void UMidiComponent::onStart(bool fromBeginning) { 
 	// MultiThread
 	if (InBackground) {
-		mWorker = new FMidiProcessorWorker(&mProcessor);
+		mWorker = new FMidiProcessorWorker(&mProcessor, this->isGameTime);
 	}
-	else
-		if (mProcessor.isGameTime)
-			mProcessor.setBeginTime(GetWorld()->TimeSeconds * 1000.0f);
+	//else
+	//	if (isGameTime)
+	//		mProcessor.setStartClock(GetWorld()->TimeSeconds * 1000.0f);
 
 	OnStart.Broadcast(fromBeginning); 
 }
@@ -186,11 +202,13 @@ void UMidiComponent::onStop(bool finish) {
 void UMidiComponent::start(bool background, bool UseGameTime) {
 	if (!isRunning()) {
 		InBackground = background;
-		mProcessor.isGameTime = UseGameTime;
+		this->isGameTime = UseGameTime;
 	}
 
-
-	mProcessor.start();
+	if(UseGameTime)
+		mProcessor.start(GetWorld()->TimeSeconds * 1000.0f);
+	else
+		mProcessor.start();
 }
 
 void UMidiComponent::stop() {
@@ -226,10 +244,12 @@ float UMidiComponent::GetDuration()
 	if (mMidiFile)
 	{
 
-		TArray<TArray<MidiEvent*>::TIterator> mCurrEvents;
-		TArray<MidiTrack*>& tracks = mMidiFile->getTracks();
-		for (int i = 0; i < tracks.Num(); i++) {
-			mCurrEvents.Add(tracks[i]->getEvents().CreateIterator());
+		vector<vector<MidiEvent*>::iterator > mCurrEvents;
+		vector<vector<MidiEvent*>::iterator > mCurrEventsEnd;
+		vector<MidiTrack*>& tracks = mMidiFile->getTracks();
+		for (int i = 0; i < tracks.size(); i++) {
+			mCurrEvents.push_back(tracks[i]->getEvents().begin());
+			mCurrEventsEnd.push_back(tracks[i]->getEvents().end());
 		}
 
 		double mMsElapsed = 0;
@@ -240,13 +260,13 @@ float UMidiComponent::GetDuration()
 		while (true) {
 
 			const double msElapsed = 1.0;
-			double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * mProcessor.PlaySpeed;
+			double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * mProcessor.PlayRate;
 
 			mMsElapsed += msElapsed;
 			mTicksElapsed += ticksElapsed;
 
-			for (int i = 0; i < mCurrEvents.Num(); i++) {
-				while (mCurrEvents[i]) {
+			for (int i = 0; i < mCurrEvents.size(); i++) {
+				while (mCurrEvents[i] != mCurrEventsEnd[i]) {
 					MidiEvent * _event = *mCurrEvents[i];
 					if (_event->getTick() <= mTicksElapsed) {
 						// Tempo and Time Signature events are always needed by the processor
@@ -261,8 +281,8 @@ float UMidiComponent::GetDuration()
 			}
 			
 			bool more = false;
-			for (int i = 0; i < mCurrEvents.Num(); i++) {
-				if (mCurrEvents[i])
+			for (int i = 0; i < mCurrEvents.size(); i++) {
+				if (mCurrEvents[i] != mCurrEventsEnd[i])
 				{
 					more = true; 
 					break;

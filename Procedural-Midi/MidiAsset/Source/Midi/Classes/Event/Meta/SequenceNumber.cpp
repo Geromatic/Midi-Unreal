@@ -20,24 +20,24 @@ int SequenceNumber::getSequenceNumber() {
 	return mNumber;
 }
 
-void SequenceNumber::writeToFile(FMemoryWriter& output) {
+void SequenceNumber::writeToFile(ostream& output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.Serialize(&size, 1);
+	output.put(size);
 	int high = getMostSignificantBits();
 	int low = getLeastSignificantBits();
-	output.Serialize(&high, 1);
-	output.Serialize(&low, 1);
+	output.put(high);
+	output.put(low);
 }
 
-SequenceNumber * SequenceNumber::parseSequenceNumber(long tick, long delta, FBufferReader & input) {
+SequenceNumber * SequenceNumber::parseSequenceNumber(long tick, long delta, istream & input) {
 
-	input.Seek(input.Tell() + 1);		// Size = 2;
+	input.ignore();		// Size = 2;
 
 	int msb = 0, lsb = 0;
-	input.Serialize(&msb, 1);
-	input.Serialize(&lsb, 1);
+	msb = input.get();
+	lsb = input.get();
 	int number = (msb << 8) + lsb;
 
 	return new SequenceNumber(tick, delta, number);

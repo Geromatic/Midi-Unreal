@@ -9,7 +9,7 @@
  * Abstract Textual Meta Event
  * A abstract event for 'messages that contains 'text based' information about the MIDI sequence and that are not to be sent over MIDI ports.'
  */
-class MIDI_API TextualMetaEvent : public MetaEvent
+class TextualMetaEvent : public MetaEvent
 {
 protected:
 	string mText;
@@ -25,7 +25,7 @@ protected:
 	int getEventSize();
 
 public:
-	void writeToFile(FMemoryWriter & output);
+	void writeToFile(ostream & output);
 	int CompareTo(MidiEvent *other);
 	string ToString();
 };
