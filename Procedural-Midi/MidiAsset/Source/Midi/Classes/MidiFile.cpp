@@ -50,7 +50,7 @@ MidiFile::MidiFile(istream& input)
 
 MidiFile::~MidiFile()
 {
-	for (int i = 0; i < mTracks.size(); i++)
+	for (int i = 0; i < (int)mTracks.size(); i++)
 	{
 		delete mTracks[i];
 		mTracks[i] = NULL;
