@@ -60,11 +60,6 @@
                 return time;
     }
 	#define AudioGetCurrentHostTime() (unsigned long long)mach_absolute_time()
-	
-	// TODO temp solution
-	SInt32 EndianS32_BtoN(SInt32 value) {
-		return value;
-	}
 #endif
 
 //*********************************************************************//
@@ -406,7 +401,7 @@ MidiOutApi :: ~MidiOutApi( void )
 // OS-X CoreMIDI header files.
 #include <CoreMIDI/CoreMIDI.h>
 //#include <CoreAudio/CoreAudio.h>
-//#include <CoreServices/CoreServices.h>
+#include <CoreServices/CoreServices.h>
 
 // A structure to hold variables related to the CoreMIDI API
 // implementation.
