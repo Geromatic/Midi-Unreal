@@ -247,7 +247,7 @@ float UMidiComponent::GetDuration()
 		vector<vector<MidiEvent*>::iterator > mCurrEvents;
 		vector<vector<MidiEvent*>::iterator > mCurrEventsEnd;
 		vector<MidiTrack*>& tracks = mMidiFile->getTracks();
-		for (int i = 0; i < tracks.size(); i++) {
+		for (int i = 0; i < (int)tracks.size(); i++) {
 			mCurrEvents.push_back(tracks[i]->getEvents().begin());
 			mCurrEventsEnd.push_back(tracks[i]->getEvents().end());
 		}
@@ -265,7 +265,7 @@ float UMidiComponent::GetDuration()
 			mMsElapsed += msElapsed;
 			mTicksElapsed += ticksElapsed;
 
-			for (int i = 0; i < mCurrEvents.size(); i++) {
+			for (int i = 0; i < (int)mCurrEvents.size(); i++) {
 				while (mCurrEvents[i] != mCurrEventsEnd[i]) {
 					MidiEvent * _event = *mCurrEvents[i];
 					if (_event->getTick() <= mTicksElapsed) {
@@ -281,7 +281,7 @@ float UMidiComponent::GetDuration()
 			}
 			
 			bool more = false;
-			for (int i = 0; i < mCurrEvents.size(); i++) {
+			for (int i = 0; i < (int)mCurrEvents.size(); i++) {
 				if (mCurrEvents[i] != mCurrEventsEnd[i])
 				{
 					more = true; 

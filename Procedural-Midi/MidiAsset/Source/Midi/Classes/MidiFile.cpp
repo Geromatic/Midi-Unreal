@@ -98,7 +98,7 @@ int MidiFile::getResolution()
 long MidiFile::getLengthInTicks()
 {
 	long length = 0;
-	for (int i = 0; i < mTracks.size(); i++)
+	for (int i = 0; i < (int)mTracks.size(); i++)
 	{
 		MidiTrack * T = mTracks[i];
 		long l = T->getLengthInTicks();
@@ -122,7 +122,7 @@ void MidiFile::addTrack(MidiTrack* T)
 
 void MidiFile::addTrack(MidiTrack *T, int pos) {
 
-	if (pos > mTracks.size())
+	if (pos > (int)mTracks.size())
 	{
 		pos = (int)mTracks.size();
 	}
@@ -138,7 +138,7 @@ void MidiFile::addTrack(MidiTrack *T, int pos) {
 
 void MidiFile::removeTrack(int pos)
 {
-	if (pos < 0 || pos >= mTracks.size())
+	if (pos < 0 || pos >= (int)mTracks.size())
 	{
 		return;
 	}
@@ -158,7 +158,7 @@ void MidiFile::writeToFile(ostream & output)
 	output.write(MidiUtil::intToBytes(mTrackCount, 2), 2);
 	output.write(MidiUtil::intToBytes(mResolution, 2), 2);
 
-	for (int i = 0; i < mTracks.size(); i++)
+	for (int i = 0; i < (int)mTracks.size(); i++)
 	{
 		MidiTrack * T = mTracks[i];
 		T->writeToFile(output);

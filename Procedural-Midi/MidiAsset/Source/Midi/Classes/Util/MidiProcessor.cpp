@@ -44,7 +44,7 @@ void MidiProcessor::load(MidiFile & file) {
 	mCurrEvents.clear();
 	mCurrEventsEnd.clear();
 	vector<MidiTrack*>& tracks = mMidiFile->getTracks();
-	for (int i = 0; i < tracks.size(); i++) {
+	for (int i = 0; i < (int)tracks.size(); i++) {
 		mCurrEvents.push_back(tracks[i]->getEvents().begin());
 		mCurrEventsEnd.push_back(tracks[i]->getEvents().end());
 	}
@@ -78,7 +78,7 @@ void MidiProcessor::reset() {
 		mMetronome->setTimeSignature(&sig);
 
 	vector<MidiTrack*>& tracks = mMidiFile->getTracks();
-	for (int i = 0; i < mCurrEvents.size(); i++) {
+	for (int i = 0; i < (int)mCurrEvents.size(); i++) {
 		mCurrEvents[i] = tracks[i]->getEvents().begin();
 	}
 }
@@ -139,7 +139,7 @@ void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
 
 void MidiProcessor::process() {
 
-	for (int i = 0; i < mCurrEvents.size(); i++) {
+	for (int i = 0; i < (int)mCurrEvents.size(); i++) {
 		while (mCurrEvents[i] != mCurrEventsEnd[i]) {
 			MidiEvent * _event = *mCurrEvents[i];
 			if (_event->getTick() <= mTicksElapsed) {
@@ -151,7 +151,7 @@ void MidiProcessor::process() {
 		}
 	}
 
-	for (int i = 0; i < mCurrEvents.size(); i++) {
+	for (int i = 0; i < (int)mCurrEvents.size(); i++) {
 		if (mCurrEvents[i] != mCurrEventsEnd[i])
 		{
 			return;

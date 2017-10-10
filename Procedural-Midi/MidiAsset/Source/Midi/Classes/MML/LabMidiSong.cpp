@@ -365,7 +365,7 @@ namespace Lab {
             }
         } while (curr < end);
 		vector<MidiTrack*> trks = mMidiFile->getTracks();
-		for (int i = 0; i < trks.size(); i++)
+		for (int i = 0; i < (int)trks.size(); i++)
 			trks[i]->closeTrack();
 
 		return mMidiFile;
