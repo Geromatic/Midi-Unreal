@@ -1933,8 +1933,8 @@ void MidiOutAlsa :: sendMessage( std::vector<unsigned char> *message )
 #include <mmsystem.h>
 #include "HideWindowsPlatformTypes.h"
 
-typedef FPlatformTypes::uint32 _UINT;
-typedef FPlatformTypes::SIZE_T _DWORD;
+typedef unsigned int _UINT;
+typedef unsigned long _DWORD;
 
 #define  RT_SYSEX_BUFFER_SIZE 1024
 #define  RT_SYSEX_BUFFER_COUNT 4
