@@ -20,7 +20,12 @@ Features:
 - Ability to connect external MIDI input device (ex. Midi Keyboard, Midi Fighter 64, any MIDI-equipped hardware) [**]
 
 [Sending MIDI to/from another program or VST] is possible with a virtual MIDI driver.
-<a href="https://www.tobias-erichsen.de/software/loopmidi.html">LoopMidi</a> Plus Procedural Midi Midi Interface
+<a href="https://www.tobias-erichsen.de/software/loopmidi.html">LoopMidi</a>
+</br>
+--By sending midi data to the virtual midi device...you can have other apps be able to  retrieve that data
+</br>
+-You can interact with the midi device by using the Midi Interface Component
+</br>
 
 ** <b>[Shown in Demo Project on marketplace]</b>
 
