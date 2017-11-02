@@ -33,15 +33,21 @@ uint32 FMidiProcessorWorker::Run() {
 	if (!world)
 		return 0;
 
-	if(isGameTime)
+	if(isGameTime) {
 		ThePC->setStartClock(world->TimeSeconds * 1000.0f);
+		ThePC->mClockType = 2;
+	}
+	else {
+		ThePC->setStartClock(FPlatformTime::Cycles());
+		ThePC->mClockType = 1;
+	}
 
 	while (!IsFinished())
 	{
 		if (isGameTime)
 			ThePC->update(world->TimeSeconds * 1000.0f);
 		else
-			ThePC->update();
+			ThePC->update(FPlatformTime::Cycles());
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//prevent thread from using too many resources
 		FPlatformProcess::Sleep(0.008f);

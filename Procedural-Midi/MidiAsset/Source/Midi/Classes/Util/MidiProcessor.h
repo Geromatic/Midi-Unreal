@@ -50,6 +50,8 @@ public:
 	void setStartClock(double time) {
 		mLastMs = time;
 	}
+	/* clock() = 0, FPlatformTime = 1, Other = 2 */
+	int mClockType;
 
 	void update(const double& deltaTime = clock());
 
