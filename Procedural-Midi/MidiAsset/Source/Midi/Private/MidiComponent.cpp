@@ -72,7 +72,7 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 			mProcessor.update(GetWorld()->TimeSeconds * 1000.0f);
 		}
 		else
-			mProcessor.update();
+			mProcessor.update(FPlatformTime::Cycles());
 	}
 
 	else
@@ -208,7 +208,7 @@ void UMidiComponent::start(bool background, bool UseGameTime) {
 	if(UseGameTime)
 		mProcessor.start(GetWorld()->TimeSeconds * 1000.0f);
 	else
-		mProcessor.start();
+		mProcessor.start(FPlatformTime::Cycles());
 }
 
 void UMidiComponent::stop() {
