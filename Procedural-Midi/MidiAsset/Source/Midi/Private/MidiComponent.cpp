@@ -205,10 +205,14 @@ void UMidiComponent::start(bool background, bool UseGameTime) {
 		this->isGameTime = UseGameTime;
 	}
 
-	if(UseGameTime)
+	if(UseGameTime) {
 		mProcessor.start(GetWorld()->TimeSeconds * 1000.0f);
-	else
+		mProcessor.mClockType = 2;
+	}
+	else {
 		mProcessor.start(FPlatformTime::Cycles());
+		mProcessor.mClockType = 1;
+	}
 }
 
 void UMidiComponent::stop() {

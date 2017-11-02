@@ -33,10 +33,14 @@ uint32 FMidiProcessorWorker::Run() {
 	if (!world)
 		return 0;
 
-	if(isGameTime)
+	if(isGameTime) {
 		ThePC->setStartClock(world->TimeSeconds * 1000.0f);
-	else
+		ThePC->mClockType = 2;
+	}
+	else {
 		ThePC->setStartClock(FPlatformTime::Cycles());
+		ThePC->mClockType = 1;
+	}
 
 	while (!IsFinished())
 	{
