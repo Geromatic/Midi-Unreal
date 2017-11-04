@@ -96,7 +96,7 @@ void MidiTrack::readTrackData(istream & input)
 	}
 
 	// TODO allow to resort
-	std::sort(mEvents.begin(), mEvents.end(), ConstPredicate);
+//	std::sort(mEvents.begin(), mEvents.end(), ConstPredicate);
 }
 
 vector<MidiEvent*>& MidiTrack::getEvents() {
@@ -172,7 +172,7 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	}
 
 	// TODO allow to resort
-	std::sort(mEvents.begin(), mEvents.end(), ConstPredicate);
+//	std::sort(mEvents.begin(), mEvents.end(), ConstPredicate);
 
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == MetaEvent::END_OF_TRACK) {
