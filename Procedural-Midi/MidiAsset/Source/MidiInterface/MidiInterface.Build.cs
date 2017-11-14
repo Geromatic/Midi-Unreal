@@ -11,8 +11,9 @@ public class MidiInterface : ModuleRules
     public MidiInterface(TargetInfo Target)
 #endif
 	{
-		
-		PublicIncludePaths.AddRange(
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+        PublicIncludePaths.AddRange(
 			new string[] {
 				"MidiInterface/Public"
 			}

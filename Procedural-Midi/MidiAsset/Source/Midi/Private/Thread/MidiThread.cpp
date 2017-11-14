@@ -1,8 +1,8 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "MidiThread.h"
+#include "MidiPrivatePCH.h"
 
 #include "Util/MidiProcessor.h"
 

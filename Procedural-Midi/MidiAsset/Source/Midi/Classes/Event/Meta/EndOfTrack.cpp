@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "EndOfTrack.h"
 
 EndOfTrack::EndOfTrack(long tick, long delta)
@@ -17,7 +16,7 @@ void EndOfTrack::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.put(size);
+	output.put((char)size);
 }
 
 int EndOfTrack::CompareTo(MidiEvent *other) {

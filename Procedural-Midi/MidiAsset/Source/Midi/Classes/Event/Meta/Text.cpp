@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "Text.h"
 
 Text::Text(long tick, long delta, string text)

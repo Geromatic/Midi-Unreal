@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "MidiChannelPrefix.h"
 
 MidiChannelPrefix::MidiChannelPrefix(long tick, long delta, int channel)
@@ -25,8 +24,8 @@ void MidiChannelPrefix::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.put(size);
-	output.put(mChannel);
+	output.put((char)size);
+	output.put((char)mChannel);
 }
 
 MidiChannelPrefix * MidiChannelPrefix::parseMidiChannelPrefix(long tick, long delta, istream & input) {

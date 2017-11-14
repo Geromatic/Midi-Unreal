@@ -67,7 +67,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Updated: Scott Bishel
 
 
-#include "MidiPrivatePCH.h"
 #include "LabMidiSong.h"
 
 #include <iostream>
@@ -271,7 +270,7 @@ namespace Lab {
 					tempo = 0;
 				if (tempo > 500)
 					tempo = 500;
-				track->insertEvent(new Tempo(ticks, 0, MidiUtil::bpmToMpqn(tempo)));
+				track->insertEvent(new Tempo(ticks, 0, MidiUtil::bpmToMpqn((float)tempo)));
 				break;
 			}
 
@@ -399,7 +398,7 @@ namespace Lab {
 	static void note_sound(CHORD *p, int ticks, int number, MidiSong* component)
 	{
 		uint32_t ms = get_note_length_ms(p, ticks);
-		uint32_t duration = MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
+		uint32_t duration = (uint32_t)MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
 		component->track->insertNote(component->trackNumber, number & 0x7f, 127, component->ticks, duration);
 		component->ticks += duration;
 	}
@@ -407,7 +406,7 @@ namespace Lab {
 	static void rest_sound(CHORD *p, int ticks, MidiSong* component)
 	{
 		uint32_t ms = get_note_length_ms(p, ticks);
-		uint32_t duration = MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
+		uint32_t duration = (uint32_t)MidiUtil::msToTicks((long)ms, (float)p->bpm, 480);
 		component->ticks += duration;
 	}
 
@@ -420,7 +419,7 @@ namespace Lab {
 		{
 			MML_ARGS_TEMPO *args = &(p->args.tempo);
 			chord_init(&chord, args->value, component->mml_opt.bticks);
-			component->track->insertEvent(new Tempo(component->ticks, 0, MidiUtil::bpmToMpqn(args->value)));
+			component->track->insertEvent(new Tempo(component->ticks, 0, MidiUtil::bpmToMpqn((float)args->value)));
 		}
 		break;
 		case MML_TYPE_NOTE:

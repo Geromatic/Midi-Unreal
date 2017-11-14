@@ -112,7 +112,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	int GetResolution();
 	
-	/* Returns MIDI file duration in seconds */
+	/* Returns MIDI file duration in seconds
+	* Performance issue
+	*/
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	float GetDuration();
 

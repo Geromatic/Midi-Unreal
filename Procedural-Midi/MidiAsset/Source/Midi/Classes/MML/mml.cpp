@@ -29,9 +29,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "MidiPrivatePCH.h"
-
 #include "mml.h"
+
 #include "ntlibc.h"
 
 #define MML_WORK_BUFFER_SIZE    (8)
@@ -41,7 +40,7 @@
 #define LIBC_ATOI               ntlibc_atoi
 
 
-#define TEXT_READ(HANDLE)            (LIBC_TOUPPER(*(HANDLE)->tp))
+#define TEXT_READ(HANDLE)            ((char)LIBC_TOUPPER(*(HANDLE)->tp))
 #define TEXT_NEXT(HANDLE)            do { ((HANDLE)->tp)++; } while (0)
 #define TEXT_SET_POINTER(HANDLE, P)  do { ((HANDLE)->tp) = (P); } while (0)
 #define TEXT_GET_POINTER(HANDLE, PP) do { (*PP) = ((HANDLE)->tp); } while (0)
@@ -81,7 +80,7 @@ static MML_RESULT get_note_number(MML *handle, char *text, int *number)
   if (p == 0) {
     return MML_RESULT_ILLEGAL_NOTE_TEXT;
   }
-  *number = p - note_distance;
+  *number = (int)(p - note_distance);
 
   p = &text[1];
   while (*p) {

@@ -1,5 +1,6 @@
 // Copyright -> Scott Bishel
 
+#include "MidiInterface.h"
 #include "MidiInterfacePrivatePCH.h"
 
 

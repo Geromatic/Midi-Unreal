@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "SmpteOffset.h"
 
 SmpteOffset::SmpteOffset(long tick, long delta, int fps, int hour, int min, int sec, int fr, int subfr)
@@ -65,12 +64,12 @@ void SmpteOffset::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.put(size);
-	output.put(mHours);
-	output.put(mMinutes);
-	output.put(mSeconds);
-	output.put(mFrames);
-	output.put(mSubFrames);
+	output.put((char)size);
+	output.put((char)mHours);
+	output.put((char)mMinutes);
+	output.put((char)mSeconds);
+	output.put((char)mFrames);
+	output.put((char)mSubFrames);
 }
 
 SmpteOffset * SmpteOffset::parseSmpteOffset(long tick, long delta, istream & input) {

@@ -10,7 +10,9 @@ public class MidiAssetEditor : ModuleRules
     public MidiAssetEditor(TargetInfo Target)
 #endif
 	{
-		DynamicallyLoadedModuleNames.AddRange(
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+        DynamicallyLoadedModuleNames.AddRange(
 			new string[] {
 				"AssetTools",
 				"MainFrame",

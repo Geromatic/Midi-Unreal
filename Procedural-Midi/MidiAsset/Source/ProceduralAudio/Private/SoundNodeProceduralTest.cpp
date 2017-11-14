@@ -1,7 +1,7 @@
 // Copyright -> Scott Bishel
 
-#include "ProceduralAudioPrivatePCH.h"
 #include "SoundNodeProceduralTest.h"
+#include "ProceduralAudioPrivatePCH.h"
 
 USoundNodeProceduralTest::USoundNodeProceduralTest(const FObjectInitializer& PCIP)
 	: Super(PCIP)

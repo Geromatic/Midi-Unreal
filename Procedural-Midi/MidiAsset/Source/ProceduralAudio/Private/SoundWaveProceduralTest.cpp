@@ -1,7 +1,7 @@
 // Copyright -> Scott Bishel
 
-#include "ProceduralAudioPrivatePCH.h"
 #include "SoundWaveProceduralTest.h"
+#include "ProceduralAudioPrivatePCH.h"
 
 USoundWaveProceduralTest::USoundWaveProceduralTest(const FObjectInitializer& PCIP)
 	: Super(PCIP)

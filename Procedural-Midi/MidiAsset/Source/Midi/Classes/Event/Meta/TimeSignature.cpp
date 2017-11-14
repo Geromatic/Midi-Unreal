@@ -1,8 +1,8 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "TimeSignature.h"
+#include <math.h>
 
 TimeSignature::TimeSignature() 
 	: MetaEvent(0, 0, MetaEvent::TIME_SIGNATURE, new VariableLengthInt(4))
@@ -48,11 +48,11 @@ void TimeSignature::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.put(size);
-	output.put(mNumerator);
-	output.put(mDenominator);
-	output.put(mMeter);
-	output.put(mDivision);
+	output.put((char)size);
+	output.put((char)mNumerator);
+	output.put((char)mDenominator);
+	output.put((char)mMeter);
+	output.put((char)mDivision);
 }
 
 TimeSignature * TimeSignature::parseTimeSignature(long tick, long delta, istream & input) {

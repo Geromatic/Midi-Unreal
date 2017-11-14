@@ -1,6 +1,11 @@
 // Copyright -> Scott Bishel
 
 #pragma once
+
+// somehow there is a linker bug with generated files
+// this is a workaround 
+#include "Engine.h"
+
 #include "MidiUtils.generated.h"
 
 // Middle Key Notes

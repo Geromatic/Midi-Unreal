@@ -1,7 +1,7 @@
 // RtMidi : Copyright (c) 2003-2016 Gary P. Scavone
 
-#include "MidiInterfacePrivatePCH.h"
 #include "MidiInterfaceComponent.h"
+#include "MidiInterfacePrivatePCH.h"
 
 #include <vector>
 

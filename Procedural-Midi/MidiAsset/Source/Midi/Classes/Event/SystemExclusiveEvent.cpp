@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "SystemExclusiveEvent.h"
 
 SystemExclusiveEvent::SystemExclusiveEvent(int type, long tick, char data[])
@@ -62,7 +61,7 @@ void SystemExclusiveEvent::writeToFile(ostream & output, bool writeType) {
 
 	// TODO
 	if (writeType) {
-		output.put(mType);
+		output.put((char)mType);
 	}
 	output.write(mLength->getBytes(), mLength->getByteCount());
 	output.write(mData, sizeof(&mData));

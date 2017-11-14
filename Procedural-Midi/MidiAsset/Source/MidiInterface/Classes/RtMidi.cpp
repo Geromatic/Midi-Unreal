@@ -36,9 +36,9 @@
 */
 /**********************************************************************/
 
-#include "MidiInterfacePrivatePCH.h" // compiler requires a header
-
 #include "RtMidi.h"
+#include "Engine.h" // required for UE4
+
 #include <sstream>
 
 #if defined(__MACOSX_CORE__)

@@ -1,9 +1,7 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "Controller.h"
-
 
 Controller::Controller(long tick, int channel, int controllerType, int value)
 	: ChannelEvent(tick, ChannelEvent::CONTROLLER, channel, controllerType, value)

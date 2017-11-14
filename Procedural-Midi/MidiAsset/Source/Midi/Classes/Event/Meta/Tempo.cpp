@@ -1,13 +1,12 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "Tempo.h"
 
 #include "../../Util/MidiUtil.h"
 
 const float Tempo::DEFAULT_BPM = 120.0f;
-const int Tempo::DEFAULT_MPQN = 60000000 / DEFAULT_BPM;
+const int Tempo::DEFAULT_MPQN = (int)(60000000 / DEFAULT_BPM);
 
 Tempo::Tempo() 
 	: MetaEvent(0, 0, MetaEvent::TEMPO, new VariableLengthInt(3))
@@ -45,7 +44,7 @@ void Tempo::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.put(size);
+	output.put((char)size);
 	output.write(MidiUtil::intToBytes(mMPQN, 3), 3);
 }
 

@@ -29,8 +29,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "MidiPrivatePCH.h"
-
 #include "ntlibc.h"
 
 int ntlibc_strlen(const char *s)

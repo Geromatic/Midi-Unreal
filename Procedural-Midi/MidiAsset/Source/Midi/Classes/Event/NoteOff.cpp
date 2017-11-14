@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "NoteOff.h"
 
 NoteOff::NoteOff(long tick, int channel, int note, int velocity)

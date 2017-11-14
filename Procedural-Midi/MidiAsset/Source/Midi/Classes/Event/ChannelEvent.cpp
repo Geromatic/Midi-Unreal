@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "ChannelEvent.h"
 
 #include "ChannelAftertouch.h"
@@ -118,12 +117,12 @@ void ChannelEvent::writeToFile(ostream & output, bool writeType){
 
 	if (writeType) {
 		int typeChannel = (mType << 4) + mChannel;
-		output.put(typeChannel);
+		output.put((char)typeChannel);
 	}
 
-	output.put(mValue1);
+	output.put((char)mValue1);
 	if (mType != PROGRAM_CHANGE && mType != CHANNEL_AFTERTOUCH) {
-		output.put(mValue2);
+		output.put((char)mValue2);
 	}
 }
 ChannelEvent * ChannelEvent::parseChannelEvent(long tick, long delta, int type, int channel, istream & input) {

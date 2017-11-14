@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "MetaEvent.h"
 
 #include "TimeSignature.h"
@@ -44,8 +43,8 @@ void MetaEvent::writeToFile(ostream & output) {
 	MidiEvent::writeToFile(output, true);
 	
 	int status = 0XFF;
-	output.put(status);
-	output.put(mType);
+	output.put((char)status);
+	output.put((char)mType);
 }
 
 MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {

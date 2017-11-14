@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "TextualMetaEvent.h"
 
 TextualMetaEvent::TextualMetaEvent(long tick, long delta, int type, string text)

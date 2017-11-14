@@ -1,7 +1,7 @@
 // Copyright -> Scott Bishel
 
-#include "MidiInterfacePrivatePCH.h"
 #include "MidiInterfaceLibrary.h"
+#include "MidiInterfacePrivatePCH.h"
 
 void midiMessegeCallback(double deltatime, std::vector< unsigned char > *message, void *userData)
 {

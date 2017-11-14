@@ -29,8 +29,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "MidiPrivatePCH.h"
-
 #include "mml_stack.h"
 
 MML_STACK_RESULT mml_stack_init(mml_stack_t *p)

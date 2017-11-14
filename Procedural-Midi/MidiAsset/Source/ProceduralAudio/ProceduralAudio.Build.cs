@@ -11,8 +11,10 @@ public class ProceduralAudio : ModuleRules
     public ProceduralAudio(TargetInfo Target)
 #endif
 	{
-		
-		PublicIncludePaths.AddRange(
+
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+        PublicIncludePaths.AddRange(
 			new string[] {
 				"ProceduralAudio/Public"
 			}

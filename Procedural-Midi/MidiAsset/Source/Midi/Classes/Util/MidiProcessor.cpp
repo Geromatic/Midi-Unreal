@@ -1,8 +1,8 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "MidiProcessor.h"
+#include "MidiPrivatePCH.h"
 
 #include "../Event/Meta/Tempo.h"
 #include "../Event/Meta/TimeSignature.h"
@@ -39,6 +39,8 @@ void MidiProcessor::load(MidiFile & file) {
 	mMPQN = Tempo::DEFAULT_MPQN;
 	mPPQ = mMidiFile->getResolution();
 
+	//reset metronome with a new TimeSignature
+	sig = TimeSignature();
 	mMetronome = new MetronomeTick(&sig, mPPQ);
 
 	mCurrEvents.clear();
@@ -74,6 +76,8 @@ void MidiProcessor::reset() {
 	mTicksElapsed = 0;
 	mMsElapsed = 0;
 
+	//reset metronome with a new TimeSignature
+	sig = TimeSignature();
 	if (mMetronome)
 		mMetronome->setTimeSignature(&sig);
 

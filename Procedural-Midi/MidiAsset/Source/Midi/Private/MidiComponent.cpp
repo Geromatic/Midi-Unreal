@@ -1,7 +1,7 @@
 // Copyright -> Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "MidiComponent.h"
+#include "MidiPrivatePCH.h"
 
 #include "MidiUtils.h"
 #include "MidiFile.h"
@@ -244,6 +244,7 @@ int UMidiComponent::GetResolution()
 
 float UMidiComponent::GetDuration()
 {
+
 	// TODO find a better solution
 	if (mMidiFile)
 	{

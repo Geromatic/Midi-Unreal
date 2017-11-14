@@ -2,6 +2,10 @@
 
 #pragma once
 
+// somehow there is a linker bug with generated files
+// this is a workaround
+#include "Engine.h"
+
 #include "SoundUtils.generated.h"
 
 /**

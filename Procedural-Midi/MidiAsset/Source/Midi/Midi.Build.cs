@@ -11,9 +11,10 @@ public class Midi : ModuleRules
 #else
     public Midi(TargetInfo Target)
 #endif
-	{
-		
-		PublicIncludePaths.AddRange(
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+        PublicIncludePaths.AddRange(
 			new string[] {
 				"Midi/Public"
 			}

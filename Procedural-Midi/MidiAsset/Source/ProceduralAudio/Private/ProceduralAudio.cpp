@@ -1,5 +1,6 @@
 // Copyright -> Scott Bishel
 
+#include "ProceduralAudio.h"
 #include "ProceduralAudioPrivatePCH.h"
 
 

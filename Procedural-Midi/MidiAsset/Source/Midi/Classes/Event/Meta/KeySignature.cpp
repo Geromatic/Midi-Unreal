@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "KeySignature.h"
 
 KeySignature::KeySignature(long tick, long delta, int key, int scale)
@@ -38,9 +37,9 @@ void KeySignature::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.put(size);
-	output.put(mKey);
-	output.put(mScale);
+	output.put((char)size);
+	output.put((char)mKey);
+	output.put((char)mScale);
 }
 
 KeySignature * KeySignature::parseKeySignature(long tick, long delta, istream & input) {

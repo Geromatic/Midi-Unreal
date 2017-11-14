@@ -34,7 +34,7 @@ protected:
 	class MetaEventData
 	{
 	public:
-		char type;
+		int type;
 		VariableLengthInt* length;
 		char* data;
 

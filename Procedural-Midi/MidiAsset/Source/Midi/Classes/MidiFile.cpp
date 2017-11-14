@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "MidiFile.h"
 
 #include "Util/MidiUtil.h"
@@ -29,7 +28,7 @@ MidiFile::MidiFile(int resolution, const vector<MidiTrack*>& tracks)
 	mResolution = resolution >= 0 ? resolution : DEFAULT_RESOLUTION;
 
 	mTracks.insert(mTracks.end(), tracks.begin(), tracks.end());
-	mTrackCount = tracks.size();
+	mTrackCount = (int)tracks.size();
 	mType = mTrackCount > 1 ? 1 : 0;
 }
 
@@ -173,7 +172,6 @@ void MidiFile::initFromBuffer(char buffer[])
 	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4))
 	{
 		printf("File identifier not MThd. Exiting");
-		//UE_LOG(LogTemp, Warning, TEXT("File identifier not MThd. Exiting"));
 		mType = 0;
 		mTrackCount = 0;
 		mResolution = DEFAULT_RESOLUTION;

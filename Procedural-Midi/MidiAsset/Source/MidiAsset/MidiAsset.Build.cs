@@ -10,6 +10,8 @@ namespace UnrealBuildTool.Rules
     public MidiAsset(TargetInfo Target)
 #endif
 		{
+            PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
             PublicDependencyModuleNames.AddRange(
                 new string[] {
 					"Core",

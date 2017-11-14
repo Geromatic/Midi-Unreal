@@ -1,7 +1,7 @@
 // Copyright -> Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "MidiUtils.h"
+#include "MidiPrivatePCH.h"
 
 #include "MidiFile.h"
 #include "Event/ChannelEvent.h"

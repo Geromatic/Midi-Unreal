@@ -1,7 +1,6 @@
 // Copyright 2011 Alex Leffelman
 // Updated 2016 Scott Bishel
 
-#include "MidiPrivatePCH.h"
 #include "SequenceNumber.h"
 
 SequenceNumber::SequenceNumber(long tick, long delta, int number)
@@ -24,11 +23,11 @@ void SequenceNumber::writeToFile(ostream& output) {
 	MetaEvent::writeToFile(output);
 
 	int size = getEventSize() - 3;
-	output.put(size);
+	output.put((char)size);
 	int high = getMostSignificantBits();
 	int low = getLeastSignificantBits();
-	output.put(high);
-	output.put(low);
+	output.put((char)high);
+	output.put((char)low);
 }
 
 SequenceNumber * SequenceNumber::parseSequenceNumber(long tick, long delta, istream & input) {

@@ -1,7 +1,7 @@
 // Copyright -> Scott Bishel
 
-#include "ProceduralAudioPrivatePCH.h"
 #include "SoundUtils.h"
+#include "ProceduralAudioPrivatePCH.h"
 
 #include "Sound/SoundWaveProcedural.h"
 #include "SoundWaveProceduralTest.h"
