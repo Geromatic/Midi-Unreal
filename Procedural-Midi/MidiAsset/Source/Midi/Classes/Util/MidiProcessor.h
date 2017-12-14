@@ -27,7 +27,7 @@ class MidiProcessor
 	int mPPQ;
 
 	MetronomeTick* mMetronome;
-	TimeSignature sig;
+	TimeSignature* mSig;
 
 public:
 	MidiProcessor();

@@ -12,6 +12,7 @@
 MidiProcessor::MidiProcessor() : PlayRate(1.0), mClockType(0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
+	mSig = NULL;
 
 	mRunning = false;
 	mTicksElapsed = 0;
@@ -23,6 +24,9 @@ MidiProcessor::~MidiProcessor()
 	if (mMetronome)
 		delete mMetronome;
 	mMetronome = NULL;
+	if (mSig)
+		delete mSig;
+	mSig = NULL;
 }
 
 void MidiProcessor::load(MidiFile & file) {
@@ -40,8 +44,11 @@ void MidiProcessor::load(MidiFile & file) {
 	mPPQ = mMidiFile->getResolution();
 
 	//reset metronome with a new TimeSignature
-	sig = TimeSignature();
-	mMetronome = new MetronomeTick(&sig, mPPQ);
+	if (mSig)
+		delete mSig;
+	mSig = NULL;
+	mSig = new TimeSignature();
+	mMetronome = new MetronomeTick(mSig, mPPQ);
 
 	mCurrEvents.clear();
 	mCurrEventsEnd.clear();
@@ -77,9 +84,12 @@ void MidiProcessor::reset() {
 	mMsElapsed = 0;
 
 	//reset metronome with a new TimeSignature
-	sig = TimeSignature();
+	if (mSig)
+		delete mSig;
+	mSig = NULL;
+	mSig = new TimeSignature();
 	if (mMetronome)
-		mMetronome->setTimeSignature(&sig);
+		mMetronome->setTimeSignature(mSig);
 
 	vector<MidiTrack*>& tracks = mMidiFile->getTracks();
 	for (int i = 0; i < (int)mCurrEvents.size(); i++) {
