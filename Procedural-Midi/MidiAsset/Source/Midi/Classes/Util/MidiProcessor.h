@@ -27,7 +27,7 @@ class MidiProcessor
 	int mPPQ;
 
 	MetronomeTick* mMetronome;
-	TimeSignature* mSig;
+	TimeSignature mSig;
 
 public:
 	MidiProcessor();
@@ -52,6 +52,8 @@ public:
 	}
 	/* clock() = 0, FPlatformTime = 1, Other = 2 */
 	int mClockType;
+	// TODO temp expose to get current track
+	int _trackID;
 
 	void update(const double& deltaTime = clock());
 

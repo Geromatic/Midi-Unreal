@@ -2,7 +2,7 @@
 // Updated 2016 Scott Bishel
 
 #include "MidiProcessor.h"
-#include "MidiPrivatePCH.h"
+#include "Engine.h"
 
 #include "../Event/Meta/Tempo.h"
 #include "../Event/Meta/TimeSignature.h"
@@ -12,7 +12,6 @@
 MidiProcessor::MidiProcessor() : PlayRate(1.0), mClockType(0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
-	mSig = NULL;
 
 	mRunning = false;
 	mTicksElapsed = 0;
@@ -24,9 +23,6 @@ MidiProcessor::~MidiProcessor()
 	if (mMetronome)
 		delete mMetronome;
 	mMetronome = NULL;
-	if (mSig)
-		delete mSig;
-	mSig = NULL;
 }
 
 void MidiProcessor::load(MidiFile & file) {
@@ -43,12 +39,8 @@ void MidiProcessor::load(MidiFile & file) {
 	mMPQN = Tempo::DEFAULT_MPQN;
 	mPPQ = mMidiFile->getResolution();
 
-	//reset metronome with a new TimeSignature
-	if (mSig)
-		delete mSig;
-	mSig = NULL;
-	mSig = new TimeSignature();
-	mMetronome = new MetronomeTick(mSig, mPPQ);
+	//reset metronome
+	mMetronome = new MetronomeTick(&mSig, mPPQ);
 
 	mCurrEvents.clear();
 	mCurrEventsEnd.clear();
@@ -83,13 +75,9 @@ void MidiProcessor::reset() {
 	mTicksElapsed = 0;
 	mMsElapsed = 0;
 
-	//reset metronome with a new TimeSignature
-	if (mSig)
-		delete mSig;
-	mSig = NULL;
-	mSig = new TimeSignature();
+	//reset metronome
 	if (mMetronome)
-		mMetronome->setTimeSignature(mSig);
+		mMetronome->setTimeSignature(&mSig);
 
 	vector<MidiTrack*>& tracks = mMidiFile->getTracks();
 	for (int i = 0; i < (int)mCurrEvents.size(); i++) {
@@ -124,7 +112,7 @@ void MidiProcessor::dispatch(MidiEvent * _event) {
 			dispatch(mMetronome);
 		}
 	}
-	mListener->onEvent(_event);
+	mListener->onEvent(_event, mMsElapsed);
 }
 // Processes the MIDI file every tick
 void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
@@ -166,6 +154,8 @@ void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
 void MidiProcessor::process() {
 
 	for (int i = 0; i < (int)mCurrEvents.size(); i++) {
+		//TODO re-expose track
+		_trackID = i;
 		while (mCurrEvents[i] != mCurrEventsEnd[i]) {
 			MidiEvent * _event = *mCurrEvents[i];
 			if (_event->getTick() <= mTicksElapsed) {
