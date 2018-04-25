@@ -206,11 +206,11 @@ void UMidiComponent::start(bool background, bool UseGameTime) {
 
 	if(UseGameTime) {
 		mProcessor.start(GetWorld()->TimeSeconds * 1000.0f);
-		mProcessor.mClockType = 2;
+		mProcessor.milliFunction = NULL;
 	}
 	else {
 		mProcessor.start(FPlatformTime::Cycles());
-		mProcessor.mClockType = 1;
+		mProcessor.milliFunction = FPlatformTime::ToMilliseconds;
 	}
 }
 

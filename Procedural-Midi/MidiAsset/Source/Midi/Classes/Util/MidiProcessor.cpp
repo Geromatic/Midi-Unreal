@@ -2,14 +2,13 @@
 // Updated 2016 Scott Bishel
 
 #include "MidiProcessor.h"
-#include "Engine.h"
 
 #include "../Event/Meta/Tempo.h"
 #include "../Event/Meta/TimeSignature.h"
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-MidiProcessor::MidiProcessor() : PlayRate(1.0), mClockType(0) {
+MidiProcessor::MidiProcessor() : PlayRate(1.0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
 
@@ -121,17 +120,10 @@ void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
 
 	double now = deltaTime;
 	double msElapsed = now - mLastMs;
-//	#define CLOCKS_PER_MS (CLOCKS_PER_SEC / 1000)
-	switch(mClockType) {
-		case 0: // clock()
-//			msElapsed /= CLOCKS_PER_MS;
-			break;
-		case 1: // FPlatformTime::Cycles()
-			msElapsed = FPlatformTime::ToMilliseconds(msElapsed); 
-		case 2: // Other
-			break;
-			
-	}
+
+	// workaround to allow custom timer
+	if(milliFunction != NULL)
+		msElapsed = milliFunction(msElapsed);
 
 	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlayRate;
 	if (ticksElapsed < 1) {
