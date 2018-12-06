@@ -150,6 +150,6 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {
 	}
 
 	// This should never run else something has gone wrong
-	cerr << "Completely broken in MetaEvent.parseMetaEvent()";
+	printf("Completely broken in MetaEvent.parseMetaEvent()");
 	return NULL;
 }

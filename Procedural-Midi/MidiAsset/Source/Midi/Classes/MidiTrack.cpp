@@ -39,7 +39,7 @@ MidiTrack::MidiTrack(istream & input)
 	input.read(buffer, 4);
 
 	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4)) {
-		cerr << "Track identifier did not match MTrk!";
+		printf("Track identifier did not match MTrk!");
 		return;
 	}
 
@@ -50,7 +50,6 @@ MidiTrack::MidiTrack(istream & input)
 }
 MidiTrack::~MidiTrack()
 {
-	// clear up track data
 	std::vector<MidiEvent*>::iterator it;
 	for (it = mEvents.begin();
 		it != mEvents.end();
@@ -79,12 +78,12 @@ void MidiTrack::readTrackData(istream & input)
 
 		MidiEvent * E = MidiEvent::parseEvent(totalTicks, delta.getValue(), input);
 		if (E == NULL) {
-			cout << "Event skipped!";
+			printf("Event skipped!");
 			continue;
 		}
 
 		if (VERBOSE) {
-			cout << E->ToString().c_str();
+			printf("%s", E->ToString().c_str());
 		}
 
 		// Not adding the EndOfTrack event here allows the track to be edited
@@ -136,7 +135,7 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	}
 
 	if (mClosed) {
-		cerr << "Error: Cannot add an event to a closed track.";
+		printf("Error: Cannot add an event to a closed track.");
 		return;
 	}
 
@@ -177,7 +176,7 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == MetaEvent::END_OF_TRACK) {
 		if (next != NULL) {
-			cerr << "Attempting to insert EndOfTrack before an existing event.  Use closeTrack() when finished with MidiTrack.";
+			printf("Attempting to insert EndOfTrack before an existing event.  Use closeTrack() when finished with MidiTrack.");
 			return;
 		}
 		mClosed = true;
@@ -242,7 +241,7 @@ void MidiTrack::dumpEvents() {
 	for (it = mEvents.begin();
 		it != mEvents.end();
 		it++) {
-		cout << (*it)->ToString().c_str();
+		printf("%s", (*it)->ToString().c_str());
 	}
 }
 
@@ -290,7 +289,7 @@ void MidiTrack::writeToFile(ostream & output) {
 		it++) {
 		MidiEvent * _event = *it;
 		if (VERBOSE) {
-			cout << "Writing: " << _event->ToString().c_str();
+			printf("Writing: %s", _event->ToString().c_str());
 		}
 
 		_event->writeToFile(output, _event->requiresStatusByte(lastEvent));

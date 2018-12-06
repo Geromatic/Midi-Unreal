@@ -119,7 +119,8 @@ MidiEvent * MidiEvent::parseEvent(long tick, long delta, istream & input){
 	}
 	// Unknown Event
 	else {
-		cout << "Unknown Status Type: " << sId;
+		printf("Unknown Status Type: %d", sId);
+		//UE_LOG(LogTemp, Warning, TEXT("Unknown Status Type: %d"), sId);
 
 		if (reset) {
 			// ignore next byte

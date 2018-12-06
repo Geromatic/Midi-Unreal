@@ -16,6 +16,6 @@ class MIDIASSET_API UMidiAsset
 
 public:
 	/** Holds the stored data. */
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category="MIDI|Asset")
 	TArray<uint8> Data;
 };

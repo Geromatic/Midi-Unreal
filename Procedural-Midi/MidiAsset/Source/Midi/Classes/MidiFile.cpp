@@ -34,6 +34,8 @@ MidiFile::MidiFile(int resolution, const vector<MidiTrack*>& tracks)
 
 MidiFile::MidiFile(istream& input)
 {
+	//FBufferReader reader(data, size, false);
+
 	char buffer[(int)HEADER_SIZE] = { 0 };
 	input.read(buffer, HEADER_SIZE);
 
@@ -146,6 +148,9 @@ void MidiFile::removeTrack(int pos)
 
 void MidiFile::writeToFile(ostream & output)
 {
+	//TArray<uint8> data;
+	//FMemoryWriter writer(data);
+
 	output.write((char*)IDENTIFIER, 4);
 	output.write(MidiUtil::intToBytes(6, 4), 4);
 	output.write(MidiUtil::intToBytes(mType, 2), 2);
@@ -159,13 +164,14 @@ void MidiFile::writeToFile(ostream & output)
 	}
 
 	output.flush();
+//	output.close();
 }
 
 void MidiFile::initFromBuffer(char buffer[])
 {
 	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4))
 	{
-		cerr << "File identifier not MThd. Exiting";
+		printf("File identifier not MThd. Exiting");
 		mType = 0;
 		mTrackCount = 0;
 		mResolution = DEFAULT_RESOLUTION;

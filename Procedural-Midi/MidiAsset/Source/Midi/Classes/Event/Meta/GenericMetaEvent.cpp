@@ -8,7 +8,7 @@ GenericMetaEvent::GenericMetaEvent(long tick, long delta, int type, VariableLeng
 {
 	mData = data;
 
-	cout << "Warning: GenericMetaEvent used because type "  << type << " wasn't recognized or unexpected data length ("<< length->getValue() <<") for the type.";
+	printf("Warning: GenericMetaEvent used because type %d wasn't recognized or unexpected data length (%d) for the type.", type, length->getValue());
 }
 
 GenericMetaEvent::~GenericMetaEvent()
