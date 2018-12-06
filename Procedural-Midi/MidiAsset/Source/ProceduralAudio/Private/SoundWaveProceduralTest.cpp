@@ -61,7 +61,7 @@ void USoundWaveProceduralTest::GetAssetRegistryTags(TArray<FAssetRegistryTag>& O
 	check(false);
 }
 
-FByteBulkData* USoundWaveProceduralTest::GetCompressedData(FName Format)
+FByteBulkData* USoundWaveProceduralTest::GetCompressedData(FName Format, const FPlatformAudioCookOverrides* CompressionOverrides)
 {
 	return NULL;
 }

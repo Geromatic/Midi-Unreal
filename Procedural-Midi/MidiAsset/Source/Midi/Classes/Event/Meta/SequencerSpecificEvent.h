@@ -25,5 +25,5 @@ protected:
 
 public:
 	void writeToFile(ostream & output);
-	int CompareTo(MidiEvent *other);
+	int compareTo(MidiEvent *other);
 };

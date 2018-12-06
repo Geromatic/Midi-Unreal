@@ -33,9 +33,9 @@ public:
 	int getBeatNumber();
 	int getMeasure();
 
-	std::string ToString();
+	std::string toString();
 
-	int CompareTo(MidiEvent* o);
+	int compareTo(MidiEvent* o);
 protected:
 	int getEventSize();
 

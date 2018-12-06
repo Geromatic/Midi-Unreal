@@ -40,13 +40,13 @@ void SequencerSpecificEvent::writeToFile(ostream & output) {
 	output.write(mData, sizeof(&mData));
 }
 
-int SequencerSpecificEvent::CompareTo(MidiEvent *other) {
+int SequencerSpecificEvent::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 
-	// events are not the same
+	// Check events are not the same
 	if (!(other->getType() == this->getType())) {
 		return 1;
 	}

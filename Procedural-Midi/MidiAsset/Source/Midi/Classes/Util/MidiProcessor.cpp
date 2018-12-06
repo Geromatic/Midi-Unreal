@@ -8,7 +8,7 @@
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-MidiProcessor::MidiProcessor() : PlayRate(1.0) {
+MidiProcessor::MidiProcessor() : PlayRate(1.0), milliFunction( NULL ){
 	mMidiFile = NULL;
 	mMetronome = NULL;
 
@@ -22,6 +22,8 @@ MidiProcessor::~MidiProcessor()
 	if (mMetronome)
 		delete mMetronome;
 	mMetronome = NULL;
+
+	milliFunction = NULL;
 }
 
 void MidiProcessor::load(MidiFile & file) {
@@ -111,7 +113,7 @@ void MidiProcessor::dispatch(MidiEvent * _event) {
 			dispatch(mMetronome);
 		}
 	}
-	mListener->onEvent(_event, mMsElapsed);
+	mListener->onEvent(_event, (long)mMsElapsed);
 }
 // Processes the MIDI file every tick
 void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
@@ -123,7 +125,7 @@ void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
 
 	// workaround to allow custom timer
 	if(milliFunction != NULL)
-		msElapsed = milliFunction(msElapsed);
+		msElapsed = milliFunction((unsigned int)msElapsed);
 
 	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlayRate;
 	if (ticksElapsed < 1) {

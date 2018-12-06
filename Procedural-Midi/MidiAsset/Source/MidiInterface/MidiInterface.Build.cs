@@ -15,14 +15,12 @@ public class MidiInterface : ModuleRules
 
         PublicIncludePaths.AddRange(
 			new string[] {
-				"MidiInterface/Public"
 			}
 			);
 				
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-                "MidiInterface/Private",
                 "MidiInterface/Classes",
             }
 			);
@@ -43,14 +41,15 @@ public class MidiInterface : ModuleRules
 			}
 			);
 		
-		
+		// Windows
 		if (Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
 		{
-			Definitions.Add("__WINDOWS_MM__=1");
+            PublicDefinitions.Add("__WINDOWS_MM__=1");
 			PublicAdditionalLibraries.Add("winmm.lib");
 		}
+		// MAC / IOS
 		else if (Target.Platform == UnrealTargetPlatform.Mac || Target.Platform == UnrealTargetPlatform.IOS) {
-			Definitions.Add("__MACOSX_CORE__=1");	
+            PublicDefinitions.Add("__MACOSX_CORE__=1");	
 			PublicIncludePaths.AddRange(new string[] {"Runtime/Core/Public/Apple"});
 			
 			if(Target.Platform == UnrealTargetPlatform.Mac)
@@ -63,8 +62,9 @@ public class MidiInterface : ModuleRules
 				"CoreMIDI", "CoreAudio", "CoreFoundation"
 			});
 		}
-		else if (Target.Platform == UnrealTargetPlatform.Linux) {			
-			Definitions.Add("__LINUX_ALSA__=1");
+		// LINUX
+		else if (Target.Platform == UnrealTargetPlatform.Linux) {
+            PublicDefinitions.Add("__LINUX_ALSA__=1");
 
 			PublicIncludePaths.Add("Runtime/Core/Public/Linux");
 			

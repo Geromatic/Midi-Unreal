@@ -23,8 +23,8 @@ public:
 public:
 	void writeToFile(ostream& output);
 
-	static SequenceNumber * parseSequenceNumber(long tick, long delta, istream & input);
-	int CompareTo(MidiEvent *other);
+	static MetaEvent * parseSequenceNumber(long tick, long delta, MetaEventData& info);
+	int compareTo(MidiEvent *other);
 protected:
 	int getEventSize();
 

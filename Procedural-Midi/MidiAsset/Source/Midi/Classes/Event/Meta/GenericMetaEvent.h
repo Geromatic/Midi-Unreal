@@ -14,7 +14,7 @@ class GenericMetaEvent : public MetaEvent
 	char* mData;
 
 public:
-	GenericMetaEvent(long tick, long delta, int type, VariableLengthInt * length, char data[]);
+	GenericMetaEvent(long tick, long delta, MetaEventData& info);
 	~GenericMetaEvent();
 
 protected:
@@ -22,5 +22,5 @@ protected:
 
 public:
 	void writeToFile(ostream & output);
-	int CompareTo(MidiEvent *other);
+	int compareTo(MidiEvent *other);
 };

@@ -34,7 +34,7 @@ protected:
 	int getEventSize();
 
 public:
-	int CompareTo(MidiEvent *other);
+	int compareTo(MidiEvent *other);
 	bool requiresStatusByte(MidiEvent * prevEvent);
 
 	void writeToFile(ostream & output, bool writeType);

@@ -26,12 +26,12 @@ USoundWave* USoundUtils::CreateSoundWave(uint8* buffer, int32 size)
 	if (!sw)
 		return nullptr;
 
-	sw->SampleRate = 44100;
+	sw->SetSampleRate(44100);
 	sw->NumChannels = 2;
 
 	const int32 BIT_RATE = 16;
 
-	int32 DurationDiv = sw->NumChannels * BIT_RATE * sw->SampleRate;
+	int32 DurationDiv = sw->NumChannels * BIT_RATE * sw->GetSampleRateForCurrentPlatform();
 	if (DurationDiv)
 		sw->Duration = size * 8.0f / DurationDiv;
 	else

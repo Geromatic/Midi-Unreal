@@ -4,6 +4,9 @@
 #include "MidiThread.h"
 #include "MidiPrivatePCH.h"
 
+#include "Engine/Engine.h"
+#include "Engine/GameViewportClient.h"
+
 #include "Util/MidiProcessor.h"
 
 bool FMidiProcessorWorker::IsFinished() const
@@ -17,11 +20,12 @@ FMidiProcessorWorker::FMidiProcessorWorker(MidiProcessor* IN_PC, bool UseGameTim
 {
 	this->isGameTime = UseGameTime;
 
-	Thread = FRunnableThread::Create(this, TEXT("FMidiProcessorWorker"), 0, TPri_BelowNormal); //windows default = 8mb for thread, could specify more
+	Thread = FRunnableThread::Create(this, TEXT("FMidiProcessorWorker"), 0, EThreadPriority::TPri_BelowNormal); //windows default = 8mb for thread, could specify more
 }
 
 FMidiProcessorWorker::~FMidiProcessorWorker() {
-	delete Thread;
+	if(Thread)
+		delete Thread;
 	Thread = NULL;
 }
 
@@ -33,13 +37,11 @@ uint32 FMidiProcessorWorker::Run() {
 	if (!world)
 		return 0;
 
-	if(isGameTime) {
+	if (this->isGameTime) {
 		ThePC->setStartClock(world->TimeSeconds * 1000.0f);
-		ThePC->milliFunction = NULL;
 	}
 	else {
 		ThePC->setStartClock(FPlatformTime::Cycles());
-		ThePC->milliFunction = FPlatformTime::ToMilliseconds;
 	}
 
 	while (!IsFinished())

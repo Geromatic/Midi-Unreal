@@ -4,6 +4,8 @@
 #include "TimeSignature.h"
 #include <math.h>
 
+#include "GenericMetaEvent.h"
+
 TimeSignature::TimeSignature() 
 	: MetaEvent(0, 0, MetaEvent::TIME_SIGNATURE, new VariableLengthInt(4))
 {
@@ -47,7 +49,7 @@ int TimeSignature::getEventSize() {
 void TimeSignature::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3;
+	int size = getEventSize() - 3; // 4
 	output.put((char)size);
 	output.put((char)mNumerator);
 	output.put((char)mDenominator);
@@ -55,15 +57,18 @@ void TimeSignature::writeToFile(ostream & output) {
 	output.put((char)mDivision);
 }
 
-TimeSignature * TimeSignature::parseTimeSignature(long tick, long delta, istream & input) {
-
-	input.ignore();		// Size = 4
+MetaEvent * TimeSignature::parseTimeSignature(long tick, long delta, MetaEventData& info) {
+	// Check if valid Event
+	if (info.length->getValue() != 4)
+	{
+		return new GenericMetaEvent(tick, delta, info);
+	}
 
 	int num = 0, den = 0, met = 0, fps = 0;
-	num = input.get();
-	den = input.get();
-	met = input.get();
-	fps = input.get();
+	num = info.data[0];
+	den = info.data[1];
+	met = info.data[2];
+	fps = info.data[3];
 
 	den = (int)pow(2, den);
 
@@ -86,13 +91,13 @@ int TimeSignature::log2(int den) {
 	return 0;
 }
 
-int TimeSignature::CompareTo(MidiEvent *other) {
+int TimeSignature::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 
-	// events are not the same
+	// Check events are not the same
 	if (!(other->getType() == this->getType())) {
 		return 1;
 	}
@@ -108,8 +113,8 @@ int TimeSignature::CompareTo(MidiEvent *other) {
 	return 0;
 }
 
-string TimeSignature::ToString() {
+string TimeSignature::toString() {
 	std::stringstream ss;
-	ss << MetaEvent::ToString() << " " << mNumerator << "/" << getRealDenominator();
+	ss << MetaEvent::toString() << " " << mNumerator << "/" << getRealDenominator();
 	return ss.str();
 }

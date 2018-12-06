@@ -5,18 +5,18 @@
 
 /* Private dependencies
  *****************************************************************************/
-
-#include "CoreUObject.h"
+#include "CoreMinimal.h"
 #include "AssetToolsModule.h"
-#include "SlateBasics.h"
-#include "Engine.h"
-#include "SlateStyle.h"
-#include "EditorStyle.h"
-#include "ModuleManager.h"
+#include "Styling/SlateStyle.h"
+
+#include "Styling/SlateStyleRegistry.h"
+#include "Slate/SlateGameResources.h"
+
+#include "Modules/ModuleInterface.h"
+#include "Modules/ModuleManager.h"
 #include "MidiAsset.h"
 #include "Toolkits/AssetEditorToolkit.h"
 #include "Toolkits/IToolkit.h"
-#include "UnrealEd.h"
 
 
 /* Private includes

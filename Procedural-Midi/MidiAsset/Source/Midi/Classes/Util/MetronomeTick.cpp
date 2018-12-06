@@ -70,14 +70,14 @@ int MetronomeTick::getMeasure()
 	return mCurrentMeasure;
 }
 
-std::string MetronomeTick::ToString()
+std::string MetronomeTick::toString()
 {
 	std::stringstream ss;
 	ss << "Metronome: " << mCurrentMeasure << "\t" << getBeatNumber();
 	return ss.str();
 }
 
-int MetronomeTick::CompareTo(MidiEvent* o)
+int MetronomeTick::compareTo(MidiEvent* o)
 {
 	return 0;
 }

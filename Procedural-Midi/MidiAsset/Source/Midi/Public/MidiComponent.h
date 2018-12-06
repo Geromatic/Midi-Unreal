@@ -9,6 +9,7 @@
 
 #include "MidiUtils.h"
 
+#include "Containers/Queue.h"
 #include "Components/ActorComponent.h"
 #include "MidiComponent.generated.h"
 
@@ -158,5 +159,5 @@ private:
 	};
 
 		// Handle Data Racing 
-	TQueue<MidiCallbackMessage> mQueue;
+	TQueue<MidiCallbackMessage, EQueueMode::Mpsc> mQueue;
 };

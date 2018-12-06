@@ -3,8 +3,8 @@
 #include "MidiAssetEditorStyle.h"
 #include "MidiAssetEditorPrivatePCH.h"
 
-#include "SlateStyle.h"
-#include "IPluginManager.h"
+#include "Styling/SlateStyle.h"
+#include "Interfaces/IPluginManager.h"
 
 #define IMAGE_BRUSH( RelativePath, ... ) FSlateImageBrush( FMidiAssetEditorStyle::InContent( RelativePath, ".png" ), __VA_ARGS__ )
 

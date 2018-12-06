@@ -30,7 +30,7 @@ class PROCEDURALAUDIO_API USoundWaveProceduralTest : public USoundWave
 
 	virtual int32 GeneratePCMData(uint8* PCMData, const int32 SamplesNeeded) override;
 	virtual int32 GetResourceSizeForFormat(FName Format) override;
-	virtual FByteBulkData* GetCompressedData(FName Format) override;
+	virtual FByteBulkData* GetCompressedData(FName Format, const FPlatformAudioCookOverrides* CompressionOverrides = nullptr) override;
 	virtual void InitAudioResource(FByteBulkData& CompressedData) override;
 	virtual bool InitAudioResource(FName Format) override;
 

@@ -78,7 +78,7 @@ bool MidiEvent::requiresStatusByte(MidiEvent * prevEvent) {
 	return true;
 }
 
-void MidiEvent::writeToFile(ostream & output, bool writeType){
+void MidiEvent::writeToFile(ostream & output, bool writeType) {
 	output.write(mDelta->getBytes(), mDelta->getByteCount());
 }
 
@@ -154,7 +154,7 @@ bool MidiEvent::verifyIdentifier(int id) {
 	return true;
 }
 
-int MidiEvent::CompareTo(MidiEvent *other)
+int MidiEvent::compareTo(MidiEvent *other)
 {
 	if (mTick != other->getTick()) {
 		return mTick < other->getTick() ? -1 : 1;
@@ -230,7 +230,7 @@ string getMidiClassName(int type) {
 	return "Unknown";
 }
 
-string MidiEvent::ToString()
+string MidiEvent::toString()
 {
 	std::stringstream ss;
 	ss << mTick << " (" << mDelta->getValue() << "): " << getMidiClassName(mType);

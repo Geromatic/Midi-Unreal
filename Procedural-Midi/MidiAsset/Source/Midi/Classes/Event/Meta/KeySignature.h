@@ -32,6 +32,6 @@ protected:
 public:
 	void writeToFile(ostream & output);
 
-	static KeySignature * parseKeySignature(long tick, long delta, istream & input);
-	int CompareTo(MidiEvent *other);
+	static MetaEvent * parseKeySignature(long tick, long delta, MetaEventData& info);
+	int compareTo(MidiEvent *other);
 };

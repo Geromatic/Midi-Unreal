@@ -11,7 +11,7 @@
 class MidiEventListener
 {
 public:
-	virtual void onStart(bool fromBeginning) {};
-	virtual void onEvent(MidiEvent* _event, long ms) {};
-	virtual void onStop(bool finished) {};
+	virtual void onStart(bool fromBeginning) = 0;
+	virtual void onEvent(MidiEvent* _event, long ms) = 0;
+	virtual void onStop(bool finished) = 0;
 };
