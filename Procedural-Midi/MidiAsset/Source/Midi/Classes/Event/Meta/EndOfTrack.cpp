@@ -15,17 +15,17 @@ int EndOfTrack::getEventSize() {
 void EndOfTrack::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3;
+	int size = getEventSize() - 3; // 0
 	output.put((char)size);
 }
 
-int EndOfTrack::CompareTo(MidiEvent *other) {
+int EndOfTrack::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 
-	// events are not the same
+	// Check events are not the same
 	if (!(other->getType() == this->getType())) {
 		return 1;
 	}

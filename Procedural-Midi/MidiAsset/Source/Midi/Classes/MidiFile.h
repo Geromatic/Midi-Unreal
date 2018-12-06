@@ -20,7 +20,7 @@ class MidiFile
 
 public:
 	static const int HEADER_SIZE = 14;
-	static const char IDENTIFIER[];
+	static const char IDENTIFIER[]; // 'M', 'T', 'h', 'd'
 
 	static const int DEFAULT_RESOLUTION = 480;
 

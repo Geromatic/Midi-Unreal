@@ -3,9 +3,9 @@
 #pragma once
 
 #include "RtMidi.h"
-
 #include "MidiUtils.h"
 
+#include "Containers/Queue.h"
 #include "GameFramework/Actor.h"
 #include "MidiInterfaceComponent.generated.h"
 
@@ -95,7 +95,7 @@ private:
 		std::vector< unsigned char > message;
 	};
 	TArray<uint8> sysExArray;
-	TQueue<CallbackMessage> messageQueue;
+	TQueue<CallbackMessage, EQueueMode::Mpsc> messageQueue;
 
 	void setInSysEx(bool isInSysEx) { inSysEx = isInSysEx; }
 

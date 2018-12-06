@@ -32,13 +32,13 @@ void TextualMetaEvent::writeToFile(ostream & output) {
 	output.write((char*)mText.c_str(), mText.length());
 }
 
-int TextualMetaEvent::CompareTo(MidiEvent *other) {
+int TextualMetaEvent::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 
-	// events are not the same
+	// Check events are not the same
 	if (!(other->getType() == this->getType())) {
 		return 1;
 	}
@@ -47,8 +47,8 @@ int TextualMetaEvent::CompareTo(MidiEvent *other) {
 	return mText.compare(o->mText);
 }
 
-string TextualMetaEvent::ToString() {
+string TextualMetaEvent::toString() {
 	std::stringstream ss;
-	ss << MetaEvent::ToString() << ": " << mText;
+	ss << MetaEvent::toString() << ": " << mText;
 	return ss.str();
 }

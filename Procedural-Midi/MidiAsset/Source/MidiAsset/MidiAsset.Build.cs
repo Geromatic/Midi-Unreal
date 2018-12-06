@@ -19,11 +19,11 @@ namespace UnrealBuildTool.Rules
                 }
             );
 
-			PrivateIncludePaths.AddRange(
+
+            PrivateIncludePaths.AddRange(
 				new string[] {
-					"Runtime/MidiAsset/Private",
-				}
+                }
 			);
-		}
+        }
 	}
 }

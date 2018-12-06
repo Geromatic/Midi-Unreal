@@ -1,19 +1,20 @@
 {
 	"FileVersion" : 3,
-	"Version" : 13.54,
-	"VersionName" : "2.52.2",
+	"Version" : 13.55,
+	"VersionName" : "2.52.5",
 	"FriendlyName" : "Midi Asset",
-	"Description" : "A Plugin to add Midi capability such as importing, playing, and interfacing with Midi files.  It also includes connecting with external devices and procedural audio",
+	"Description" : "A plugin to add MIDI capability such as importing, playing, and interfacing with MIDI files.  It also includes connecting with external devices and procedural audio",
 	"Category" : "Audio",
 	"CreatedBy" : "Scott Bishel",
 	"CreatedByURL" : "",
 	"DocsURL" : "",
+	"EngineVersion" : "4.20.0",
 	"MarketplaceURL" : "com.epicgames.launcher://ue/marketplace/content/aff69119f95d405abbab38236e258c2e",
 	"SupportURL" : "mailto:scott.bishel@yahoo.com",
 	"EnabledByDefault" : true,
 	"CanContainContent" : true,
 	"IsBetaVersion" : false,
-	"Installed" : false,
+	"Installed": false,
 	"Modules" :
 	[
 		{

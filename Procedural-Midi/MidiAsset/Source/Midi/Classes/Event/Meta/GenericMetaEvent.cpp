@@ -3,12 +3,15 @@
 
 #include "GenericMetaEvent.h"
 
-GenericMetaEvent::GenericMetaEvent(long tick, long delta, int type, VariableLengthInt * length, char data[])
-	: MetaEvent(tick, delta, type, length), mData(NULL)
+GenericMetaEvent::GenericMetaEvent(long tick, long delta, MetaEventData& info)
+	: MetaEvent(tick, delta, info.type, info.length), mData(NULL)
 {
-	mData = data;
+	mData = info.data;
 
-	cout << "Warning: GenericMetaEvent used because type "  << type << " wasn't recognized or unexpected data length ("<< length->getValue() <<") for the type.";
+	cout << "Warning: GenericMetaEvent used because type "  << info.type << " wasn't recognized or unexpected data length ("<< info.length->getValue() <<") for the type.";
+
+	// make sure to keep data pointers
+	info.destroy = false;
 }
 
 GenericMetaEvent::~GenericMetaEvent()
@@ -29,9 +32,9 @@ void GenericMetaEvent::writeToFile(ostream & output) {
 	output.write(mData, sizeof(&mData));
 }
 
-int GenericMetaEvent::CompareTo(MidiEvent *other) {
+int GenericMetaEvent::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 

@@ -192,7 +192,7 @@ namespace Lab {
     // sample MML from http://www.g200kg.com/en/docs/webmodular/
     // t150 e-d-<g-4>g-rg-4e-d-<g-4>g-rg-4e-d-<g-4>g-4<e-4>g-4<d-4>frf4e-d-<d-4>frf4e-d-<d-4>frf4e-d-<d-4>f4<e-4>f4<g-4>g-rg-4
     
-	MidiFile* MidiSong::parseMML(char const*const mmlStr, int length, bool verbose)
+	MidiFile* MidiSong::parseMML(char const*const mmlStr, int length)
     {
 		MidiFile* mMidiFile = new MidiFile();
 		int ticksPerBeat = 240;//mMidiFile->getResolution();  // 480

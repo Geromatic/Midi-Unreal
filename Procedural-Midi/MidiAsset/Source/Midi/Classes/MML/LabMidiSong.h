@@ -52,8 +52,7 @@ namespace Lab {
 
     class MidiSong {
     public:
-        static MidiFile* parseMML(char const*const mmlStr, int length, bool verbose);
-		static void parseMML(char const*const midifilePath, bool verbose);
+        static MidiFile* parseMML(char const*const mmlStr, int length);
 
 		void LoadString(const string &data);
 

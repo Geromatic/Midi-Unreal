@@ -2,7 +2,7 @@
 
 
 #include "MidiAssetEditorPrivatePCH.h"
-#include "ModuleInterface.h"
+#include "Modules/ModuleInterface.h"
 
 #include "./Styles/MidiAssetEditorStyle.h"
 

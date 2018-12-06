@@ -2,10 +2,7 @@
 
 #pragma once
 
-// somehow there is a linker bug with generated files
-// this is a workaround 
-#include "Engine.h"
-
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "MidiUtils.generated.h"
 
 // Middle Key Notes
@@ -172,6 +169,9 @@ struct FMidiClockEvent
 		Data = 0;
 	}
 };
+
+
+
 /**
  * MIDI Frequency Conversion Utility
  */

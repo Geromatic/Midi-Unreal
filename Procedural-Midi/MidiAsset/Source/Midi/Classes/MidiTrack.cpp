@@ -62,7 +62,7 @@ MidiTrack::~MidiTrack()
 // sort MIDI predicate
 inline static bool ConstPredicate(const MidiEvent* ip1, const MidiEvent* ip2)
 {
-	int value = ((MidiEvent*)ip1)->CompareTo((MidiEvent*)ip2);
+	int value = ((MidiEvent*)ip1)->compareTo((MidiEvent*)ip2);
 
 	// somehow value should be less then else it flips the MIDI file
 	return value < 0;
@@ -84,7 +84,7 @@ void MidiTrack::readTrackData(istream & input)
 		}
 
 		if (VERBOSE) {
-			cout << E->ToString().c_str();
+			cout << E->toString().c_str();
 		}
 
 		// Not adding the EndOfTrack event here allows the track to be edited
@@ -119,6 +119,7 @@ long MidiTrack::getLengthInTicks() {
 		return 0;
 	}
 
+	// get the last note
 	MidiEvent * E = *(--mEvents.end());
 	return E->getTick();
 }
@@ -242,7 +243,7 @@ void MidiTrack::dumpEvents() {
 	for (it = mEvents.begin();
 		it != mEvents.end();
 		it++) {
-		cout << (*it)->ToString().c_str();
+		cout << (*it)->toString().c_str();
 	}
 }
 
@@ -290,7 +291,7 @@ void MidiTrack::writeToFile(ostream & output) {
 		it++) {
 		MidiEvent * _event = *it;
 		if (VERBOSE) {
-			cout << "Writing: " << _event->ToString().c_str();
+			cout << "Writing: " << _event->toString().c_str();
 		}
 
 		_event->writeToFile(output, _event->requiresStatusByte(lastEvent));

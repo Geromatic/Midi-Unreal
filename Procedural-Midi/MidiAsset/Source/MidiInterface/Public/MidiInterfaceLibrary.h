@@ -3,9 +3,9 @@
 #pragma once
 
 #include "RtMidi.h"
-
 #include "MidiUtils.h"
 
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "MidiInterfaceLibrary.generated.h"
 
 enum EPortType

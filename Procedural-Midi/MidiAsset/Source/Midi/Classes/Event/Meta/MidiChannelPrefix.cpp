@@ -2,6 +2,7 @@
 // Updated 2016 Scott Bishel
 
 #include "MidiChannelPrefix.h"
+#include "GenericMetaEvent.h"
 
 MidiChannelPrefix::MidiChannelPrefix(long tick, long delta, int channel)
 	: MetaEvent(tick, delta, MetaEvent::MIDI_CHANNEL_PREFIX, new VariableLengthInt(4))
@@ -23,28 +24,31 @@ int MidiChannelPrefix::getEventSize() {
 void MidiChannelPrefix::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3;
+	int size = getEventSize() - 3; // 1
 	output.put((char)size);
 	output.put((char)mChannel);
 }
 
-MidiChannelPrefix * MidiChannelPrefix::parseMidiChannelPrefix(long tick, long delta, istream & input) {
-
-	input.ignore();		// Size = 1;
+MetaEvent * MidiChannelPrefix::parseMidiChannelPrefix(long tick, long delta, MetaEventData& info) {
+	// Check if valid Event
+	if (info.length->getValue() != 1)
+	{
+		return new GenericMetaEvent(tick, delta, info);
+	}
 
 	int channel = 0;
-	channel = input.get();
+	channel = info.data[0];
 
 	return new MidiChannelPrefix(tick, delta, channel);
 }
 
-int MidiChannelPrefix::CompareTo(MidiEvent *other) {
+int MidiChannelPrefix::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 
-	// events are not the same
+	// Check events are not the same
 	if (!(other->getType() == this->getType())) {
 		return 1;
 	}

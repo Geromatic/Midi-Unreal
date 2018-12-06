@@ -2,6 +2,7 @@
 // Updated 2016 Scott Bishel
 
 #include "SequenceNumber.h"
+#include "GenericMetaEvent.h"
 
 SequenceNumber::SequenceNumber(long tick, long delta, int number)
 	: MetaEvent(tick, delta, MetaEvent::SEQUENCE_NUMBER, new VariableLengthInt(2))
@@ -22,7 +23,7 @@ int SequenceNumber::getSequenceNumber() {
 void SequenceNumber::writeToFile(ostream& output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3;
+	int size = getEventSize() - 3; // 2
 	output.put((char)size);
 	int high = getMostSignificantBits();
 	int low = getLeastSignificantBits();
@@ -30,25 +31,28 @@ void SequenceNumber::writeToFile(ostream& output) {
 	output.put((char)low);
 }
 
-SequenceNumber * SequenceNumber::parseSequenceNumber(long tick, long delta, istream & input) {
-
-	input.ignore();		// Size = 2;
+MetaEvent* SequenceNumber::parseSequenceNumber(long tick, long delta, MetaEventData& info) {
+	// Check if valid Event
+	if (info.length->getValue() != 2)
+	{
+		return new GenericMetaEvent(tick, delta, info);
+	}
 
 	int msb = 0, lsb = 0;
-	msb = input.get();
-	lsb = input.get();
+	msb = info.data[0];
+	lsb = info.data[1];
 	int number = (msb << 8) + lsb;
 
 	return new SequenceNumber(tick, delta, number);
 }
 
-int SequenceNumber::CompareTo(MidiEvent *other) {
+int SequenceNumber::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 
-	// events are not the same
+	// Check events are not the same
 	if (!(other->getType() == this->getType())) {
 		return 1;
 	}

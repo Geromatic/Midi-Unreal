@@ -67,13 +67,13 @@ void SystemExclusiveEvent::writeToFile(ostream & output, bool writeType) {
 	output.write(mData, sizeof(&mData));
 }
 
-int SystemExclusiveEvent::CompareTo(MidiEvent *other) {
+int SystemExclusiveEvent::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 
-	// Events are the same
+	// Check Events are the same
 	if (other->getType() == this->getType()) {
 		string curr = mData;
 		string comp = (static_cast<SystemExclusiveEvent*>(other)->mData);

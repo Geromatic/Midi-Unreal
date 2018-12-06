@@ -16,19 +16,15 @@ public class Midi : ModuleRules
 
         PublicIncludePaths.AddRange(
 			new string[] {
-				"Midi/Public"
 			}
 			);
 				
-		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				"Midi/Private",
                 "Midi/Classes",
             }
 			);
 			
-		
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
@@ -36,7 +32,6 @@ public class Midi : ModuleRules
 			}
 			);
 			
-		
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{

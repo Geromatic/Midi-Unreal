@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "HAL/Runnable.h"
+#include "HAL/RunnableThread.h" 
+
 class FRunnable;
 class FRunnableThread;
 class MidiProcessor;

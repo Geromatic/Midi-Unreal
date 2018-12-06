@@ -53,6 +53,6 @@ protected:
 public:
 	void writeToFile(ostream & output);
 
-	static SmpteOffset * parseSmpteOffset(long tick, long delta, istream & input);
-	int CompareTo(MidiEvent *other);
+	static MetaEvent * parseSmpteOffset(long tick, long delta, MetaEventData& info);
+	int compareTo(MidiEvent *other);
 };

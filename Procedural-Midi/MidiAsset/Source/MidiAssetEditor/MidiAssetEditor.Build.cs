@@ -21,12 +21,17 @@ public class MidiAssetEditor : ModuleRules
 
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				"MidiAssetEditor/Private",
-				"MidiAssetEditor/Private/Factories",
 			}
 		);
 
-		PrivateDependencyModuleNames.AddRange(
+        PublicDependencyModuleNames.AddRange(
+            new string[] {
+                            "Core",
+                            "CoreUObject",
+            }
+        );
+
+        PrivateDependencyModuleNames.AddRange(
 			new string[] {
 				"ContentBrowser",
 				"Core",
@@ -40,7 +45,7 @@ public class MidiAssetEditor : ModuleRules
 				"SlateCore",
                 "MidiAsset",
 				"UnrealEd",
-			}
+            }
 		);
 
 		PrivateIncludePathModuleNames.AddRange(

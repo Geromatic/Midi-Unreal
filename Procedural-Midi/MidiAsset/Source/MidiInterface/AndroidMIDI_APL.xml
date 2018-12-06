@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ARToolKit plugin additions-->
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- init section is always evaluated once per architecture -->
+	<init>
+		<log text="AndroidMidi init"/>
+	</init>
+	
+	<androidManifestUpdates>
+		<addPermission android:name="android.permission.MIDI_SERVICE"/>
+		<addFeature android:name="android.software.midi" android:required="true"/>
+	</androidManifestUpdates>
+
+	<!-- optional additions to the GameActivity imports in GameActivity.java -->
+	<gameActivityImportAdditions>
+		<insert>
+import android.widget.Toast;
+import android.media.midi;
+import java.util.List; 
+import java.io.IOException;
+import android.util.Log;
+		</insert>
+	</gameActivityImportAdditions>
+	
+	<gameActivityClassAdditions>
+		<insert>
+			MidiManager midi;
+			MidiDeviceInfo info;
+			MidiInputPort inputPort;
+			MidiOutputPort outputPort;
+			public native boolean nativeGetMessage(byte[] data);
+			
+			public void AndroidThunkJava_startMidi()
+			{
+				if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_MIDI)) {
+	
+					midi = (MidiManager)context.getSystemService(android.content.Context.MIDI_SERVICE);
+					
+					MidiDeviceInfo[] infos;
+					try { 
+						info = midi.getDevices()[0];
+					} catch (IOException t) {
+						android.util.Log.e("ARToolKitLog", "Cannot Find Devices!", t);
+					}
+					return;
+
+					midi.registerDeviceCallback(new MidiManager.DeviceCallback() {
+						public void onDeviceAdded( MidiDeviceInfo info ) {
+
+						}
+						public void onDeviceRemoved( MidiDeviceInfo info ) {
+
+						}
+					  });
+					  
+				}
+			}
+			
+			class MyReceiver extends MidiReceiver {
+				public void onSend(byte[] data, int offset,
+						int count, long timestamp) throws IOException {
+					// parse MIDI or whatever
+					nativeGetMessage(data);
+				}
+			}
+			
+			public void AndroidThunkJava_stopMidi()
+			{
+
+			}
+
+			void AndroidThunkJava_openPort()
+			{
+				if(info == null) return;
+				
+				/*
+				
+				midi.openDevice(info, new MidiManager.OnDeviceOpenedListener() {
+				@Override
+				public void onDeviceOpened(MidiDevice device) {
+					if (device == null) {
+						Log.e(TAG, "could not open device " + info);
+					} else {
+						inputPort = device.openInputPort(0);
+						
+						//outputPort = device.openOutputPort(0);
+						//outputPort.connect(new MyReceiver());
+					}
+				}, new Handler(Looper.getMainLooper())
+				);
+				
+				*/
+			}
+
+			int AndroidThunkJava_getPortCountIn()
+			{
+				if(info == null) return 0;
+				return info.getOutputPortCount();
+			}
+
+			String AndroidThunkJava_getPortName()
+			{
+				if(info == null) return "";
+				MidiDeviceInfo.PortInfo[] portInfos = info.getPorts();
+				String portName = portInfos[0].getName();
+
+				return portName;
+			}
+
+			void AndroidThunkJava_closePort()
+			{
+				if(outputPort != null)
+					outputPort.close();
+				if(inputPort != null)
+					inputPort.close();
+			}
+
+			int AndroidThunkJava_getPortCountOut()
+			{
+				if(info == null) return 0;
+				return info.getInputPortCount();
+			}
+
+			void AndroidThunkJava_sendMessage( byte[] buffer, int numBytes )
+			{
+				if(inputPort == null) return;
+				inputPort.send(buffer, 0, numBytes);
+			}
+			
+		</insert>
+	</gameActivityClassAdditions>
+
+	<!-- optional additions to GameActivity onCreate in GameActivity.java -->
+	<gameActivityOnCreateAdditions>
+		<insert>
+		//Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+		//AndroidThunkJava_Toast();
+		</insert>
+	</gameActivityOnCreateAdditions>
+
+
+</root>

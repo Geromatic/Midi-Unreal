@@ -54,11 +54,11 @@ public:
 	*  -1:	Current event time is less then Other
 	*  1:	Current event time is greater then other
 	*/
-	virtual int CompareTo(MidiEvent *other);
+	virtual int compareTo(MidiEvent *other);
 
 private:
 	static bool verifyIdentifier(int id);
 
 public:
-	virtual string ToString();
+	virtual string toString();
 };

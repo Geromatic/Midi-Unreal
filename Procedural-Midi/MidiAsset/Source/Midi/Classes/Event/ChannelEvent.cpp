@@ -66,9 +66,9 @@ int ChannelEvent::getEventSize() {
 	}
 }
 
-int ChannelEvent::CompareTo(MidiEvent *other) {
+int ChannelEvent::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::CompareTo(other);
+	int value = MidiEvent::compareTo(other);
 	if (value != 0)
 		return value;
 

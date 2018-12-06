@@ -31,5 +31,5 @@ private:
 	void buildBytes();
 
 public:
-	string ToString();
+	string toString();
 };

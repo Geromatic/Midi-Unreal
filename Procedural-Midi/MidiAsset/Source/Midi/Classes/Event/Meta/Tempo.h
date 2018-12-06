@@ -33,6 +33,6 @@ protected:
 public:
 	void writeToFile(ostream & output);
 
-	static Tempo * parseTempo(long tick, long delta, istream & input);
-	int CompareTo(MidiEvent *other);
+	static MetaEvent * parseTempo(long tick, long delta, MetaEventData& info);
+	int compareTo(MidiEvent *other);
 };

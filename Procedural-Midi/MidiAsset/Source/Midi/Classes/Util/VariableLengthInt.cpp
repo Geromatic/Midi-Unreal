@@ -98,7 +98,7 @@ void VariableLengthInt::buildBytes() {
 	}
 }
 
-string VariableLengthInt::ToString() {
+string VariableLengthInt::toString() {
 	stringstream ss;
 	ss << MidiUtil::bytesToHex(mBytes) << " (" << mValue << ")";
 	return ss.str();

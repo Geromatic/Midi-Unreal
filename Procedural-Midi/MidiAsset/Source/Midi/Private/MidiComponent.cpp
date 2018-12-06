@@ -3,6 +3,10 @@
 #include "MidiComponent.h"
 #include "MidiPrivatePCH.h"
 
+// Unreal Engine Files
+#include "Engine/Engine.h"
+#include "Misc/FileHelper.h"
+
 #include "MidiUtils.h"
 #include "MidiFile.h"
 #include "Util/MidiUtil.h"
@@ -202,15 +206,15 @@ void UMidiComponent::start(bool background, bool UseGameTime) {
 	if (!isRunning()) {
 		InBackground = background;
 		this->isGameTime = UseGameTime;
-	}
 
-	if(UseGameTime) {
-		mProcessor.start(GetWorld()->TimeSeconds * 1000.0f);
-		mProcessor.milliFunction = NULL;
-	}
-	else {
-		mProcessor.start(FPlatformTime::Cycles());
-		mProcessor.milliFunction = FPlatformTime::ToMilliseconds;
+		if (UseGameTime) {
+			mProcessor.milliFunction = NULL;
+			mProcessor.start(GetWorld()->TimeSeconds * 1000.0f);
+		}
+		else {
+			mProcessor.milliFunction = FPlatformTime::ToMilliseconds;
+			mProcessor.start(FPlatformTime::Cycles());
+		}
 	}
 }
 
@@ -263,7 +267,7 @@ float UMidiComponent::GetDuration()
 		while (true) {
 
 			const double msElapsed = 1.0;
-			double ticksElapsed = (((msElapsed * 1000.0) * mPPQ) / mMPQN) * mProcessor.PlayRate;
+			double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * mProcessor.PlayRate;
 
 			mMsElapsed += msElapsed;
 			mTicksElapsed += ticksElapsed;

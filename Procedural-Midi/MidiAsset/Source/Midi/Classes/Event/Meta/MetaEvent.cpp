@@ -49,13 +49,11 @@ void MetaEvent::writeToFile(ostream & output) {
 
 MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {
 
-	// Get the type of event
-	int type = 0;
-	type = input.get();
+	MetaEventData eventData = MetaEventData(input);
 
 	// Set whether event is a text type event
 	bool isText = false;
-	switch (type) {
+	switch (eventData.type) {
 	case SEQUENCE_NUMBER:
 	case MIDI_CHANNEL_PREFIX:
 	case END_OF_TRACK:
@@ -78,36 +76,9 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {
 	}
 
 	if (isText) {
-		// Get the message length
-		VariableLengthInt * length = new VariableLengthInt(input);
-		char * buffer = new char[length->getValue()];
-		// clear out buffer in case
-		for (int i = 0; i < length->getValue(); i++) {
-			buffer[i] = 0;
-		}
+		string text = eventData.data;
 
-		// Read the string value
-		input.read(buffer, length->getValue());
-		string text = buffer;
-
-		// remove unneeded data
-		switch (type)
-		{
-		case TEXT_EVENT:
-		case COPYRIGHT_NOTICE:
-		case TRACK_NAME:
-		case INSTRUMENT_NAME:
-		case LYRICS:
-		case MARKER:
-		case CUE_POINT:
-			delete[] buffer;
-			buffer = NULL;
-		case SEQUENCER_SPECIFIC:
-			delete length;
-			length = NULL;
-		}
-
-		switch (type) {
+		switch (eventData.type) {
 		case TEXT_EVENT:
 			return new Text(tick, delta, text);
 		case COPYRIGHT_NOTICE:
@@ -123,30 +94,34 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {
 		case CUE_POINT:
 			return new CuePoint(tick, delta, text);
 		case SEQUENCER_SPECIFIC:
-			return new SequencerSpecificEvent(tick, delta, buffer);
+			eventData.destroy = false;
+			delete eventData.length;
+			eventData.length = NULL;
+
+			return new SequencerSpecificEvent(tick, delta, eventData.data);
 		default:
-			return new GenericMetaEvent(tick, delta, type, length, buffer);
+			return new GenericMetaEvent(tick, delta, eventData);
 		}
 	}
 
-	switch (type) {
+	switch (eventData.type) {
 	case SEQUENCE_NUMBER:
-		return SequenceNumber::parseSequenceNumber(tick, delta, input);
+		return SequenceNumber::parseSequenceNumber(tick, delta, eventData);
 	case MIDI_CHANNEL_PREFIX:
-		return MidiChannelPrefix::parseMidiChannelPrefix(tick, delta, input);
+		return MidiChannelPrefix::parseMidiChannelPrefix(tick, delta, eventData);
 	case END_OF_TRACK:
 		// ignore next byte
-		input.ignore(); // Size = 0;
+//		input.ignore(); // Size = 0;
 
 		return new EndOfTrack(tick, delta);
 	case TEMPO:
-		return Tempo::parseTempo(tick, delta, input);
+		return Tempo::parseTempo(tick, delta, eventData);
 	case SMPTE_OFFSET:
-		return SmpteOffset::parseSmpteOffset(tick, delta, input);
+		return SmpteOffset::parseSmpteOffset(tick, delta, eventData);
 	case TIME_SIGNATURE:
-		return TimeSignature::parseTimeSignature(tick, delta, input);
+		return TimeSignature::parseTimeSignature(tick, delta, eventData);
 	case KEY_SIGNATURE:
-		return KeySignature::parseKeySignature(tick, delta, input);
+		return KeySignature::parseKeySignature(tick, delta, eventData);
 	}
 
 	// This should never run else something has gone wrong

@@ -1,7 +1,8 @@
 // Copyright 1998-2015 Epic Games, Inc. All Rights Reserved.
 
 #include "MidiAssetPrivatePCH.h"
-#include "ModuleInterface.h"
+#include "Modules/ModuleInterface.h"
+#include "Modules/ModuleManager.h"
 
 
 /**

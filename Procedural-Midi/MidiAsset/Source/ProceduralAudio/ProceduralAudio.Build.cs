@@ -16,15 +16,12 @@ public class ProceduralAudio : ModuleRules
 
         PublicIncludePaths.AddRange(
 			new string[] {
-				"ProceduralAudio/Public"
 			}
 			);
 				
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				"ProceduralAudio/Private",
-                "ProceduralAudio/Classes",
             }
 			);
 			
