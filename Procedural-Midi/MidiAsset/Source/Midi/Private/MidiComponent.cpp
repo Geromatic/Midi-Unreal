@@ -77,9 +77,9 @@ void UMidiComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActor
 
 	else
 		while (!mQueue.IsEmpty()) {
-			FMidiEvent _midiEvent;
+			MidiCallbackMessage _midiEvent;
 			mQueue.Dequeue(_midiEvent);
-			OnMidiEvent.Broadcast(_midiEvent);
+			OnMidiEvent.Broadcast(_midiEvent.Event, _midiEvent.ms, _midiEvent.trackID);
 		}
 }
 
@@ -149,7 +149,7 @@ void UMidiComponent::LoadMML(FString path) {
 	mProcessor.load(*mMidiFile);
 }
 
-void UMidiComponent::onEvent(MidiEvent* _event) {
+void UMidiComponent::onEvent(MidiEvent* _event, long ms) {
 	// Channel Event
 	if (_event->getType() >= ChannelEvent::NOTE_OFF && _event->getType() <= ChannelEvent::PITCH_BEND) {
 		ChannelEvent* channelEvent = static_cast<ChannelEvent*>(_event);
@@ -167,10 +167,12 @@ void UMidiComponent::onEvent(MidiEvent* _event) {
 				_midiEvent.Data2 = 0 & 0XFF;
 			}
 		}
-		if(InBackground)
-			mQueue.Enqueue(_midiEvent);
+		if (InBackground) {
+			MidiCallbackMessage msg = { _midiEvent, ms, mProcessor._trackID };
+			mQueue.Enqueue(msg);
+		}
 		else
-			OnMidiEvent.Broadcast(_midiEvent);
+			OnMidiEvent.Broadcast(_midiEvent, ms, mProcessor._trackID);
 	}
 }
 
@@ -179,9 +181,6 @@ void UMidiComponent::onStart(bool fromBeginning) {
 	if (InBackground) {
 		mWorker = new FMidiProcessorWorker(&mProcessor, this->isGameTime);
 	}
-	//else
-	//	if (isGameTime)
-	//		mProcessor.setStartClock(GetWorld()->TimeSeconds * 1000.0f);
 
 	OnStart.Broadcast(fromBeginning); 
 }
@@ -207,11 +206,11 @@ void UMidiComponent::start(bool background, bool UseGameTime) {
 
 	if(UseGameTime) {
 		mProcessor.start(GetWorld()->TimeSeconds * 1000.0f);
-		mProcessor.mClockType = 2;
+		mProcessor.milliFunction = NULL;
 	}
 	else {
 		mProcessor.start(FPlatformTime::Cycles());
-		mProcessor.mClockType = 1;
+		mProcessor.milliFunction = FPlatformTime::ToMilliseconds;
 	}
 }
 
@@ -248,7 +247,6 @@ float UMidiComponent::GetDuration()
 	// TODO find a better solution
 	if (mMidiFile)
 	{
-
 		vector<vector<MidiEvent*>::iterator > mCurrEvents;
 		vector<vector<MidiEvent*>::iterator > mCurrEventsEnd;
 		vector<MidiTrack*>& tracks = mMidiFile->getTracks();

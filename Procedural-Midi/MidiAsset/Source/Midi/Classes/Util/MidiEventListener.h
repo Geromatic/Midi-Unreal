@@ -8,10 +8,10 @@
 /**
  * 
  */
-class MIDI_API MidiEventListener
+class MidiEventListener
 {
 public:
 	virtual void onStart(bool fromBeginning) {};
-	virtual void onEvent(MidiEvent* _event) {};
+	virtual void onEvent(MidiEvent* _event, long ms) {};
 	virtual void onStop(bool finished) {};
 };

@@ -3,7 +3,6 @@
 #include "MidiAssetFactory.h"
 #include "MidiAssetEditorPrivatePCH.h"
 
-
 /* UMidiAssetFactory structors
  *****************************************************************************/
 

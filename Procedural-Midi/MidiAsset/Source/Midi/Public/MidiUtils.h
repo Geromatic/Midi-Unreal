@@ -172,6 +172,9 @@ struct FMidiClockEvent
 		Data = 0;
 	}
 };
+
+
+
 /**
  * MIDI Frequency Conversion Utility
  */

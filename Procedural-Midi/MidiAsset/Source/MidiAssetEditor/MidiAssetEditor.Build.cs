@@ -40,7 +40,7 @@ public class MidiAssetEditor : ModuleRules
 				"SlateCore",
                 "MidiAsset",
 				"UnrealEd",
-			}
+            }
 		);
 
 		PrivateIncludePathModuleNames.AddRange(

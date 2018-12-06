@@ -2,17 +2,15 @@
 // Updated 2016 Scott Bishel
 
 #include "MidiProcessor.h"
-#include "MidiPrivatePCH.h"
 
 #include "../Event/Meta/Tempo.h"
 #include "../Event/Meta/TimeSignature.h"
 #include "../Event/MidiEvent.h"
 #include "../Util/MidiUtil.h"
 
-MidiProcessor::MidiProcessor() : PlayRate(1.0), mClockType(0) {
+MidiProcessor::MidiProcessor() : PlayRate(1.0) {
 	mMidiFile = NULL;
 	mMetronome = NULL;
-	mSig = NULL;
 
 	mRunning = false;
 	mTicksElapsed = 0;
@@ -24,9 +22,6 @@ MidiProcessor::~MidiProcessor()
 	if (mMetronome)
 		delete mMetronome;
 	mMetronome = NULL;
-	if (mSig)
-		delete mSig;
-	mSig = NULL;
 }
 
 void MidiProcessor::load(MidiFile & file) {
@@ -43,12 +38,8 @@ void MidiProcessor::load(MidiFile & file) {
 	mMPQN = Tempo::DEFAULT_MPQN;
 	mPPQ = mMidiFile->getResolution();
 
-	//reset metronome with a new TimeSignature
-	if (mSig)
-		delete mSig;
-	mSig = NULL;
-	mSig = new TimeSignature();
-	mMetronome = new MetronomeTick(mSig, mPPQ);
+	//reset metronome
+	mMetronome = new MetronomeTick(&mSig, mPPQ);
 
 	mCurrEvents.clear();
 	mCurrEventsEnd.clear();
@@ -83,13 +74,9 @@ void MidiProcessor::reset() {
 	mTicksElapsed = 0;
 	mMsElapsed = 0;
 
-	//reset metronome with a new TimeSignature
-	if (mSig)
-		delete mSig;
-	mSig = NULL;
-	mSig = new TimeSignature();
+	//reset metronome
 	if (mMetronome)
-		mMetronome->setTimeSignature(mSig);
+		mMetronome->setTimeSignature(&mSig);
 
 	vector<MidiTrack*>& tracks = mMidiFile->getTracks();
 	for (int i = 0; i < (int)mCurrEvents.size(); i++) {
@@ -124,7 +111,7 @@ void MidiProcessor::dispatch(MidiEvent * _event) {
 			dispatch(mMetronome);
 		}
 	}
-	mListener->onEvent(_event);
+	mListener->onEvent(_event, mMsElapsed);
 }
 // Processes the MIDI file every tick
 void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
@@ -133,17 +120,10 @@ void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
 
 	double now = deltaTime;
 	double msElapsed = now - mLastMs;
-//	#define CLOCKS_PER_MS (CLOCKS_PER_SEC / 1000)
-	switch(mClockType) {
-		case 0: // clock()
-//			msElapsed /= CLOCKS_PER_MS;
-			break;
-		case 1: // FPlatformTime::Cycles()
-			msElapsed = FPlatformTime::ToMilliseconds(msElapsed); 
-		case 2: // Other
-			break;
-			
-	}
+
+	// workaround to allow custom timer
+	if(milliFunction != NULL)
+		msElapsed = milliFunction(msElapsed);
 
 	double ticksElapsed = MidiUtil::msToTicks(msElapsed, mMPQN, mPPQ) * PlayRate;
 	if (ticksElapsed < 1) {
@@ -166,6 +146,8 @@ void MidiProcessor::update(const double& deltaTime /*= clock()*/) {
 void MidiProcessor::process() {
 
 	for (int i = 0; i < (int)mCurrEvents.size(); i++) {
+		//TODO re-expose track
+		_trackID = i;
 		while (mCurrEvents[i] != mCurrEventsEnd[i]) {
 			MidiEvent * _event = *mCurrEvents[i];
 			if (_event->getTick() <= mTicksElapsed) {

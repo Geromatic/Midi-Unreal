@@ -16,7 +16,8 @@ class FMidiProcessorWorker;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStart, bool, beginning);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventStop, bool, finished);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEventMidiEvent, struct FMidiEvent, Event);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FEventMidiEvent, struct FMidiEvent, Event, int32, time, int, TrackID);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSysExEventReceive, const TArray<uint8>&, data, int32, time, int, TrackID);
 
 /*
 * A component that loads/plays a MIDI Asset or file
@@ -80,7 +81,7 @@ private:
 
 	// MIDI Event Listener
 
-	void onEvent(MidiEvent* _event);
+	void onEvent(MidiEvent* _event, long ms);
 	void onStart(bool fromBeginning);
 	void onStop(bool finish);
 
@@ -109,6 +110,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	bool isRunning();
 	
+	/* The resolution in pulses, or ticks, per quarter note */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Processor")
 	int GetResolution();
 	
@@ -124,9 +126,19 @@ protected:
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
 	FEventStop OnStop;
 
-	/* Called when a Midi Event is received */
+	/* Called when a Midi Event is received 
+	* @param MidiEvent - The Event
+	* @param MS - time of event occured in milliseconds
+	* @param Track ID - Which track the event happened
+	*/
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
 	FEventMidiEvent OnMidiEvent;
+
+	//UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
+	//FSysExEventReceive OnSysExEvent;
+
+	//UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
+	//	FSysExEventReceive OnMetaEvent;
 
 private:
 
@@ -137,6 +149,14 @@ private:
 	bool InBackground = false;
 	bool isGameTime;
 	
+	class MidiCallbackMessage
+	{
+	public:
+		FMidiEvent Event;
+		long ms;
+		int trackID;
+	};
+
 		// Handle Data Racing 
-	TQueue<FMidiEvent> mQueue;
+	TQueue<MidiCallbackMessage> mQueue;
 };
