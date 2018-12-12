@@ -21,7 +21,7 @@ private:
 	bool mSizeNeedsRecalculating;
 	bool mClosed;
 
-	vector<MidiEvent*> mEvents;
+	std::vector<MidiEvent*> mEvents;
 
 public:
 	static MidiTrack* createTempoTrack();
@@ -30,7 +30,7 @@ public:
 	MidiTrack(istream & input);
 	~MidiTrack();
 
-	vector<MidiEvent*>& getEvents();
+	std::vector<MidiEvent*>& getEvents();
 
 private:
 	void readTrackData(istream & input);

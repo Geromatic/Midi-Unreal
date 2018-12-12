@@ -62,16 +62,14 @@ void MidiProcessor::start(const double& deltaTime /*= clock()*/) {
 }
 
 void MidiProcessor::stop() {
-	mRunning = false;
+	if (!mRunning) return;
 
+	mRunning = false;
 	mListener->onStop(false);
 }
 
 void MidiProcessor::reset() {
 	mRunning = false;
-
-	// makes sure thread is stopped
-	mListener->onStop(false);
 
 	mTicksElapsed = 0;
 	mMsElapsed = 0;
@@ -169,6 +167,8 @@ void MidiProcessor::process() {
 	}
 
 	mRunning = false;
+	this->reset();
+	
 	mListener->onStop(true);
 
 }

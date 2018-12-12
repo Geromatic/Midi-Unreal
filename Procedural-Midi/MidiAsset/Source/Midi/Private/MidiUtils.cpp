@@ -3,10 +3,6 @@
 #include "MidiUtils.h"
 #include "MidiPrivatePCH.h"
 
-#include "MidiFile.h"
-#include "Event/ChannelEvent.h"
-#include "Event/NoteOn.h"
-#include "Event/NoteOff.h"
 
 const int CENTER_NOTE = 69;
 const float CENTER_FREQUENCY = 440.0;

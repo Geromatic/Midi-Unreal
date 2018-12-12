@@ -3,7 +3,7 @@
 #pragma once
 
 #include "RtMidi.h"
-#include "MidiUtils.h"
+#include "MidiStruct.h"
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MidiInterfaceLibrary.generated.h"
@@ -19,10 +19,10 @@ struct FMidiDevice {
 
 	GENERATED_BODY()
 
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MIDI|Device")
-		FString Name;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MIDI|Device")
-		uint8 Port;
+	FString Name;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MIDI|Device")
+	uint8 Port;
 
 	//Constructor
 	FMidiDevice()
@@ -62,12 +62,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static void CloseMidiOutput();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Interface", meta=(DisplayName="IsMidiOutputOpen"))
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "MIDI|Interface", meta=(DisplayName="Is Midi Output Open"))
 	static bool isOutputOpen();
 	
-	// Sends a Midi Event to a Device
+	// Sends a MIDI Event to a Device
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
 	static void SendMidiEvent(const FMidiEvent& Event);
+
+	// Sends Raw MIDI data to a MIDI output device
+	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
+	static void SendMidiRaw(const TArray<uint8>& Data);
 	
 	// Gets all the Input and Output devices
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")

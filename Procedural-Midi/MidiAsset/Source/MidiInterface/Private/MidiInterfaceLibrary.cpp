@@ -19,7 +19,7 @@ bool UMidiInterface::OpenMidiInput(uint8 port)
 {
 	// Check available ports.
 	unsigned int nPorts = midiIn.getPortCount();
-	if (nPorts == 0 || port >= nPorts) {
+	if (nPorts < 1 || port >= nPorts) {
 		UE_LOG(LogTemp, Display, TEXT("No ports available!"));
 		return false;
 	}
@@ -39,14 +39,14 @@ bool UMidiInterface::OpenMidiInput(uint8 port)
 	// Don't ignore sysex, timing, or active sensing messages.
 //	midiIn.ignoreTypes(false, false, false);
 
-	return true;
+	return midiIn.isPortOpen();
 }
 
 bool UMidiInterface::OpenMidiOutput(uint8 port)
 {
 	// Check available ports.
 	unsigned int nPorts = midiOut.getPortCount();
-	if (nPorts == 0 || port >= nPorts) {
+	if (nPorts < 1 || port >= nPorts) {
 		UE_LOG(LogTemp, Display, TEXT("No ports available!"));
 		return false;
 	}
@@ -58,7 +58,7 @@ bool UMidiInterface::OpenMidiOutput(uint8 port)
 
 	midiOut.openPort(port);
 
-	return true;
+	return midiOut.isPortOpen();
 }
 
 
@@ -79,15 +79,20 @@ bool UMidiInterface::isOutputOpen()
 
 void UMidiInterface::SendMidiEvent(const FMidiEvent& Event)
 {
-	std::vector<uint8> msg;
 	uint8 status = ((uint8)Event.Type << 4) | Event.Channel;
-	msg.push_back(status);
-	msg.push_back(Event.Data1);
+	uint8 data[3] = { status, Event.Data1, Event.Data2 };
+
 	// check for program change or CHANNEL_AFTERTOUCH
 	if (Event.Type != EMidiTypeEnum::MTE_PROGRAM_CHANGE && Event.Type != EMidiTypeEnum::MTE_CHANNEL_AFTERTOUCH) {
-		msg.push_back(Event.Data2);
+		midiOut.sendMessage(&data[0], 3);
 	}
-	midiOut.sendMessage(&msg);
+	else
+		midiOut.sendMessage(&data[0], 2);
+}
+
+void UMidiInterface::SendMidiRaw(const TArray<uint8>& Data)
+{
+	midiOut.sendMessage(Data.GetData(), Data.Num());
 }
 
 void UMidiInterface::GetMidiDevices(TArray<FMidiDevice>& Input, TArray<FMidiDevice>& Output) {

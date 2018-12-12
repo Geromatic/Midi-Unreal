@@ -9,8 +9,8 @@ TextualMetaEvent::TextualMetaEvent(long tick, long delta, int type, string text)
 	mText = text;
 }
 
-TextualMetaEvent::~TextualMetaEvent() {
-	
+TextualMetaEvent::~TextualMetaEvent()
+{ 
 }
 
 void TextualMetaEvent::setText(string t) {
@@ -22,24 +22,27 @@ string TextualMetaEvent::getText() {
 }
 
 int TextualMetaEvent::getEventSize() {
-	return 2 + mLength->getByteCount() + (int)mText.length();
+	return 2 + mLength->getByteCount() + mLength->getValue();
 }
 
 void TextualMetaEvent::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	output.write(mLength->getBytes(), mLength->getByteCount());
-	output.write((char*)mText.c_str(), mText.length());
+	output.write(mText.data(), mLength->getValue());
 }
 
 int TextualMetaEvent::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::compareTo(other);
-	if (value != 0)
-		return value;
+	if (mTick != other->getTick()) {
+		return mTick < other->getTick() ? -1 : 1;
+	}
+	if (mDelta->getValue() != other->getDelta()) {
+		return mDelta->getValue() < other->getDelta() ? 1 : -1;
+	}
 
-	// Check events are not the same
-	if (!(other->getType() == this->getType())) {
+	// Check if event is a text type event
+	if (!(other->getType() >= TEXT_EVENT && other->getType() <= CUE_POINT)) {
 		return 1;
 	}
 

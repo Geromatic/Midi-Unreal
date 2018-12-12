@@ -8,6 +8,9 @@
 MetronomeTick::MetronomeTick(TimeSignature* sig, int resolution) 
 	: MidiEvent(0, 0), mMetronomeProgress(0.0)
 {
+	// custom type to represent class
+	mType = MetronomeTick::TYPE;
+
 	mResolution = resolution;
 
 	setTimeSignature(sig);

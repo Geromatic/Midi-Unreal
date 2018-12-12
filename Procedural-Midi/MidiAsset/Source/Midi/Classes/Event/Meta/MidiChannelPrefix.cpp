@@ -24,8 +24,7 @@ int MidiChannelPrefix::getEventSize() {
 void MidiChannelPrefix::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3; // 1
-	output.put((char)size);
+	output.put((char)1); // size
 	output.put((char)mChannel);
 }
 
@@ -36,20 +35,22 @@ MetaEvent * MidiChannelPrefix::parseMidiChannelPrefix(long tick, long delta, Met
 		return new GenericMetaEvent(tick, delta, info);
 	}
 
-	int channel = 0;
-	channel = info.data[0];
+	int channel = info.data[0];
 
 	return new MidiChannelPrefix(tick, delta, channel);
 }
 
 int MidiChannelPrefix::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::compareTo(other);
-	if (value != 0)
-		return value;
+	if (mTick != other->getTick()) {
+		return mTick < other->getTick() ? -1 : 1;
+	}
+	if (mDelta->getValue() != other->getDelta()) {
+		return mDelta->getValue() < other->getDelta() ? 1 : -1;
+	}
 
-	// Check events are not the same
-	if (!(other->getType() == this->getType())) {
+	// Check if same event type
+	if (!(other->getType() == MetaEvent::MIDI_CHANNEL_PREFIX)) {
 		return 1;
 	}
 

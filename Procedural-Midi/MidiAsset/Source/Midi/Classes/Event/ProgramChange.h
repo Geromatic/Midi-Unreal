@@ -20,6 +20,7 @@ public:
 	void setProgramNumber(int p);
 
 	enum MidiProgram {
+		/* Piano */
 		ACOUSTIC_GRAND_PIANO,
 		BRIGHT_ACOUSTIC_PIANO,
 		ELECTRIC_GRAND_PIANO,
@@ -28,6 +29,7 @@ public:
 		ELECTRIC_PIANO_2,
 		HARPSICHORD,
 		CLAVINET,
+		/* Chromatic Percussion  */
 		CELESTA,
 		GLOCKENSPIEL,
 		MUSIC_BOX,
@@ -36,6 +38,7 @@ public:
 		XYLOPHONE,
 		TUBULAR_BELLS,
 		DULCIMER,
+		/* Organ */
 		DRAWBAR_ORGAN,
 		PERCUSSIVE_ORGAN,
 		ROCK_ORGAN,
@@ -92,6 +95,7 @@ public:
 		ENGLISH_HORN,
 		BASSOON,
 		CLARINET,
+		/* Pipe */
 		PICCOLO,
 		FLUTE,
 		RECORDER,
@@ -100,6 +104,7 @@ public:
 		SHAKUHACHI,
 		WHISTLE,
 		OCARINA,
+		/* Synth Lead */
 		LEAD_1_SQUARE,
 		LEAD_2_SAWTOOTH,
 		LEAD_3_CALLIOPE,
@@ -108,6 +113,7 @@ public:
 		LEAD_6_VOICE,
 		LEAD_7_FIFTHS,
 		LEAD_8_BASS_AND_LEAD,
+		/* Synth Pad */
 		PAD_1_NEW_AGE,
 		PAD_2_WARM,
 		PAD_3_POLYSYNTH,
@@ -116,6 +122,7 @@ public:
 		PAD_6_METALLIC,
 		PAD_7_HALO,
 		PAD_8_SWEEP,
+		/* Synth Effects */
 		FX_1_RAIN,
 		FX_2_SOUNDTRACK,
 		FX_3_CRYSTAL,
@@ -124,6 +131,7 @@ public:
 		FX_6_GOBLINS,
 		FX_7_ECHOES,
 		FX_8_SCIFI,
+		/* Ethnic */
 		SITAR,
 		BANJO,
 		SHAMISEN,
@@ -132,6 +140,7 @@ public:
 		BAGPIPE,
 		FIDDLE,
 		SHANAI,
+		/* Percussive */
 		TINKLE_BELL,
 		AGOGO,
 		STEEL_DRUMS,
@@ -140,6 +149,7 @@ public:
 		MELODIC_TOM,
 		SYNTH_DRUM,
 		REVERSE_CYMBAL,
+		/* Sound Effects */
 		GUITAR_FRET_NOISE,
 		BREATH_NOISE,
 		SEASHORE,

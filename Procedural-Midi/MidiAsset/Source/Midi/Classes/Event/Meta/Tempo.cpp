@@ -44,8 +44,7 @@ int Tempo::getEventSize() {
 void Tempo::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3; // 3
-	output.put((char)size);
+	output.put((char)3); // size
 	output.write(MidiUtil::intToBytes(mMPQN, 3), 3);
 }
 
@@ -63,12 +62,15 @@ MetaEvent * Tempo::parseTempo(long tick, long delta, MetaEventData& info) {
 
 int Tempo::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::compareTo(other);
-	if (value != 0)
-		return value;
+	if (mTick != other->getTick()) {
+		return mTick < other->getTick() ? -1 : 1;
+	}
+	if (mDelta->getValue() != other->getDelta()) {
+		return mDelta->getValue() < other->getDelta() ? 1 : -1;
+	}
 
-	// Check events are not the same
-	if (!(other->getType() == this->getType())) {
+	// Check if same event type
+	if (!(other->getType() == MetaEvent::TEMPO)) {
 		return 1;
 	}
 

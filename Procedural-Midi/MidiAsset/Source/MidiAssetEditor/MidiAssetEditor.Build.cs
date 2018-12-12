@@ -16,35 +16,35 @@ public class MidiAssetEditor : ModuleRules
 			new string[] {
 				"AssetTools",
 				"MainFrame",
-			}
+            }
 		);
 
 		PrivateIncludePaths.AddRange(
 			new string[] {
-			}
+            }
 		);
 
         PublicDependencyModuleNames.AddRange(
             new string[] {
-                            "Core",
-                            "CoreUObject",
+                "Core",
+                "CoreUObject",
             }
         );
 
         PrivateDependencyModuleNames.AddRange(
 			new string[] {
-				"ContentBrowser",
-				"Core",
-				"CoreUObject",
+                "ContentBrowser",
+                "Core",
+                "CoreUObject",
                 "DesktopWidgets",
-				"EditorStyle",
-				"Engine",
-				"InputCore",
+                "EditorStyle",
+                "Engine",
+                "InputCore",
                 "Projects",
-				"Slate",
-				"SlateCore",
+                "Slate",
+                "SlateCore",
                 "MidiAsset",
-				"UnrealEd",
+                "UnrealEd",
             }
 		);
 
@@ -52,7 +52,7 @@ public class MidiAssetEditor : ModuleRules
 			new string[] {
 				"AssetTools",
 				"UnrealEd",
-			}
+            }
 		);
 	}
 }

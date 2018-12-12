@@ -6,6 +6,7 @@
 #include "../MidiEvent.h"
 
 #include <sstream>
+#include <vector>
 using namespace std;
 
 /**
@@ -22,7 +23,7 @@ protected:
 
 	virtual int getEventSize() = 0;
 public:
-	virtual void writeToFile(ostream & output, bool writeType);
+	/*virtual*/void writeToFile(ostream & output, bool writeType);
 
 protected:
 	virtual void writeToFile(ostream & output);
@@ -57,7 +58,7 @@ protected:
 		{
 			if (destroy) {
 				delete length;
-				delete []data;
+				delete data;
 
 				length = NULL;
 				data = NULL;

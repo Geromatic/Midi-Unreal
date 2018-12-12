@@ -23,12 +23,9 @@ int SequenceNumber::getSequenceNumber() {
 void SequenceNumber::writeToFile(ostream& output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3; // 2
-	output.put((char)size);
-	int high = getMostSignificantBits();
-	int low = getLeastSignificantBits();
-	output.put((char)high);
-	output.put((char)low);
+	output.put((char)2); // size
+	output.put((char)getMostSignificantBits()); // high byte
+	output.put((char)getLeastSignificantBits()); // low byte
 }
 
 MetaEvent* SequenceNumber::parseSequenceNumber(long tick, long delta, MetaEventData& info) {
@@ -38,9 +35,8 @@ MetaEvent* SequenceNumber::parseSequenceNumber(long tick, long delta, MetaEventD
 		return new GenericMetaEvent(tick, delta, info);
 	}
 
-	int msb = 0, lsb = 0;
-	msb = info.data[0];
-	lsb = info.data[1];
+	int msb = info.data[0];
+	int lsb = info.data[1];
 	int number = (msb << 8) + lsb;
 
 	return new SequenceNumber(tick, delta, number);
@@ -48,12 +44,15 @@ MetaEvent* SequenceNumber::parseSequenceNumber(long tick, long delta, MetaEventD
 
 int SequenceNumber::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::compareTo(other);
-	if (value != 0)
-		return value;
+	if (mTick != other->getTick()) {
+		return mTick < other->getTick() ? -1 : 1;
+	}
+	if (mDelta->getValue() != other->getDelta()) {
+		return mDelta->getValue() < other->getDelta() ? 1 : -1;
+	}
 
-	// Check events are not the same
-	if (!(other->getType() == this->getType())) {
+	// Check if same event type
+	if (!(other->getType() == MetaEvent::SEQUENCE_NUMBER)) {
 		return 1;
 	}
 

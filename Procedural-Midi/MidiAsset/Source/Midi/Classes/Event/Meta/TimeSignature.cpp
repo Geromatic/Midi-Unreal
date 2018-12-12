@@ -49,8 +49,7 @@ int TimeSignature::getEventSize() {
 void TimeSignature::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3; // 4
-	output.put((char)size);
+	output.put((char)4); // size
 	output.put((char)mNumerator);
 	output.put((char)mDenominator);
 	output.put((char)mMeter);
@@ -64,11 +63,10 @@ MetaEvent * TimeSignature::parseTimeSignature(long tick, long delta, MetaEventDa
 		return new GenericMetaEvent(tick, delta, info);
 	}
 
-	int num = 0, den = 0, met = 0, fps = 0;
-	num = info.data[0];
-	den = info.data[1];
-	met = info.data[2];
-	fps = info.data[3];
+	int num = info.data[0];
+	int den = info.data[1];
+	int met = info.data[2];
+	int fps = info.data[3];
 
 	den = (int)pow(2, den);
 
@@ -93,12 +91,15 @@ int TimeSignature::log2(int den) {
 
 int TimeSignature::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::compareTo(other);
-	if (value != 0)
-		return value;
+	if (mTick != other->getTick()) {
+		return mTick < other->getTick() ? -1 : 1;
+	}
+	if (mDelta->getValue() != other->getDelta()) {
+		return mDelta->getValue() < other->getDelta() ? 1 : -1;
+	}
 
-	// Check events are not the same
-	if (!(other->getType() == this->getType())) {
+	// Check if same event type
+	if (!(other->getType() == MetaEvent::TIME_SIGNATURE)) {
 		return 1;
 	}
 

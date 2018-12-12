@@ -64,8 +64,7 @@ int SmpteOffset::getEventSize() {
 void SmpteOffset::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3; // 5
-	output.put((char)size);
+	output.put((char)5); // size
 	output.put((char)mHours);
 	output.put((char)mMinutes);
 	output.put((char)mSeconds);
@@ -80,30 +79,30 @@ MetaEvent * SmpteOffset::parseSmpteOffset(long tick, long delta, MetaEventData& 
 		return new GenericMetaEvent(tick, delta, info);
 	}
 
-	int rrHours = 0;
-	rrHours = info.data[0];
-
+	int rrHours = info.data[0];
 	int rr = rrHours >> 5;
 	int fps = int(rr);
 	int hour = rrHours & 0x1F;
 
-	int min = 0, sec = 0, frm = 0, sub = 0;
-	min = info.data[1];
-	sec = info.data[2];
-	frm = info.data[3];
-	sub = info.data[4];
+	int min = info.data[1];
+	int sec = info.data[2];
+	int frm = info.data[3];
+	int sub = info.data[4];
 
 	return new SmpteOffset(tick, delta, fps, hour, min, sec, frm, sub);
 }
 
 int SmpteOffset::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::compareTo(other);
-	if (value != 0)
-		return value;
+	if (mTick != other->getTick()) {
+		return mTick < other->getTick() ? -1 : 1;
+	}
+	if (mDelta->getValue() != other->getDelta()) {
+		return mDelta->getValue() < other->getDelta() ? 1 : -1;
+	}
 
-	// Check events are not the same
-	if (!(other->getType() == this->getType())) {
+	// Check if same event type
+	if (!(other->getType() == MetaEvent::SMPTE_OFFSET)) {
 		return 1;
 	}
 

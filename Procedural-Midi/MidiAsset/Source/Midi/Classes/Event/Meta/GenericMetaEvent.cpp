@@ -17,7 +17,7 @@ GenericMetaEvent::GenericMetaEvent(long tick, long delta, MetaEventData& info)
 GenericMetaEvent::~GenericMetaEvent()
 {
 	if (mData != NULL)
-		delete[] mData;
+		delete []mData;
 	mData = NULL;
 }
 
@@ -29,14 +29,17 @@ void GenericMetaEvent::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
 	output.write(mLength->getBytes(), mLength->getByteCount());
-	output.write(mData, sizeof(&mData));
+	output.write(mData, mLength->getValue());
 }
 
 int GenericMetaEvent::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::compareTo(other);
-	if (value != 0)
-		return value;
+	if (mTick != other->getTick()) {
+		return mTick < other->getTick() ? -1 : 1;
+	}
+	if (mDelta->getValue() != other->getDelta()) {
+		return mDelta->getValue() < other->getDelta() ? 1 : -1;
+	}
 
 	return 1;
 }

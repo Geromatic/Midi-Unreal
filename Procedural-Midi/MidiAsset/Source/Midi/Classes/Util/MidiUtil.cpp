@@ -34,7 +34,7 @@ float MidiUtil::mpqnToBpm(int mpqn) {
 /**
 * Utility methods for working with bytes and byte buffers
 */
-int MidiUtil::bytesToInt(char buff[], int off, int len) {
+int MidiUtil::bytesToInt(const char buff[], int off, int len) {
 
 	int num = 0;
 
@@ -66,10 +66,10 @@ char * MidiUtil::intToBytes(int val, int byteCount) {
 	return buffer;
 }
 
-bool MidiUtil::bytesEqual(char buf1[], char buf2[], int off, int len) {
+bool MidiUtil::bytesEqual(string buf1, string buf2, int off, int len) {
 
 	for (int i = off; i < off + len; i++) {
-		if (i >= sizeof(&buf1) || i >= sizeof(&buf2)) {
+		if ( (i >= buf1.size()) || (i >= buf2.size()) ) {
 			return false;
 		}
 		if (buf1[i] != buf2[i]) {
@@ -101,9 +101,9 @@ string MidiUtil::byteToHex(char b) {
 	ss << HEX[high] << HEX[low];
 	return ss.str();
 }
-string MidiUtil::bytesToHex(char b[]) {
+string MidiUtil::bytesToHex(string b) {
 	stringstream ss;
-	for (int i = 0; i < sizeof(&b); i++) {
+	for (int i = 0; i < b.size(); i++) {
 		ss << byteToHex(b[i]) << " ";
 	}
 	return ss.str();

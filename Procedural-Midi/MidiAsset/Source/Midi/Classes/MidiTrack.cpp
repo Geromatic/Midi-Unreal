@@ -9,8 +9,6 @@
 #include "Event/Meta/Tempo.h"
 #include "Event/Meta/EndOfTrack.h"
 
-#include <algorithm>    // std::sort
-
 const char MidiTrack::IDENTIFIER[] = { 'M', 'T', 'r', 'k' };
 
 MidiTrack* MidiTrack::createTempoTrack() {
@@ -38,7 +36,7 @@ MidiTrack::MidiTrack(istream & input)
 	char buffer[4] = { 0 };
 	input.read(buffer, 4);
 
-	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4)) {
+	if (!MidiUtil::bytesEqual(buffer, IDENTIFIER, 0, 4)) {
 		cerr << "Track identifier did not match MTrk!";
 		return;
 	}
@@ -57,15 +55,6 @@ MidiTrack::~MidiTrack()
 		it++) {
 		delete *it;
 	}
-}
-
-// sort MIDI predicate
-inline static bool ConstPredicate(const MidiEvent* ip1, const MidiEvent* ip2)
-{
-	int value = ((MidiEvent*)ip1)->compareTo((MidiEvent*)ip2);
-
-	// somehow value should be less then else it flips the MIDI file
-	return value < 0;
 }
 
 void MidiTrack::readTrackData(istream & input)
@@ -94,12 +83,9 @@ void MidiTrack::readTrackData(istream & input)
 		}
 		mEvents.push_back(E);
 	}
-
-	// TODO allow to resort
-//	std::sort(mEvents.begin(), mEvents.end(), ConstPredicate);
 }
 
-vector<MidiEvent*>& MidiTrack::getEvents() {
+std::vector<MidiEvent*>& MidiTrack::getEvents() {
 	return mEvents;
 }
 
@@ -171,9 +157,6 @@ void MidiTrack::insertEvent(MidiEvent * newEvent) {
 	if (next != NULL) {
 		next->setDelta(next->getTick() - newEvent->getTick());
 	}
-
-	// TODO allow to resort
-//	std::sort(mEvents.begin(), mEvents.end(), ConstPredicate);
 
 	mSize += newEvent->getSize();
 	if (newEvent->getType() == MetaEvent::END_OF_TRACK) {

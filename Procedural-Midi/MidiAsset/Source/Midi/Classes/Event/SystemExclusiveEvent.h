@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ChannelEvent.h"
+#include <string.h>
 
 /**
  * System Exclusive MIDI Event
@@ -12,15 +13,15 @@
 class SystemExclusiveEvent : public MidiEvent
 {
 	VariableLengthInt * mLength;
-	char * mData;
+	string * mData;
 
 public:
-	SystemExclusiveEvent(int type, long tick, char data[]);
-	SystemExclusiveEvent(int type, long tick, long delta, char data[]);
+	SystemExclusiveEvent(int type, long tick, string* data);
+	SystemExclusiveEvent(int type, long tick, long delta, string* data);
 	~SystemExclusiveEvent();
 
-	char* getData();
-	void setData(char data[]);
+	string* getData();
+	void setData(string* data);
 
 	bool requiresStatusByte(MidiEvent* prevEvent);
 

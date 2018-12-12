@@ -13,12 +13,13 @@ using namespace std;
 class VariableLengthInt
 {
 	int mValue;
-	char mBytes[4];
+	char* mBytes;
 	int mSizeInBytes;
 
 public:
 	VariableLengthInt(int value);
 	VariableLengthInt(istream & input);
+	~VariableLengthInt();
 
 	void setValue(int value);
 	int getValue();

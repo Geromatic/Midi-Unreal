@@ -36,6 +36,9 @@ public:
 	std::string toString();
 
 	int compareTo(MidiEvent* o);
+
+	// TODO custom event type
+	static const int TYPE = -255;
 protected:
 	int getEventSize();
 

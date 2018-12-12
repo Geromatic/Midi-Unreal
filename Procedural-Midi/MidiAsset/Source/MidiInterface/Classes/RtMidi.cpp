@@ -39,8 +39,6 @@
 #include "RtMidi.h"
 #include <sstream>
 
-#include "Engine/Engine.h"
-
 #if defined(__MACOSX_CORE__)
 /*  #if TARGET_OS_IPHONE
     #define AudioGetCurrentHostTime CAHostTimeBase::GetCurrentTime

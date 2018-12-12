@@ -7,15 +7,28 @@
 #include <sstream>
 
 VariableLengthInt::VariableLengthInt(int value) {
+	mBytes = NULL;
 	setValue(value);
 }
 
 VariableLengthInt::VariableLengthInt(istream & input) {
+	mBytes = NULL;
 	parseBytes(input);
+}
+
+VariableLengthInt::~VariableLengthInt() {
+	if (mBytes != NULL)
+		delete[] mBytes;
+	mBytes = NULL;
 }
 
 void VariableLengthInt::setValue(int value) {
 	mValue = value;
+
+	if (mBytes != NULL)
+		delete[] mBytes;
+	mBytes = NULL;
+
 	buildBytes();
 }
 int VariableLengthInt::getValue() {
@@ -25,23 +38,18 @@ int VariableLengthInt::getValue() {
 int VariableLengthInt::getByteCount() {
 	return mSizeInBytes;
 }
-char * VariableLengthInt::getBytes() {
+char* VariableLengthInt::getBytes() {
 	return mBytes;
 }
 
 void VariableLengthInt::parseBytes(istream & input) {
-	for (int i = 0; i < 4; i++) {
-		mBytes[i] = 0;
-	}
-	
 	int ints[4] = { 0 };
 
 	mSizeInBytes = 0;
 	mValue = 0;
 	int shift = 0;
 
-	int b = 0;
-	b = input.get();
+	int b = input.get();
 	while (mSizeInBytes < 4) {
 		mSizeInBytes++;
 
@@ -59,7 +67,7 @@ void VariableLengthInt::parseBytes(istream & input) {
 	for (int i = 1; i < mSizeInBytes; i++) {
 		shift += 7;
 	}
-
+	mBytes = new char[mSizeInBytes];
 	for (int i = 0; i < mSizeInBytes; i++) {
 		mBytes[i] = (char)ints[i];
 
@@ -69,12 +77,10 @@ void VariableLengthInt::parseBytes(istream & input) {
 }
 
 void VariableLengthInt::buildBytes() {
-	for (int i = 0; i < 4; i++) {
-		mBytes[i] = 0;
-	}
-
 	if (mValue == 0) {
 		mSizeInBytes = 1;
+		mBytes = new char[mSizeInBytes];
+		mBytes[0] = 0;
 		return;
 	}
 
@@ -92,7 +98,7 @@ void VariableLengthInt::buildBytes() {
 	for (int i = 1; i < mSizeInBytes; i++) {
 		vals[i] |= 0x80;
 	}
-
+	mBytes = new char[mSizeInBytes];
 	for (int i = 0; i < mSizeInBytes; i++) {
 		mBytes[i] = (char)vals[mSizeInBytes - i - 1];
 	}

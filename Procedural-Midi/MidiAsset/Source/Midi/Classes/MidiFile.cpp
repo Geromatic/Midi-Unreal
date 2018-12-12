@@ -139,6 +139,9 @@ void MidiFile::removeTrack(int pos)
 	{
 		return;
 	}
+	delete mTracks[pos];
+	mTracks[pos] = NULL;
+
 	mTracks.erase(mTracks.begin() + pos);
 	mTrackCount = (int)mTracks.size();
 	mType = mTrackCount > 1 ? 1 : 0;
@@ -163,7 +166,7 @@ void MidiFile::writeToFile(ostream & output)
 
 void MidiFile::initFromBuffer(char buffer[])
 {
-	if (!MidiUtil::bytesEqual(buffer, (char*)IDENTIFIER, 0, 4))
+	if (!MidiUtil::bytesEqual(buffer, IDENTIFIER, 0, 4))
 	{
 		cerr << "File identifier not MThd. Exiting";
 		mType = 0;

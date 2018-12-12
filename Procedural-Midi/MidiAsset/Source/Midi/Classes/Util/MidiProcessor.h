@@ -46,10 +46,6 @@ public:
 
 	// Sets the play back rate
 	double PlayRate;
-	/*TODO set time if using user based clock*/
-	void setStartClock(double time) {
-		mLastMs = time;
-	}
 	// TODO temp expose to get current track
 	int _trackID;
 	
@@ -76,65 +72,4 @@ private:
 
 	double mLastMs;
 	MidiEventListener* mListener;
-
-	/*class MidiTrackEventIterator
-	{
-	private:
-		MidiTrack* mTrack;
-		vector<MidiEvent*>::iterator mIterator, mEnd;
-		MidiEvent* mEvent;
-		MidiProcessor * mProccessor;
-
-	public:
-		MidiTrackEventIterator(MidiTrack* track, MidiProcessor* p) :mEvent(NULL)
-		{
-			mTrack = track;
-			mProccessor = p;
-
-			this->Reset();
-		}
-
-		void parseNextEventsUpToTick(double tick)
-		{
-
-			while (mEvent != NULL)
-			{
-
-				if (mEvent->getTick() <= tick)
-				{
-					if (mIterator != mEnd)
-					{
-						mEvent = *mIterator;
-						mProccessor->dispatch(mEvent);
-						mIterator++;
-					}
-					else
-					{
-						mEvent = NULL;
-					}
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-
-		bool hasMoreEvents() const
-		{
-			return mEvent != NULL;
-		}
-
-		void Reset() {
-			mEvent = NULL;
-
-			mIterator = mTrack->getEvents().begin();
-			mEnd = mTrack->getEvents().end();
-
-			if (mIterator != mEnd)
-			{
-				mEvent = *mIterator;
-			}
-		}
-	};*/
 };

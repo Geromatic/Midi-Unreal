@@ -3,7 +3,7 @@
 #pragma once
 
 #include "RtMidi.h"
-#include "MidiUtils.h"
+#include "MidiStruct.h"
 
 #include "Containers/Queue.h"
 #include "GameFramework/Actor.h"
@@ -70,16 +70,16 @@ public:
 	void SendRaw(const TArray<uint8>& Data);
 
 
-	//  Called when a device sends a Midi Event to the computer
+	//  Called when a device sends a MIDI Event to the computer
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
 	FEventReceive OnReceiveEvent;
 
-	//  Called when a device sends a Midi SysEx Event to the computer
+	//  Called when a device sends a MIDI SysEx Event to the computer
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
 	FSysExEventReceive OnReceiveSysExEvent;
 
 
-	//  Called when a device sends a Midi clock Event to the computer
+	//  Called when a device sends a MIDI clock Event to the computer
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Interface")
 	FClockEventReceive OnReceiveClockEvent;
 
@@ -95,7 +95,7 @@ private:
 		std::vector< unsigned char > message;
 	};
 	TArray<uint8> sysExArray;
-	TQueue<CallbackMessage, EQueueMode::Mpsc> messageQueue;
+	TQueue<CallbackMessage, EQueueMode::Spsc> messageQueue;
 
 	void setInSysEx(bool isInSysEx) { inSysEx = isInSysEx; }
 

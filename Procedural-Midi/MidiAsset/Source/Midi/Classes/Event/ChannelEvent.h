@@ -48,4 +48,7 @@ public:
 	static const int PROGRAM_CHANGE = 0xC;
 	static const int CHANNEL_AFTERTOUCH = 0xD;
 	static const int PITCH_BEND = 0xE;
+
+private:
+	static int getOrder(int type);
 };

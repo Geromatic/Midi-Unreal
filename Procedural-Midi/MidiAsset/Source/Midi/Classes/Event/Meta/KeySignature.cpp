@@ -37,8 +37,7 @@ int KeySignature::getEventSize() {
 void KeySignature::writeToFile(ostream & output) {
 	MetaEvent::writeToFile(output);
 
-	int size = getEventSize() - 3; // 2
-	output.put((char)size);
+	output.put((char)2); //size
 	output.put((char)mKey);
 	output.put((char)mScale);
 }
@@ -50,21 +49,23 @@ MetaEvent * KeySignature::parseKeySignature(long tick, long delta, MetaEventData
 		return new GenericMetaEvent(tick, delta, info);
 	}
 
-	int key = 0, scale = 0;
-	key = info.data[0];
-	scale = info.data[1];
+	int key = info.data[0];
+	int scale = info.data[1];
 
 	return new KeySignature(tick, delta, key, scale);
 }
 
 int KeySignature::compareTo(MidiEvent *other) {
 	// Compare time
-	int value = MidiEvent::compareTo(other);
-	if (value != 0)
-		return value;
+	if (mTick != other->getTick()) {
+		return mTick < other->getTick() ? -1 : 1;
+	}
+	if (mDelta->getValue() != other->getDelta()) {
+		return mDelta->getValue() < other->getDelta() ? 1 : -1;
+	}
 
-	// Check events are not the same
-	if (!(other->getType() == this->getType())) {
+	// Check if same event type
+	if (!(other->getType() == MetaEvent::KEY_SIGNATURE)) {
 		return 1;
 	}
 

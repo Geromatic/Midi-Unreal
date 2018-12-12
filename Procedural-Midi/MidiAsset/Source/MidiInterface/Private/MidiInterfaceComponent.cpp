@@ -5,7 +5,6 @@
 
 #include <vector>
 
-
 void mycallback(double deltatime, std::vector< unsigned char > *message, void *userData)
 {
 	UMidiInterfaceComponent* component = (UMidiInterfaceComponent*)userData;
@@ -26,7 +25,6 @@ UMidiInterfaceComponent::UMidiInterfaceComponent()
 	
 	PrimaryComponentTick.bCanEverTick = queueCallbacks;
 	inSysEx = false;
-	
 }
 
 // Called when the game starts or when spawned
@@ -123,7 +121,7 @@ bool UMidiInterfaceComponent::OpenInput(uint8 port)
 {
 	// Check available ports.
 	unsigned int nPorts = midiIn.getPortCount();
-	if (nPorts == 0 || port >= nPorts) {
+	if (nPorts < 1 || port >= nPorts) {
 		UE_LOG(LogTemp, Display, TEXT("No ports available!"));
 		return false;
 	}
@@ -143,14 +141,14 @@ bool UMidiInterfaceComponent::OpenInput(uint8 port)
 	// Don't ignore sysex, timing, or active sensing messages.
 	midiIn.ignoreTypes(false, false, true);
 
-	return true;
+	return midiIn.isPortOpen();
 }
 
 bool UMidiInterfaceComponent::OpenOutput(uint8 port)
 {
 	// Check available ports.
 	unsigned int nPorts = midiOut.getPortCount();
-	if (nPorts == 0 || port >= nPorts) {
+	if (nPorts < 1 || port >= nPorts) {
 		UE_LOG(LogTemp, Display, TEXT("No ports available!"));
 		return false;
 	}
@@ -162,7 +160,7 @@ bool UMidiInterfaceComponent::OpenOutput(uint8 port)
 
 	midiOut.openPort(port);
 
-	return true;
+	return midiOut.isPortOpen();
 }
 
 void UMidiInterfaceComponent::CloseInput()
@@ -177,26 +175,19 @@ void UMidiInterfaceComponent::CloseOutput()
 
 void UMidiInterfaceComponent::Send(const FMidiEvent& Event)
 {
-	std::vector<uint8> msg;
 	uint8 status = ((uint8)Event.Type << 4) | Event.Channel;
-	msg.push_back(status);
-	msg.push_back(Event.Data1);
+	uint8 data[3] = { status, Event.Data1, Event.Data2 };
+
 	// check for program change or CHANNEL_AFTERTOUCH
 	if (Event.Type != EMidiTypeEnum::MTE_PROGRAM_CHANGE && Event.Type != EMidiTypeEnum::MTE_CHANNEL_AFTERTOUCH) {
-		msg.push_back(Event.Data2);
+		midiOut.sendMessage(&data[0], 3);
 	}
-	midiOut.sendMessage(&msg);
+	else
+		midiOut.sendMessage(&data[0], 2);
 }
-void UMidiInterfaceComponent::SendRaw(const TArray<uint8>& Data)
+void UMidiInterfaceComponent::SendRaw(const TArray<uint8>& Data) 
 {
-	std::vector<uint8> msg;
-
-	for (int i = 0; i < Data.Num(); i++)
-	{
-		msg.push_back(Data[i]);
-	}
-	
-	midiOut.sendMessage(&msg);
+	midiOut.sendMessage(Data.GetData(), Data.Num());
 }
 void UMidiInterfaceComponent::startSysEx()
 {

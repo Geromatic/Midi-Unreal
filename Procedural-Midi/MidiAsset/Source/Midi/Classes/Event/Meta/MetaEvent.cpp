@@ -42,8 +42,7 @@ void MetaEvent::writeToFile(ostream & output, bool writeType) {
 void MetaEvent::writeToFile(ostream & output) {
 	MidiEvent::writeToFile(output, true);
 	
-	int status = 0XFF;
-	output.put((char)status);
+	output.put((char)(unsigned char)0XFF); // meta event
 	output.put((char)mType);
 }
 
@@ -76,7 +75,7 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {
 	}
 
 	if (isText) {
-		string text = eventData.data;
+		string text(eventData.data, eventData.length->getValue());
 
 		switch (eventData.type) {
 		case TEXT_EVENT:
@@ -94,11 +93,7 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {
 		case CUE_POINT:
 			return new CuePoint(tick, delta, text);
 		case SEQUENCER_SPECIFIC:
-			eventData.destroy = false;
-			delete eventData.length;
-			eventData.length = NULL;
-
-			return new SequencerSpecificEvent(tick, delta, eventData.data);
+			return new SequencerSpecificEvent(tick, delta, new string(text));
 		default:
 			return new GenericMetaEvent(tick, delta, eventData);
 		}
@@ -110,9 +105,6 @@ MetaEvent * MetaEvent::parseMetaEvent(long tick, long delta, istream & input) {
 	case MIDI_CHANNEL_PREFIX:
 		return MidiChannelPrefix::parseMidiChannelPrefix(tick, delta, eventData);
 	case END_OF_TRACK:
-		// ignore next byte
-//		input.ignore(); // Size = 0;
-
 		return new EndOfTrack(tick, delta);
 	case TEMPO:
 		return Tempo::parseTempo(tick, delta, eventData);
