@@ -215,7 +215,7 @@ void UMidiComponent::handleCallback(MidiEvent* _event, long ms, int trackID)
 		if(midi_type == 0xF0)
 			data.Add(midi_type);
 		// multi-packet check
-		else if (midi_type == 0xF7 && data.Num() > 3) {
+		else if (midi_type == 0xF7 && ptr->size() > 3) {
 			data.Add((uint8)0xF0);
 			isDivided = true;
 		}
