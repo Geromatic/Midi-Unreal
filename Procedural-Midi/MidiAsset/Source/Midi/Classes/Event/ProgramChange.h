@@ -1,0 +1,162 @@
+// Copyright 2011 Alex Leffelman
+// Updated 2016 Scott Bishel
+
+#pragma once
+
+#include "ChannelEvent.h"
+
+/**
+ * Program Change Channel Event
+ * A event that can 'assign a program to a MIDI channel, such as an instrument, patch, or preset.;
+ */
+class ProgramChange : public ChannelEvent
+{
+public:
+	ProgramChange(long tick, int channel, int program);
+	ProgramChange(long tick, long delta, int channel, int program);
+
+	int getProgramNumber();
+
+	void setProgramNumber(int p);
+
+	enum MidiProgram {
+		/* Piano */
+		ACOUSTIC_GRAND_PIANO,
+		BRIGHT_ACOUSTIC_PIANO,
+		ELECTRIC_GRAND_PIANO,
+		HONKYTONK_PIANO,
+		ELECTRIC_PIANO_1,
+		ELECTRIC_PIANO_2,
+		HARPSICHORD,
+		CLAVINET,
+		/* Chromatic Percussion  */
+		CELESTA,
+		GLOCKENSPIEL,
+		MUSIC_BOX,
+		VIBRAPHONE,
+		MARIMBA,
+		XYLOPHONE,
+		TUBULAR_BELLS,
+		DULCIMER,
+		/* Organ */
+		DRAWBAR_ORGAN,
+		PERCUSSIVE_ORGAN,
+		ROCK_ORGAN,
+		CHURCH_ORGAN,
+		REED_ORGAN,
+		ACCORDION,
+		HARMONICA,
+		TANGO_ACCORDION,
+		ACOUSTIC_GUITAR_NYLON,
+		ACOUSTIC_GUITAR_STEEL,
+		ELECTRIC_GUITAR_JAZZ,
+		ELECTRIC_GUITAR_CLEAN,
+		ELECTRIC_GUITAR_MUTED,
+		OVERDRIVEN_GUITAR,
+		DISTORTION_GUITAR,
+		GUITAR_HARMONICS,
+		ACOUSTIC_BASS,
+		ELECTRIC_BASS_FINGER,
+		ELECTRIC_BASS_PICK,
+		FRETLESS_BASS,
+		SLAP_BASS_1,
+		SLAP_BASS_2,
+		SYNTH_BASS_1,
+		SYNTH_BASS_2,
+		VIOLIN,
+		VIOLA,
+		CELLO,
+		CONTRABASS,
+		TREMOLO_STRINGS,
+		PIZZICATO_STRINGS,
+		ORCHESTRAL_HARP,
+		TIMPANI,
+		STRING_ENSEMBLE_1,
+		STRING_ENSEMBLE_2,
+		SYNTH_STRINGS_1,
+		SYNTH_STRINGS_2,
+		CHOIR_AAHS,
+		VOICE_OOHS,
+		SYNTH_CHOIR,
+		ORCHESTRA_HIT,
+		TRUMPET,
+		TROMBONE,
+		TUBA,
+		MUTED_TRUMPET,
+		FRENCH_HORN,
+		BRASS_SECTION,
+		SYNTH_BRASS_1,
+		SYNTH_BRASS_2,
+		SOPRANO_SAX,
+		ALTO_SAX,
+		TENOR_SAX,
+		BARITONE_SAX,
+		OBOE,
+		ENGLISH_HORN,
+		BASSOON,
+		CLARINET,
+		/* Pipe */
+		PICCOLO,
+		FLUTE,
+		RECORDER,
+		PAN_FLUTE,
+		BLOWN_BOTTLE,
+		SHAKUHACHI,
+		WHISTLE,
+		OCARINA,
+		/* Synth Lead */
+		LEAD_1_SQUARE,
+		LEAD_2_SAWTOOTH,
+		LEAD_3_CALLIOPE,
+		LEAD_4_CHIFF,
+		LEAD_5_charANG,
+		LEAD_6_VOICE,
+		LEAD_7_FIFTHS,
+		LEAD_8_BASS_AND_LEAD,
+		/* Synth Pad */
+		PAD_1_NEW_AGE,
+		PAD_2_WARM,
+		PAD_3_POLYSYNTH,
+		PAD_4_CHOIR,
+		PAD_5_BOWED,
+		PAD_6_METALLIC,
+		PAD_7_HALO,
+		PAD_8_SWEEP,
+		/* Synth Effects */
+		FX_1_RAIN,
+		FX_2_SOUNDTRACK,
+		FX_3_CRYSTAL,
+		FX_4_ATMOSPHERE,
+		FX_5_BRIGHTNESS,
+		FX_6_GOBLINS,
+		FX_7_ECHOES,
+		FX_8_SCIFI,
+		/* Ethnic */
+		SITAR,
+		BANJO,
+		SHAMISEN,
+		KOTO,
+		KALIMBA,
+		BAGPIPE,
+		FIDDLE,
+		SHANAI,
+		/* Percussive */
+		TINKLE_BELL,
+		AGOGO,
+		STEEL_DRUMS,
+		WOODBLOCK,
+		TAIKO_DRUM,
+		MELODIC_TOM,
+		SYNTH_DRUM,
+		REVERSE_CYMBAL,
+		/* Sound Effects */
+		GUITAR_FRET_NOISE,
+		BREATH_NOISE,
+		SEASHORE,
+		BIRD_TWEET,
+		TELEPHONE_RING,
+		HELICOPTER,
+		APPLAUSE,
+		GUNSHOT
+	};
+};
