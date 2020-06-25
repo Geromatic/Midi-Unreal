@@ -5,10 +5,11 @@
     This class implements some common functionality for the realtime
     MIDI input/output subclasses RtMidiIn and RtMidiOut.
 
-    RtMidi WWW site: http://music.mcgill.ca/~gary/rtmidi/
+    RtMidi GitHub site: https://github.com/thestk/rtmidi
+	RtMidi WWW site: http://www.music.mcgill.ca/~gary/rtmidi/
 
-    RtMidi: realtime MIDI i/o C++ classes
-    Copyright (c) 2003-2017 Gary P. Scavone
+	RtMidi: realtime MIDI i/o C++ classes
+	Copyright (c) 2003-2019 Gary P. Scavone
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation files
@@ -45,23 +46,27 @@
     #define AudioConvertHostTimeToNanos CAHostTimeBase::ConvertToNanos
   #endif*/
 // TODO use mach_time workaround
-	#include <mach/mach_time.h>
-    unsigned long long AudioConvertHostTimeToNanos(unsigned long long time)
+    #include <mach/mach_time.h>
+    class CTime2nsFactor
     {
-				/* Get the timebase info */
-				struct mach_timebase_info info;
-				mach_timebase_info(&info);
-
-				/* Convert to nanoseconds */
-				time *= info.numer;
-				time /= info.denom;
-                return time;
-    }
-	#define AudioGetCurrentHostTime() (unsigned long long)mach_absolute_time()
-	
-	// TODO temp solution
-	#undef EndianS32_BtoN
-	#define EndianS32_BtoN(value) value
+    public:
+        CTime2nsFactor()
+        {
+            mach_timebase_info_data_t tinfo;
+            mach_timebase_info(&tinfo);
+            Factor = (double)tinfo.numer / tinfo.denom;
+        }
+        static double Factor;
+    };
+    double CTime2nsFactor::Factor;
+    static CTime2nsFactor InitTime2nsFactor;
+    #undef AudioGetCurrentHostTime
+    #undef AudioConvertHostTimeToNanos
+  #define AudioGetCurrentHostTime() (unsigned long long) mach_absolute_time()
+  #define AudioConvertHostTimeToNanos(t) t *CTime2nsFactor::Factor
+  // TODO temp solution
+  #undef EndianS32_BtoN
+  #define EndianS32_BtoN(n) n
 #endif
 
 // Default for Windows is to add an identifier to the port names; this

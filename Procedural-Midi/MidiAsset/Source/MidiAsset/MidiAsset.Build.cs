@@ -24,6 +24,7 @@ namespace UnrealBuildTool.Rules
 				new string[] {
                 }
 			);
+			PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1"); // ignore warning
         }
 	}
 }

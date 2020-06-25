@@ -40,5 +40,6 @@ public class ProceduralAudio : ModuleRules
 				"CoreUObject", "Engine", "Slate", "SlateCore"
 			}
 			);
+		PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1"); // ignore warning
     }
 }

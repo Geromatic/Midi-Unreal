@@ -87,6 +87,7 @@ bool MidiEvent::requiresStatusByte(MidiEvent * prevEvent) {
 }
 
 void MidiEvent::writeToFile(ostream & output, bool writeType) {
+	writeType = false; // TODO ignore unreferenced formal parameter
 	output.write(mDelta->getBytes(), mDelta->getByteCount());
 }
 

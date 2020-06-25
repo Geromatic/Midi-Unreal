@@ -11,6 +11,8 @@ public class MidiInterface : ModuleRules
     public MidiInterface(TargetInfo Target)
 #endif
 	{
+		bEnableUndefinedIdentifierWarnings = false;
+		
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicIncludePaths.AddRange(
@@ -44,6 +46,7 @@ public class MidiInterface : ModuleRules
 		// Windows
 		if (Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
 		{
+			PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1"); // ignore warning
             PublicDefinitions.Add("__WINDOWS_MM__=1");
 			PublicAdditionalLibraries.Add("winmm.lib");
 		}

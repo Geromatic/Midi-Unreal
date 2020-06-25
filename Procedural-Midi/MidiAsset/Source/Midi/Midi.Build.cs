@@ -38,5 +38,6 @@ public class Midi : ModuleRules
 				"CoreUObject", "Engine", "Slate", "SlateCore", "MidiAsset"
 			}
 			);
+		PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1"); // ignore warning
     }
 }

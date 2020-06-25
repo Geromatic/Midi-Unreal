@@ -54,5 +54,6 @@ public class MidiAssetEditor : ModuleRules
 				"UnrealEd",
             }
 		);
+		PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1"); // ignore warning
 	}
 }

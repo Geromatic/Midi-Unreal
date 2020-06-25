@@ -6,7 +6,7 @@
 #include "../../Util/MidiUtil.h"
 
 SequencerSpecificEvent::SequencerSpecificEvent(long tick, long delta, string* data)
-	: MetaEvent(tick, delta, MetaEvent::SEQUENCER_SPECIFIC, new VariableLengthInt(data->size())), mData(NULL)
+	: MetaEvent(tick, delta, MetaEvent::SEQUENCER_SPECIFIC, new VariableLengthInt((int)data->size())), mData(NULL)
 {
 	mData = data;
 }
@@ -23,7 +23,7 @@ void SequencerSpecificEvent::setData(string* data) {
 	mData = NULL;
 
 	mData = data;
-	mLength->setValue(mData->size());
+	mLength->setValue((int)mData->size());
 }
 string * SequencerSpecificEvent::getData() {
 	return mData;

@@ -11,7 +11,7 @@ SystemExclusiveEvent::SystemExclusiveEvent(int type, long tick, string* data)
 		mType = 0xF0;
 	}
 
-	mLength = new VariableLengthInt(data->size());
+	mLength = new VariableLengthInt((int)data->size());
 	mData = data;
 }
 
@@ -24,7 +24,7 @@ SystemExclusiveEvent::SystemExclusiveEvent(int type, long tick, long delta, stri
 		mType = 0xF0;
 	}
 
-	mLength = new VariableLengthInt(data->size());
+	mLength = new VariableLengthInt((int)data->size());
 	mData = data;
 }
 
@@ -46,11 +46,13 @@ void SystemExclusiveEvent::setData(string* data) {
 		delete mData;
 	mData = NULL;
 
-	mLength->setValue(data->size());
+	mLength->setValue((int)data->size());
 	mData = data;
 }
 
 bool SystemExclusiveEvent::requiresStatusByte(MidiEvent* prevEvent) {
+	if(prevEvent == NULL) //ignore unreferenced formal parameter
+		return true;
 	return true;
 }
 

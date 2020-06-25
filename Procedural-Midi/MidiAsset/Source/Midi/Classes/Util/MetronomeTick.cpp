@@ -82,6 +82,8 @@ std::string MetronomeTick::toString()
 
 int MetronomeTick::compareTo(MidiEvent* o)
 {
+	if(o == NULL) // TODO ignore unreferenced formal parameter
+		return 0;
 	return 0;
 }
 

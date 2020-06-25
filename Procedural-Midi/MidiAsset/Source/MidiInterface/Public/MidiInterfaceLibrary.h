@@ -10,7 +10,7 @@
 
 enum EPortType
 {
-	PT_INPUT 	UMETA(DisplayName = "Input"),
+	PT_INPUT = 0 	UMETA(DisplayName = "Input"),
 	PT_OUTPUT 	UMETA(DisplayName = "Output"),
 };
 

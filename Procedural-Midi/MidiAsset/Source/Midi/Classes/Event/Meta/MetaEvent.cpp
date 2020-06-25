@@ -36,6 +36,7 @@ MetaEvent::~MetaEvent()
 }
 
 void MetaEvent::writeToFile(ostream & output, bool writeType) {
+	writeType = true; //  TODO  ignore unreferenced formal parameter
 	this->writeToFile(output);
 }
 
