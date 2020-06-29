@@ -1,7 +1,7 @@
 # Midi-Unreal
 Midi for Unreal Engine
 
-Discord: https://discord.gg/HkCFV6
+Discord: https://discord.gg/yR5wYkX
 
 MarketPlace: https://www.unrealengine.com/marketplace/procedural-midi 
 <br>Example Project: Updated 2/27/2017
@@ -32,13 +32,13 @@ Features:
 
 ** <b>[Shown in Demo Project on marketplace]</b>
 
-Plugin Supports:
+Plugin Build Supports:
 
 - Windows(32/64): [Packaged+Tested+Works]
-- HTML5: [Packaged+Tested+Works but no sound]
-- Android(All): [Packaged+Untested]
+- HTML5: [Packaged+Tested+Works]
+- Android(All): [Packaged+Tested+Works]
 - Linus: [Packaged+Tested+Works]
-- Mac/IOS: [Packaged+Tested+Works] 
+- Mac/IOS: [Packaged+Tested+Works]
 
 ### Installation \[Github Version Only / C++ Project Required\] 
 
@@ -56,33 +56,54 @@ Place MidiAsset folder in your Plugins folder in youe Unreal project
 
 ###Example Usage: [Beta-Untested/C++]
 ----
+```c++
+// headers
+#include <vector>	// std::vector
+#include <iostream> 	// std::cout, std::ostream, std::ios, std::streambuf
+#include <fstream>      // std::filebuf
+using namespace std;	// optional
+```
 #### Reading and Writing a MIDI file:
-```java
+```c++
+struct membuf : std::streambuf
+{
+	membuf(char* begin, char* end) {
+		this->setg(begin, begin, end);
+	}
+};
+
 FString path;
 TArray<uint8> data;
 bool result = FFileHelper::LoadFileToArray(data, path.GetCharArray().GetData());
-FBufferReader reader((uint8*)data.GetData(), data.Num(), false);
-MidiFile midi(reader);
+if (result == 0 || data.Num() == 0)
+	return;
+
+char* ptr = (char*)data.GetData();
+
+membuf sbuf(ptr, ptr + data.Num());
+std::istream in(&sbuf);
+
+MidiFile midi(in);
 
 ...
-
-TArray<uint8> data;
-FMemoryWriter writer(data);
-midi.writeToFile(writer);
+std::filebuf fb;
+fb.open("test.txt", std::ios::out);
+std::ostream os(&fb);
+midi.writeToFile(os);
 ```
 
 #### Manipulating a MIDI file's data:
 Removing a track:
-```java
+```c++
 midi.removeTrack(2);
 ```
 
 Removing any event that is not a note from track 1:
-```java
+```c++
 MidiTrack& track = *midi.getTracks()[1];
 
-TArray<MidiEvent*>::TIterator it = track.getEvents().CreateIterator();
-TArray<MidiEvent*> eventsToRemove;
+std::vector<MidiEvent*>::iterator it = track.getEvents().begin();
+std::vector<MidiEvent*> eventsToRemove;
 
 while (it)
 {
@@ -100,9 +121,10 @@ for (int i = 0; i < eventsToRemove.Num(); i++) {
 ```
 
 Reducing the tempo by half:
-```java
+```c++
 	MidiTrack& track = *midi.getTracks()[0];
-	TArray<MidiEvent*>::TIterator it = track.getEvents().CreateIterator();
+
+	std::vector<MidiEvent*>::iterator it = track.getEvents().begin();
 
 	while (it)
 	{
@@ -118,7 +140,7 @@ Reducing the tempo by half:
 ```
 
 #### Composing a new MIDI file:
-```java
+```c++
 // 1. Create some MidiTracks
 MidiTrack& tempoTrack = *new MidiTrack();
 MidiTrack& noteTrack = *new MidiTrack();
@@ -149,22 +171,23 @@ for(int i = 0; i < NOTE_COUNT; i++)
 }
 
 // 3. Create a MidiFile with the tracks we created
-TArray<MidiTrack*>& tracks = *new TArray<MidiTrack*>();
-tracks.Add(&tempoTrack);
-tracks.Add(&noteTrack);
+std::vector<MidiTrack*>& tracks = *new std::vector<MidiTrack*>();
+tracks.push_back(&tempoTrack);
+tracks.push_back(&noteTrack);
 
 MidiFile& midi = *new MidiFile(MidiFile::DEFAULT_RESOLUTION, tracks);
 
 // 4. Write the MIDI data to a file
-TArray<uint8> data;
-FMemoryWriter writer(data);
-midi.writeToFile(writer);
+std::filebuf fb;
+fb.open("test.txt", std::ios::out);
+std::ostream os(&fb);
+midi.writeToFile(os);
 ```
 
 #### Listening for and processing MIDI events
-```java
+```c++
 // Create a new MidiProcessor:
-MidiProcessor processor();
+MidiProcessor processor;
 processor.load(midi);
 
 // Register for the events you're interested in:
@@ -174,7 +197,7 @@ processor.setListener(&ep);
 // Start the processor:
 processor.start();
 ```
-```java
+```c++
 // This class will print any event it receives to the console
 class EventPrinter: public MidiEventListener
 {
@@ -196,9 +219,10 @@ public:
         }
     }
 
-    void onEvent(MidiEvent* _event, int track)
+    void onEvent(MidiEvent* _event, long ms, int trackID)
     {
-        //System.out.println(mLabel + " received event: " + _event);
+    	FString layerName(_event->toString().c_str());
+	UE_LOG(LogTemp, Display, TEXT("received event: %s"), *layerName);
     }
 
     void onStop(bool finished)
