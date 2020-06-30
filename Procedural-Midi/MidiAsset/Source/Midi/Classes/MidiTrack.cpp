@@ -80,6 +80,7 @@ void MidiTrack::readTrackData(istream & input)
 		// Not adding the EndOfTrack event here allows the track to be edited
 		// after being read in from file.
 		if (E->getType() == MetaEvent::END_OF_TRACK) {
+			delete E;
 			break;
 		}
 		mEvents.push_back(E);
