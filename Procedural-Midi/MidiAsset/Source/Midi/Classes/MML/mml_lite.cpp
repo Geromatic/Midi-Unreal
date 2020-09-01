@@ -1,22 +1,24 @@
+//©2018 ArcheAge MML Library - reverse engineered Javascript code
+
 #include "mml_lite.h"
 #include "ntlibc.h"
 
 int MML_LITE::get_note_value(char c)
 {
-	switch (ntlibc_toupper(c)) {
-	case 'C':
+	switch (c) {
+	case 'c':
 		return 0;
-	case 'D':
+	case 'd':
 		return 2;
-	case 'E':
+	case 'e':
 		return 4;
-	case 'F':
+	case 'f':
 		return 5;
-	case 'G':
+	case 'g':
 		return 7;
-	case 'A':
+	case 'a':
 		return 9;
-	case 'B':
+	case 'b':
 		return 11;
 	}
 
@@ -25,16 +27,16 @@ int MML_LITE::get_note_value(char c)
 
 string MML_LITE::get_char_type(char c)
 {
-	switch (ntlibc_toupper(c)) {
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'A':
-	case 'B':
+	switch (c) {
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'a':
+	case 'b':
 		return "n";
-	case 'R':
+	case 'r':
 		return "rest";
 	case '#':
 	case '+':
@@ -43,13 +45,13 @@ string MML_LITE::get_char_type(char c)
 		return "mod";
 	case ',':
 		return "trk";
-	case 'L':
+	case 'l':
 		return "len";
-	case 'V':
+	case 'v':
 		return "vol";
-	case 'T':
+	case 't':
 		return "tempo";
-	case 'O':
+	case 'o':
 	case '>':
 	case '<':
 		return "oct";
@@ -70,11 +72,18 @@ string MML_LITE::get_char_type(char c)
 	return "";
 }
 
-void MML_LITE::playNote(int note, float speed, int* mod) {
+// Modifier
+const int VALUE = 0;
+const int HALF_STEP = 1;
+const int STOP = 2;
+const int AND = 3;
+
+
+void MML_LITE::addNote(int note, float speed, int* mod) {
 
 	_track->insertEvent(new NoteOn( (long)(curPos * 1000), track, note, volume));
 
-	if (!mod[3])
+	if (!mod[AND])
 		_track->insertEvent(new NoteOff((long)((curPos + speed) * 1000), track, note, 0));
 };
 
@@ -91,37 +100,41 @@ int* MML_LITE::parseModifiers() {
 		modifiers[i] = 0;
 	}
 	
-	for (i = index; i < (int)source->length(); i++) {
-		char cur = source->at(i);
+	int len = (int)source->length();
+	for (i = index; i < len; i++) {
+		char cur = ntlibc_tolower(source->at(i));
 
-		if (get_char_type(cur) != ""
-			&& get_char_type(cur) != "stop"
-			&& get_char_type(cur) != "mod"
-			&& get_char_type(cur) != "val") {
+		// result
+		string char_type = get_char_type(cur);
+
+		if (char_type != ""
+			&& char_type != "stop"
+			&& char_type != "mod"
+			&& char_type != "val") {
 			index = i;
 			return modifiers;
 		}
 
 		// Read in complete values if current is the start of one
-		if (get_char_type(cur) == "val") {
+		if (char_type == "val") {
 			string v = "";
-			while (i < (int)source->length() && get_char_type(source->at(i)) == "val") {
+			do {
 				v += source->at(i++);
-			}
+			} while (i < len && ntlibc_isdigit(source->at(i)));
 			i--;
-			modifiers[0] = ntlibc_atoi(v.c_str());
+			modifiers[VALUE] = ntlibc_atoi(v.c_str());
 		}
-		else if (get_char_type(cur) == "mod") {
+		else if (char_type == "mod") {
 			// ÃŸ, #
 			if (cur == '+' || cur == '#')
-				modifiers[1] = 1;
+				modifiers[HALF_STEP] = 1;
 			else if (cur == '&')
-				modifiers[3] = true;
+				modifiers[AND] = true;
 			else
-				modifiers[1] = -1;
+				modifiers[HALF_STEP] = -1;
 		}
-		else if (get_char_type(cur) == "stop") {
-			modifiers[2] = 1;
+		else if (char_type == "stop") {
+			modifiers[STOP] = 1;
 		}
 	}
 	index = i;
@@ -131,38 +144,43 @@ int* MML_LITE::parseModifiers() {
 void MML_LITE::parseNote() {
 	while (index < source->length()) {
 		int i = index;
-		char cur = source->at(i);
+		char cur = ntlibc_tolower(source->at(i));
 
-		if (get_char_type(cur) == "n") {
+		// result
+		string char_type = get_char_type(cur);
+
+		if (char_type == "n") {
 			// note
 			index++;
-			auto mod = parseModifiers();
+			int* mod = parseModifiers();
 			float speed = 1.0f / defaultLength;
-			if (mod[0])
-				speed = 1.0f / mod[0];
-			if (mod[2])
+			if (mod[VALUE])
+				speed = 1.0f / mod[VALUE];
+			if (mod[STOP])
 				speed *= 1.5f;
 
-			int note = this->octave * 12 + get_note_value(cur) + mod[1];
+			int note = this->octave * 12 + get_note_value(cur) + mod[HALF_STEP];
 			if (this->skipNext)
 				this->skipNext = false;
 			else
-				this->playNote(note, speed, mod);
+				this->addNote(note, speed, mod);
 
 			this->moveTime(speed);
 
-			if (mod[3])
+			if (mod[AND])
 				this->skipNext = true;
 		}
-		else if (get_char_type(cur) == "trk") {
+		else if (char_type == "trk") {
 			index++;
 			track++;
+
+			octave = 5;
 			curPos = 1;
 
 			_track = new MidiTrack();
 			_tracks.push_back(_track);
 		}
-		else if (get_char_type(cur) == "oct") {
+		else if (char_type == "oct") {
 			index++;
 			// octave change command
 			if (cur == '>') {
@@ -172,39 +190,41 @@ void MML_LITE::parseNote() {
 				octave--;
 			}
 			else if (cur == 'o') {
-				auto mod = parseModifiers();
-				octave = mod[0];
+				int* mod = parseModifiers();
+				octave = mod[VALUE];
 			}
 		}
-		else if (get_char_type(cur) == "len") {
+		else if (char_type == "len") {
 			// length
 			index++;
-			auto mod = parseModifiers();
-			defaultLength = mod[0];
+			int* mod = parseModifiers();
+			defaultLength = mod[VALUE];
 		}
-		else if (get_char_type(cur) == "vol") {
+		else if (char_type == "vol") {
+			// volume
 			index++;
-			auto mod = parseModifiers();
-			volume = mod[0];
+			int* mod = parseModifiers();
+//			volume = mod[VALUE];
 			_track->insertEvent(new Controller( (long)(curPos * 1000), track, 7, volume));
 		}
-		else if (get_char_type(cur) == "rest") {
+		else if (char_type == "rest") {
 			// rest
 			index++;
-			auto mod = parseModifiers();
+			int* mod = parseModifiers();
 			float speed = 1.0f / defaultLength;
-			if (mod[0]) {
-				speed = 1.0f / mod[0];
+			if (mod[VALUE]) {
+				speed = 1.0f / mod[VALUE];
 			}
 			moveTime(speed);
 		}
-		else if (get_char_type(cur) == "tempo") {
+		else if (char_type == "tempo") {
 			// tempo
 			index++;
-			auto mod = parseModifiers();
-			tempo = mod[0];
+			int* mod = parseModifiers();
+			tempo = mod[VALUE];
 		}
 		else {
+			// "Unhandled command: " + cur
 			index++;
 		}
 	}
@@ -220,7 +240,6 @@ void MML_LITE::parse(string data) {
 	_tracks.push_back(_track);
 
 	reset();
-
 	parseNote();
 };
 

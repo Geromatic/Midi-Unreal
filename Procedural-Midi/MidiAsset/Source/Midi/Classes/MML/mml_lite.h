@@ -1,4 +1,4 @@
-//©2018 ArcheAge MML Library - reverse engineered Python code
+//©2018 ArcheAge MML Library - reverse engineered Javascript code
 
 #ifndef MML_SIMPLE_H
 #define MML_SIMPLE_H
@@ -34,7 +34,7 @@ struct MML_LITE {
 
 	static string get_char_type(char c);
 
-	void playNote(int note, float speed, int* mod);
+	void addNote(int note, float speed, int* mod);
 
 	void moveTime(float speed);;
 	
