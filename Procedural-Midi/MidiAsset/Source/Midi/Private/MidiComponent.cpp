@@ -257,6 +257,14 @@ void UMidiComponent::handleCallback(MidiEvent* _event, long ms, int trackID)
 		MetronomeTick* ev = static_cast<MetronomeTick*>(_event);
 		OnMetronomeTick.Broadcast(ev->getBeatNumber(), ev->getMeasure(), ms);
 	}
+	// Tempo Event
+	else if (midi_type == MetaEvent::TEMPO)
+	{
+		if (!OnTempoEvent.IsBound())
+			return;
+		Tempo* tempoEvent = static_cast<Tempo*>(_event);
+		OnTempoEvent.Broadcast(tempoEvent->getBpm(), ms);
+	}
 }
 
 void UMidiComponent::onStart(bool fromBeginning) {

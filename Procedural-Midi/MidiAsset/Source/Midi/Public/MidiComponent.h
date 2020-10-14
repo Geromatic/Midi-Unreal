@@ -21,6 +21,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FTextEventReceive, EMidiTextTypeEn
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSysExEventReceive, const TArray<uint8>&, data, int32, time, int, TrackID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FEventMetronome, int, beatNumber, int, measure, int32, time);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEventTempo, float, BeatsPerMinute, int32, time);
+
 /*
 * A component that loads/plays a MIDI Asset or file
 */
@@ -141,6 +143,9 @@ protected:
 	// Metronome Ticker
 	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
 	FEventMetronome OnMetronomeTick;
+	
+	UPROPERTY(BlueprintAssignable, Category = "MIDI|Processor")
+	FEventTempo OnTempoEvent;
 
 private:
 
