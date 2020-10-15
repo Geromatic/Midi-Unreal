@@ -204,8 +204,8 @@ void MML_LITE::parseNote() {
 			// volume
 			index++;
 			int* mod = parseModifiers();
-//			volume = mod[VALUE];
-			_track->insertEvent(new Controller( (long)(curPos * 1000), track, 7, volume));
+			volume = mod[VALUE];
+//			_track->insertEvent(new Controller( (long)(curPos * 1000), track, 7, volume));
 		}
 		else if (char_type == "rest") {
 			// rest
