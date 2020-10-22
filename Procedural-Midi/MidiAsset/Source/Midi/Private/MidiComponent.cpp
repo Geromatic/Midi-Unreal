@@ -195,6 +195,11 @@ void UMidiComponent::handleCallback(MidiEvent* _event, long ms, int trackID)
 		_midiEvent.Channel = channelEvent->getChannel();
 		_midiEvent.Data1 = channelEvent->getValue1();
 		_midiEvent.Data2 = channelEvent->getValue2();
+		
+		// to prevent confusion
+		if (midi_type == ChannelEvent::NOTE_ON && channelEvent->getValue2() == 0) {
+			_midiEvent.Type = static_cast<EMidiTypeEnum>(ChannelEvent::NOTE_OFF);
+		}
 
 		if (SimplifyNote) {
 
