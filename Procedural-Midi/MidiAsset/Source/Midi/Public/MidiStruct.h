@@ -143,12 +143,12 @@ enum class EMidiClockTypeEnum : uint8
 	*	Quarter Frame (MTC)
 	*	[Data=]
 	*/
-	MCTE_QUARTER_FRAME = 1 					UMETA(DisplayName = "Quarter Frame (MTC)"),
+	MCTE_QUARTER_FRAME = 0xF1 				UMETA(DisplayName = "Quarter Frame (MTC)"),
 	/*
 	*	Song Position Pointer
 	*	[Data=Position]
 	*/
-	MCTE_SONG_POSITION = 2 					UMETA(DisplayName = "Song position pointer"),
+	MCTE_SONG_POSITION 						UMETA(DisplayName = "Song position pointer"),
 	/*
 	*	Song Select
 	*	[Data=SongNumber]
@@ -158,17 +158,17 @@ enum class EMidiClockTypeEnum : uint8
 	*	Tune Request
 	*	[Data=]
 	*/
-	MCTE_TUNE_REQUEST = 8 					UMETA(DisplayName = "Tune Request"),
+	MCTE_TUNE_REQUEST = 0xF6 				UMETA(DisplayName = "Tune Request"),
 	/*
 	*	Clock
 	*	[Data=]
 	*/
-	MCTE_CLOCK = 10							UMETA(DisplayName = "Timing Clock"),
+	MCTE_CLOCK = 0xF8						UMETA(DisplayName = "Timing Clock"),
 	/*
 	*	Start
 	*	[Data=]
 	*/
-	MCTE_START = 11							UMETA(DisplayName = "Start"),
+	MCTE_START = 0xFA							UMETA(DisplayName = "Start"),
 	/*
 	*	Continue
 	*	[Data=]
@@ -178,12 +178,12 @@ enum class EMidiClockTypeEnum : uint8
 	*	Stop
 	*	[Data=]
 	*/
-	MCTE_STOP = 13							UMETA(DisplayName = "Stop"),
+	MCTE_STOP								UMETA(DisplayName = "Stop"),
 	/*
 	*	Active Sensing
 	*	[Data=]
 	*/
-	MCTE_ACTIVE 							UMETA(DisplayName = "Active Sensing"),
+	MCTE_ACTIVE = 0xFE 						UMETA(DisplayName = "Active Sensing"),
 	/*
 	*	Reset
 	*	[Data=]

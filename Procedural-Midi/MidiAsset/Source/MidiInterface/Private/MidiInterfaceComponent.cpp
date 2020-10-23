@@ -1,4 +1,4 @@
-// RtMidi : Copyright (c) 2003-2016 Gary P. Scavone
+// Copyright -> Scott Bishel
 
 #include "MidiInterfaceComponent.h"
 #include "MidiInterfacePrivatePCH.h"
@@ -65,20 +65,30 @@ void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsi
 		// system message (top four bits 1111)
 		if (type == 0xF)
 		{
-			// sysex start?
-			if(channelOrSubtype == 0) {
+			switch (channelOrSubtype) {
+			case 0: // Sysex start?
 				startSysEx();
-				continue;
-			}
-			// sysex end?
-			else if(channelOrSubtype == 7) {
+				break;
+			case 7: // Sysex end?
 				stopSysEx(deltatime);
-				continue;
-			}
-			// MIDI Clock Events
-			else {
+				break;
+
+			// system common
+			case 1: // Quarter Frame (MTC)
+			case 2: // song position pointer
+			case 3: // Song Select
+			case 6: // Tune Request
+
+			// system realtime
+			case 8: // Clock
+			case 10: // Start
+			case 11: // Continue
+			case 12: // Stop
+			case 14: // Active Sensing
+			case 15: // Reset
+			{
 				FMidiClockEvent Event;
-				Event.Type = (EMidiClockTypeEnum)channelOrSubtype;
+				Event.Type = (EMidiClockTypeEnum)(id);
 
 				// song position pointer
 				if (channelOrSubtype == 2) {
@@ -90,7 +100,15 @@ void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsi
 					Event.Data = Event.Data << 7;
 					Event.Data += lsb;
 				}
+				
+				// Quarter Frame or Song Select
+				else if (channelOrSubtype == 1 || channelOrSubtype == 3) {
+					Event.Data = message->at(i++);
+				}
+
 				OnReceiveClockEvent.Broadcast(Event, deltatime);
+				break;
+			}
 			}
 		}
 		// if in the middle of sysex, pass it on to sysex buffer
@@ -216,3 +234,4 @@ void UMidiInterfaceComponent::appendSysEx(int data)
 {
 	sysExArray.Add(data);
 }
+
