@@ -87,6 +87,16 @@ void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsi
 			case 14: // Active Sensing
 			case 15: // Reset
 			{
+				// ignore data if not using event
+				if (!OnReceiveClockEvent.IsBound()) {
+					if (channelOrSubtype == 2)
+						i += 2;
+					else if (channelOrSubtype == 1 || channelOrSubtype == 3) {
+						i++;
+					}
+					break;
+				}
+				
 				FMidiClockEvent Event;
 				Event.Type = (EMidiClockTypeEnum)(id);
 
@@ -128,6 +138,11 @@ void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsi
 			// check for program change or CHANNEL_AFTERTOUCH
 			if (type != 0xC && type != 0xD) {
 				Event.Data2 = message->at(i++) & 0XFF;
+
+				// change Note On with Velocity 0 to Note Off
+				if (type == 0x9 && Event.Data2 == 0) {
+					Event.Type = (EMidiTypeEnum)(0X8);
+				}
 			}
 
 			OnReceiveEvent.Broadcast(Event, deltatime);
@@ -135,7 +150,7 @@ void UMidiInterfaceComponent::handleCallback(double deltatime, std::vector< unsi
 	}
 }
 
-bool UMidiInterfaceComponent::OpenInput(uint8 port)
+bool UMidiInterfaceComponent::OpenInput(uint8 port, bool ignoreSysEx, bool ignoreTiming)
 {
 	// Check available ports.
 	unsigned int nPorts = midiIn.getPortCount();
@@ -157,7 +172,7 @@ bool UMidiInterfaceComponent::OpenInput(uint8 port)
 	midiIn.setCallback(&mycallback, this);
 
 	// Don't ignore sysex, timing, or active sensing messages.
-	midiIn.ignoreTypes(false, false, true);
+	midiIn.ignoreTypes(ignoreSysEx, ignoreTiming, true);
 
 	return midiIn.isPortOpen();
 }

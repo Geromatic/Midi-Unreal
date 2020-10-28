@@ -49,9 +49,14 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// Opens a MIDI input device (ex. MIDI keyboard)
+	/**
+	* Opens a MIDI input device (ex. MIDI keyboard)
+	* @param port - a port number
+	* @param ignoreSysEx - whether to ignore system exclusive events
+	* @param ignoreTiming - whether to ignore the Midi clock event - high data rate
+	*/
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface")
-	bool OpenInput(uint8 port = 0);
+	bool OpenInput(uint8 port = 0, bool ignoreSysEx = true, bool ignoreTiming = true);
 	// Opens a MIDI output device (ex, Computer Speakers, Synth)
 	UFUNCTION(BlueprintCallable, Category = "MIDI|Interface|Local")
 	bool OpenOutput(uint8 port = 0);
