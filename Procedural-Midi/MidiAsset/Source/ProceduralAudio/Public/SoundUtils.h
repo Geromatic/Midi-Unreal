@@ -61,5 +61,5 @@ public:
 	static USoundWave* CreateMidiWave(const FString& Path);
 
 	UFUNCTION(BlueprintCallable, Category = "Audio|Utilities", meta = (DevelopmentOnly))
-	static void LoadSoundFont(const FString& Name);
+	static void LoadSoundFont(const FString& Path);
 };

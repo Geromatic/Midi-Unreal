@@ -111,14 +111,12 @@ USoundWave* USoundUtils::ConstantNote(float amplitude, float frequency) {
 	return sw;
 }
 
-void USoundUtils::LoadSoundFont(const FString& Name) {
+void USoundUtils::LoadSoundFont(const FString& Path) {
 	tsf_close(g_TinySoundFont);
 	g_TinySoundFont = NULL;
 
 	if (!g_TinySoundFont) {
-
-		FString sf = FPaths::ProjectContentDir() + "SoundFonts/" + Name;
-		std::string path = std::string(TCHAR_TO_UTF8(*sf));
+		std::string path = std::string(TCHAR_TO_UTF8(*Path));
 
 		g_TinySoundFont = tsf_load_filename(path.c_str());
 		if (!g_TinySoundFont)
