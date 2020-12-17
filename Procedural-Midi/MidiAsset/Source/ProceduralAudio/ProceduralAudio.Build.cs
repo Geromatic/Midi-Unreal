@@ -1,4 +1,4 @@
-// Copyright -> Scott Bishel
+// Credit -> Scott Bishel
 
 using UnrealBuildTool;
 using System.IO;
@@ -18,14 +18,14 @@ public class ProceduralAudio : ModuleRules
 			new string[] {
 			}
 			);
-				
-		
+
 		PrivateIncludePaths.AddRange(
 			new string[] {
-            }
+				"ProceduralAudio/Classes",
+			}
 			);
-			
-		
+
+
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
@@ -37,9 +37,12 @@ public class ProceduralAudio : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject", "Engine", "Slate", "SlateCore"
+				"CoreUObject", "Engine", "Slate", "SlateCore", "Midi", "MidiAsset"
 			}
 			);
-		PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1"); // ignore warning
-    }
+		PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1");
+
+		PublicDefinitions.Add("TSF_IMPLEMENTATION=1");
+		PublicDefinitions.Add("TML_IMPLEMENTATION=1");
+	}
 }

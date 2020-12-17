@@ -88,7 +88,7 @@ enum class EMidiTextTypeEnum : uint8
 	/*
 	*	Marker
 	*/
-	MMTE_MARKER 							UMETA(DisplayName = "Maker"),
+	MMTE_MARKER 							UMETA(DisplayName = "Marker"),
 	/*
 	*	Cue Point
 	*/
