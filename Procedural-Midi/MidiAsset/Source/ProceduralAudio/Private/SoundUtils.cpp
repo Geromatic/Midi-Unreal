@@ -62,19 +62,24 @@ USoundWave* USoundUtils::CreateSoundWave(const TArray<int>& buffer)
 	return CreateSoundWave((uint8*)tmp.c_str(), tmp.size());
 }
 
+USoundWaveDynamicMidi* GlobalSynthesizer;
+
 void USoundUtils::CloseSynthesizer() {
+	if(GlobalSynthesizer)
+		GlobalSynthesizer->ConditionalBeginDestroy();
+	GlobalSynthesizer = NULL;
+
 	tsf_close(g_TinySoundFont);
 	g_TinySoundFont = NULL;
  }
 
-USoundWaveDynamicMidi* GlobalSynthesizer;
-
-
 USoundWave* USoundUtils::OpenSynthesizer()
 {
-//	if (!GlobalSW) {
+	if (g_TinySoundFont == NULL) return NULL;
+	if (GlobalSynthesizer)
+		return GlobalSynthesizer;
+
 	GlobalSynthesizer = NewObject<USoundWaveDynamicMidi>(USoundWaveDynamicMidi::StaticClass());
-//	}
 	GlobalSynthesizer->LoadFont(g_TinySoundFont);
 
 	return GlobalSynthesizer;
@@ -82,7 +87,8 @@ USoundWave* USoundUtils::OpenSynthesizer()
 
 void USoundUtils::SynthesizeEvent(const FMidiEvent& Event)
 {
-	GlobalSynthesizer->QueueEvent(Event);
+	if(GlobalSynthesizer)
+		GlobalSynthesizer->QueueEvent(Event);
 }
 
 USoundWave* USoundUtils::AudioNote(float amplitude, float frequency, float seconds)
@@ -135,8 +141,7 @@ void USoundUtils::LoadSoundFont(const FString& Path) {
 }
 
 USoundWave* USoundUtils::CreateStaticMidiFromPath(const FString& Path) {
-	//if (g_TinySoundFont == NULL)
-	//	LoadSoundFont("gm.sf2");
+	if (g_TinySoundFont == NULL) return NULL;
 
 	USoundWaveStaticMidi* sw = NewObject<USoundWaveStaticMidi>(USoundWaveStaticMidi::StaticClass());
 	sw->LoadMidi(Path, g_TinySoundFont);
@@ -152,6 +157,7 @@ struct membuf : std::streambuf
 };
 
 USoundWave* USoundUtils::CreateStaticMidiFromAsset(class UMidiAsset* MidiAsset) {
+	if (g_TinySoundFont == NULL) return NULL;
 	if (!MidiAsset) return nullptr;
 	const TArray<uint8>& data = MidiAsset->Data;
 	if (data.Num() == 0)

@@ -1111,6 +1111,8 @@ extern "C" {
 		res->voiceNum = 0;
 		++(*res->refCount);
 
+		res->channels = TSF_NULL;
+
 		return res;
 	}
 
@@ -1130,6 +1132,7 @@ extern "C" {
 			TSF_FREE(f->refCount);
 		}
 		TSF_FREE(f->voices);
+		if (f->channels) { TSF_FREE(f->channels->channels); TSF_FREE(f->channels); f->channels = TSF_NULL; }
 		TSF_FREE(f);
 	}
 
