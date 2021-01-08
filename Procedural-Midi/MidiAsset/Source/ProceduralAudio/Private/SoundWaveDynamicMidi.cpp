@@ -15,7 +15,7 @@ USoundWaveDynamicMidi::USoundWaveDynamicMidi(const FObjectInitializer& PCIP)
 
 int32 USoundWaveDynamicMidi::GeneratePCMData(uint8* PCMData, const int32 SamplesNeeded)
 {
-	////Number of samples to process
+	//Number of samples to process
 	int SampleBlock, SampleCount = SamplesNeeded / 2; //2 output channels
 	int BytesProvided = 0;
 	for (SampleBlock = 64; SampleCount; SampleCount -= SampleBlock, PCMData += (SampleBlock * (2 * sizeof(short))))
@@ -30,32 +30,32 @@ int32 USoundWaveDynamicMidi::GeneratePCMData(uint8* PCMData, const int32 Samples
 			switch (message.Type)
 			{
 			case EMidiTypeEnum::MTE_PROGRAM_CHANGE: //channel program (preset) change (special handling for 10th MIDI channel with drums)
-				tsf_channel_set_presetnumber(g_TinySoundFont, message.Channel, message.Data1, (message.Channel == 9));
+				tsf_channel_set_presetnumber(tinySoundFont, message.Channel, message.Data1, (message.Channel == 9));
 				break;
 			case EMidiTypeEnum::MTE_NOTE: //play a note
 				if(message.Data2 > 0)
-					tsf_channel_note_on(g_TinySoundFont, message.Channel, message.Data1, message.Data2 / 127.0f);
+					tsf_channel_note_on(tinySoundFont, message.Channel, message.Data1, message.Data2 / 127.0f);
 				else
-					tsf_channel_note_off(g_TinySoundFont, message.Channel, message.Data1);
+					tsf_channel_note_off(tinySoundFont, message.Channel, message.Data1);
 				break;
 			case EMidiTypeEnum::MTE_NOTE_OFF: //stop a note
-				tsf_channel_note_off(g_TinySoundFont, message.Channel, message.Data1);
+				tsf_channel_note_off(tinySoundFont, message.Channel, message.Data1);
 				break;
 			case EMidiTypeEnum::MTE_PITCH_BEND: //pitch wheel modification
 			{
 				int y = ((int)message.Data2 & 0x7F) << 7;
 				int x = ((int)message.Data1);
-				tsf_channel_set_pitchwheel(g_TinySoundFont, message.Channel, (y + x));
+				tsf_channel_set_pitchwheel(tinySoundFont, message.Channel, (y + x));
 			}
 			break;
 			case EMidiTypeEnum::MTE_CONTROLLER: //MIDI controller messages
-				tsf_channel_midi_control(g_TinySoundFont, message.Channel, message.Data1, message.Data2);
+				tsf_channel_midi_control(tinySoundFont, message.Channel, message.Data1, message.Data2);
 				break;
 			}
 		}
 
 		// Render the block of audio samples in float format
-		tsf_render_short(g_TinySoundFont, (short*)PCMData, SampleBlock, 0);
+		tsf_render_short(tinySoundFont, (short*)PCMData, SampleBlock, 0);
 		BytesProvided += (SampleBlock * (2 * sizeof(short)));
 		if (messageQueue.IsEmpty())
 			break;
@@ -71,33 +71,33 @@ int32 USoundWaveDynamicMidi::GeneratePCMData(uint8* PCMData, const int32 Samples
 	//	switch (message.Type)
 	//	{
 	//	case EMidiTypeEnum::MTE_PROGRAM_CHANGE: //channel program (preset) change (special handling for 10th MIDI channel with drums)
-	//		tsf_channel_set_presetnumber(g_TinySoundFont, message.Channel, message.Data1, (message.Channel == 9));
+	//		tsf_channel_set_presetnumber(tinySoundFont, message.Channel, message.Data1, (message.Channel == 9));
 	//		break;
 	//	case EMidiTypeEnum::MTE_NOTE: //play a note
 	//		if(message.Data2 > 0)
-	//			tsf_channel_note_on(g_TinySoundFont, message.Channel, message.Data1, message.Data2 / 127.0f);
+	//			tsf_channel_note_on(tinySoundFont, message.Channel, message.Data1, message.Data2 / 127.0f);
 	//		else
-	//			tsf_channel_note_off(g_TinySoundFont, message.Channel, message.Data1);
+	//			tsf_channel_note_off(tinySoundFont, message.Channel, message.Data1);
 	//		break;
 	//	case EMidiTypeEnum::MTE_NOTE_OFF: //stop a note
-	//		tsf_channel_note_off(g_TinySoundFont, message.Channel, message.Data1);
+	//		tsf_channel_note_off(tinySoundFont, message.Channel, message.Data1);
 	//		break;
 	//	case EMidiTypeEnum::MTE_PITCH_BEND: //pitch wheel modification
 	//	{
 	//		int y = ((int)message.Data2 & 0x7F) << 7;
 	//		int x = ((int)message.Data1);
-	//		tsf_channel_set_pitchwheel(g_TinySoundFont, message.Channel, (y + x));
+	//		tsf_channel_set_pitchwheel(tinySoundFont, message.Channel, (y + x));
 	//	}
 	//	break;
 	//	case EMidiTypeEnum::MTE_CONTROLLER: //MIDI controller messages
-	//		tsf_channel_midi_control(g_TinySoundFont, message.Channel, message.Data1, message.Data2);
+	//		tsf_channel_midi_control(tinySoundFont, message.Channel, message.Data1, message.Data2);
 	//		break;
 	//	}
 
 	//}
 
 	//// Render the block of audio samples in float format
-	//tsf_render_short(g_TinySoundFont, (short*)PCMData, 64, 0);
+	//tsf_render_short(tinySoundFont, (short*)PCMData, 64, 0);
 	//int BytesProvided = (64 * (2 * sizeof(short)));
 
 	return BytesProvided;
@@ -141,8 +141,8 @@ bool USoundWaveDynamicMidi::InitAudioResource(FName Format)
 void USoundWaveDynamicMidi::BeginDestroy()
 {
 	USoundWave::BeginDestroy();
-	tsf_close(g_TinySoundFont);
-	g_TinySoundFont = NULL;
+	tsf_close(tinySoundFont);
+	tinySoundFont = NULL;
 }
 
 
@@ -150,7 +150,10 @@ void USoundWaveDynamicMidi::LoadFont(tsf* soundFont)
 {
 	if (soundFont == NULL)
 		return;
-	g_TinySoundFont = tsf_copy(soundFont);
+	tinySoundFont = tsf_copy(soundFont);
+
+	//Initialize preset on special 10th MIDI channel to use percussion sound bank (128) if available
+	tsf_channel_set_bank_preset(tinySoundFont, 9, 128, 0);
 
 }
 

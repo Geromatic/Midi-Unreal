@@ -5,7 +5,7 @@
 
 USoundWaveStaticMidi::USoundWaveStaticMidi(const FObjectInitializer& PCIP)
 	: Super(PCIP)
-	, g_Msec(0.0)
+	, mSec(0.0)
 {
 	SampleRate = 44100;
 	NumChannels = 2;
@@ -25,33 +25,33 @@ int32 USoundWaveStaticMidi::GeneratePCMData(uint8* PCMData, const int32 SamplesN
 		if (SampleBlock > SampleCount) SampleBlock = SampleCount;
 
 		//Loop through all MIDI messages which need to be played up until the current playback time
-		for (g_Msec += SampleBlock * (1000.0 / 44100.0); g_MidiMessage && g_Msec >= g_MidiMessage->time; g_MidiMessage = g_MidiMessage->next)
+		for (mSec += SampleBlock * (1000.0 / 44100.0); midiMessage && mSec >= midiMessage->time; midiMessage = midiMessage->next)
 		{
-			switch (g_MidiMessage->type)
+			switch (midiMessage->type)
 			{
 			case TML_PROGRAM_CHANGE: //channel program (preset) change (special handling for 10th MIDI channel with drums)
-				tsf_channel_set_presetnumber(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->program, (g_MidiMessage->channel == 9));
+				tsf_channel_set_presetnumber(tinySoundFont, midiMessage->channel, midiMessage->program, (midiMessage->channel == 9));
 				break;
 			case TML_NOTE_ON: //play a note
-				if(g_MidiMessage->velocity > 0)
-					tsf_channel_note_on(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->key, g_MidiMessage->velocity / 127.0f);
+				if(midiMessage->velocity > 0)
+					tsf_channel_note_on(tinySoundFont, midiMessage->channel, midiMessage->key, midiMessage->velocity / 127.0f);
 				else
-					tsf_channel_note_off(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->key);
+					tsf_channel_note_off(tinySoundFont, midiMessage->channel, midiMessage->key);
 				break;
 			case TML_NOTE_OFF: //stop a note
-				tsf_channel_note_off(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->key);
+				tsf_channel_note_off(tinySoundFont, midiMessage->channel, midiMessage->key);
 				break;
 			case TML_PITCH_BEND: //pitch wheel modification
-				tsf_channel_set_pitchwheel(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->pitch_bend);
+				tsf_channel_set_pitchwheel(tinySoundFont, midiMessage->channel, midiMessage->pitch_bend);
 				break;
 			case TML_CONTROL_CHANGE: //MIDI controller messages
-				tsf_channel_midi_control(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->control, g_MidiMessage->control_value);
+				tsf_channel_midi_control(tinySoundFont, midiMessage->channel, midiMessage->control, midiMessage->control_value);
 				break;
 			}
 		}
 
 		// Render the block of audio samples in float format
-		tsf_render_short(g_TinySoundFont, (short*)PCMData, SampleBlock, 0);
+		tsf_render_short(tinySoundFont, (short*)PCMData, SampleBlock, 0);
 		BytesProvided += (SampleBlock * (2 * sizeof(short)));
 	}
 	return BytesProvided;
@@ -95,8 +95,8 @@ bool USoundWaveStaticMidi::InitAudioResource(FName Format)
 void USoundWaveStaticMidi::BeginDestroy()
 {
 	USoundWave::BeginDestroy();
-	tml_free(g_TinyMidiLoader);
-	tsf_close(g_TinySoundFont);
+	tml_free(tinyMidiLoader);
+	tsf_close(tinySoundFont);
 }
 
 
@@ -104,19 +104,22 @@ void USoundWaveStaticMidi::LoadMidi(FString Path, tsf* soundFont)
 {
 	if (soundFont == NULL)
 		return;
-	tml_free(g_TinyMidiLoader);
-	g_TinySoundFont = tsf_copy(soundFont);
+	tml_free(tinyMidiLoader);
+	tinySoundFont = tsf_copy(soundFont);
+
+	//Initialize preset on special 10th MIDI channel to use percussion sound bank (128) if available
+	tsf_channel_set_bank_preset(tinySoundFont, 9, 128, 0);
 
 	std::string path = std::string(TCHAR_TO_UTF8(*Path));
-	g_TinyMidiLoader = tml_load_filename(path.c_str());
+	tinyMidiLoader = tml_load_filename(path.c_str());
 
 	//Set up the global MidiMessage pointer to the first MIDI message
-	g_MidiMessage = g_TinyMidiLoader;
+	midiMessage = tinyMidiLoader;
 	unsigned int length  = 0;
-	tml_get_info(g_MidiMessage, NULL, NULL, NULL, NULL, &length);
+	tml_get_info(midiMessage, NULL, NULL, NULL, NULL, &length);
 
 	Duration = ((float)length / 1000.0f);
-	g_MidiMessage = g_TinyMidiLoader;
+	midiMessage = tinyMidiLoader;
 
 }
 
@@ -125,17 +128,20 @@ void USoundWaveStaticMidi::LoadMidi(TArray<uint8> data, tsf* soundFont)
 {
 	if (soundFont == NULL)
 		return;
-	tml_free(g_TinyMidiLoader);
-	g_TinySoundFont = tsf_copy(soundFont);
+	tml_free(tinyMidiLoader);
+	tinySoundFont = tsf_copy(soundFont);
 
-	g_TinyMidiLoader = tml_load_memory(data.GetData() , data.Num());
+	//Initialize preset on special 10th MIDI channel to use percussion sound bank (128) if available
+	tsf_channel_set_bank_preset(tinySoundFont, 9, 128, 0);
+
+	tinyMidiLoader = tml_load_memory(data.GetData() , data.Num());
 
 	//Set up the global MidiMessage pointer to the first MIDI message
-	g_MidiMessage = g_TinyMidiLoader;
+	midiMessage = tinyMidiLoader;
 	unsigned int length = 0;
-	tml_get_info(g_MidiMessage, NULL, NULL, NULL, NULL, &length);
+	tml_get_info(midiMessage, NULL, NULL, NULL, NULL, &length);
 
 	Duration = ((float)length / 1000.0f);
-	g_MidiMessage = g_TinyMidiLoader;
+	midiMessage = tinyMidiLoader;
 
 }

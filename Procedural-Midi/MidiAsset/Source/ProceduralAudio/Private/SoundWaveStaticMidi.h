@@ -31,11 +31,10 @@ class PROCEDURALAUDIO_API USoundWaveStaticMidi : public USoundWave
 	virtual void BeginDestroy() override;
 
 private:
-	double g_Msec;               //current playback time
+	double mSec;               //current playback time
 
-	// Holds the global instance pointer
-	tsf* g_TinySoundFont;
+	tsf* tinySoundFont;
 
-	tml_message* g_MidiMessage;  //next message to be played
-	tml_message* g_TinyMidiLoader = NULL;
+	tml_message* midiMessage;  //next message to be played
+	tml_message* tinyMidiLoader = NULL;
 };

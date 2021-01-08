@@ -34,8 +34,7 @@ class PROCEDURALAUDIO_API USoundWaveDynamicMidi : public USoundWave
 	void QueueEvent(const FMidiEvent& e);
 
 private:
-	// Holds the global instance pointer
-	tsf* g_TinySoundFont;
+	tsf* tinySoundFont;
 
 	TQueue<FMidiEvent, EQueueMode::Spsc> messageQueue;
 };
