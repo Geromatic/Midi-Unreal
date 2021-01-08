@@ -54,8 +54,12 @@ public class MidiInterface : ModuleRules
 		else if (Target.Platform == UnrealTargetPlatform.Mac || Target.Platform == UnrealTargetPlatform.IOS) {
             PublicDefinitions.Add("__MACOSX_CORE__=1");	
 
-			PublicAdditionalFrameworks.Add( new UEBuildFramework( "CoreMIDI" ));
-			PublicAdditionalFrameworks.Add( new UEBuildFramework( "CoreFoundation" ));
+			PublicFrameworks.AddRange(
+				new string[] { 
+					"CoreMIDI", 
+					"CoreFoundation",
+				}
+			);
 		}
 		// LINUX
 		else if (Target.Platform == UnrealTargetPlatform.Linux) {
