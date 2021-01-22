@@ -40,7 +40,8 @@ public class ProceduralAudio : ModuleRules
 				"CoreUObject", "Engine", "Slate", "SlateCore", "Midi", "MidiAsset"
 			}
 			);
-		PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1");
+			
+		PublicDefinitions.Add("TSF_NO_STDIO=1"); // ignore warning
 
 		PublicDefinitions.Add("TSF_IMPLEMENTATION=1");
 		PublicDefinitions.Add("TML_IMPLEMENTATION=1");
