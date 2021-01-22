@@ -41,7 +41,11 @@ public class ProceduralAudio : ModuleRules
 			}
 			);
 			
-		PublicDefinitions.Add("TSF_NO_STDIO=1"); // ignore warning
+		// Windows
+		if (Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
+		{
+			PublicDefinitions.Add("__STDC_WANT_SECURE_LIB__=1"); // ignore warning
+		}
 
 		PublicDefinitions.Add("TSF_IMPLEMENTATION=1");
 		PublicDefinitions.Add("TML_IMPLEMENTATION=1");
