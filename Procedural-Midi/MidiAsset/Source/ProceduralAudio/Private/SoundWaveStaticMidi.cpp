@@ -91,38 +91,12 @@ bool USoundWaveStaticMidi::InitAudioResource(FName Format)
 	return true;
 }
 
-
 void USoundWaveStaticMidi::BeginDestroy()
 {
 	USoundWave::BeginDestroy();
 	tml_free(tinyMidiLoader);
 	tsf_close(tinySoundFont);
 }
-
-
-void USoundWaveStaticMidi::LoadMidi(FString Path, tsf* soundFont)
-{
-	if (soundFont == NULL)
-		return;
-	tml_free(tinyMidiLoader);
-	tinySoundFont = tsf_copy(soundFont);
-
-	//Initialize preset on special 10th MIDI channel to use percussion sound bank (128) if available
-	tsf_channel_set_bank_preset(tinySoundFont, 9, 128, 0);
-
-	std::string path = std::string(TCHAR_TO_UTF8(*Path));
-	tinyMidiLoader = tml_load_filename(path.c_str());
-
-	//Set up the global MidiMessage pointer to the first MIDI message
-	midiMessage = tinyMidiLoader;
-	unsigned int length  = 0;
-	tml_get_info(midiMessage, NULL, NULL, NULL, NULL, &length);
-
-	Duration = ((float)length / 1000.0f);
-	midiMessage = tinyMidiLoader;
-
-}
-
 
 void USoundWaveStaticMidi::LoadMidi(TArray<uint8> data, tsf* soundFont)
 {

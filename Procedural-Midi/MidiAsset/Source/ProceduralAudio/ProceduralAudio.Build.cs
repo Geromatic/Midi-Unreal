@@ -49,5 +49,8 @@ public class ProceduralAudio : ModuleRules
 
 		PublicDefinitions.Add("TSF_IMPLEMENTATION=1");
 		PublicDefinitions.Add("TML_IMPLEMENTATION=1");
+
+		PublicDefinitions.Add("TSF_NO_STDIO=1");
+		PublicDefinitions.Add("TML_NO_STDIO=1");
 	}
 }

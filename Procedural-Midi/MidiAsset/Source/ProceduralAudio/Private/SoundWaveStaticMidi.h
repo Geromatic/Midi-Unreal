@@ -12,7 +12,6 @@ class PROCEDURALAUDIO_API USoundWaveStaticMidi : public USoundWave
 {
 	GENERATED_UCLASS_BODY()
 
-	void LoadMidi(FString Path, tsf* soundFont);
 	void LoadMidi(TArray<uint8> data, tsf* soundFont);
 
 	// UObject interface

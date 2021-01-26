@@ -123,9 +123,15 @@ void USoundUtils::LoadSoundFont(const FString& Path) {
 	g_TinySoundFont = NULL;
 
 	if (!g_TinySoundFont) {
-		std::string path = std::string(TCHAR_TO_UTF8(*Path));
 
-		g_TinySoundFont = tsf_load_filename(path.c_str());
+		TArray<uint8> data;
+		bool result = FFileHelper::LoadFileToArray(data, Path.GetCharArray().GetData());
+		if (result == 0 || data.Num() == 0) {
+			UE_LOG(LogTemp, Error, TEXT("Could not load SoundFont"));
+			return;
+		}
+
+		g_TinySoundFont = tsf_load_memory(data.GetData(), data.Num());
 		if (!g_TinySoundFont)
 		{
 			UE_LOG(LogTemp, Error, TEXT("Could not load SoundFont"));
@@ -144,8 +150,13 @@ void USoundUtils::LoadSoundFont(const FString& Path) {
 USoundWave* USoundUtils::CreateStaticMidiFromPath(const FString& Path) {
 	if (g_TinySoundFont == NULL) return NULL;
 
+	TArray<uint8> data;
+	bool result = FFileHelper::LoadFileToArray(data, Path.GetCharArray().GetData());
+	if (result == 0 || data.Num() == 0)
+		return NULL;
+
 	USoundWaveStaticMidi* sw = NewObject<USoundWaveStaticMidi>(USoundWaveStaticMidi::StaticClass());
-	sw->LoadMidi(Path, g_TinySoundFont);
+	sw->LoadMidi(data, g_TinySoundFont);
 
 	return sw;
 }
@@ -173,9 +184,12 @@ USoundWave* USoundUtils::CreateStaticMidiFromAsset(class UMidiAsset* MidiAsset) 
 USoundWave* USoundUtils::CreateMidiWave(const FString& Path) {
 
 	// TODO: this may leak
+	TArray<uint8> data;
+	bool result = FFileHelper::LoadFileToArray(data, Path.GetCharArray().GetData());
+	if (result == 0 || data.Num() == 0)
+		return NULL;
 
-	std::string path = std::string(TCHAR_TO_UTF8(*Path));
-	tml_message* tinyMidiLoader = tml_load_filename(path.c_str());
+	tml_message* tinyMidiLoader = tml_load_memory(data.GetData(), data.Num());
 
 
 	//Set up the MidiMessage pointer to the first MIDI message
