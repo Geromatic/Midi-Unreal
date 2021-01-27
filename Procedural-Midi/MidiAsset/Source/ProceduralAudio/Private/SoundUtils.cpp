@@ -142,7 +142,7 @@ void USoundUtils::LoadSoundFont(const FString& Path) {
 //		tsf_channel_set_bank_preset(g_TinySoundFont, 9, 128, 0);
 
 		// Set the SoundFont rendering output mode
-		tsf_set_output(g_TinySoundFont, TSF_STEREO_INTERLEAVED, 44100, 0);
+		tsf_set_output(g_TinySoundFont, TSF_STEREO_INTERLEAVED, 44100, -10.0F);
 
 	}
 }
