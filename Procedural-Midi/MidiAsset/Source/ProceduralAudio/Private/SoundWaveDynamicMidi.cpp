@@ -16,7 +16,7 @@ USoundWaveDynamicMidi::USoundWaveDynamicMidi(const FObjectInitializer& PCIP)
 int32 USoundWaveDynamicMidi::GeneratePCMData(uint8* PCMData, const int32 SamplesNeeded)
 {
 	//Number of samples to process
-	int SampleBlock, SampleCount = SamplesNeeded / 2; //2 output channels
+	int SampleBlock, SampleCount = (SamplesNeeded / (2 * sizeof(short))); //2 output channels
 	int BytesProvided = 0;
 	for (SampleBlock = 64; SampleCount; SampleCount -= SampleBlock, PCMData += (SampleBlock * (2 * sizeof(short))))
 	{
