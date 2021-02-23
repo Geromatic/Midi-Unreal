@@ -1,5 +1,4 @@
-// Copyright 2011 Alex Leffelman
-// Updated 2016 Scott Bishel
+// Credit -> Scott Bishel
 
 #include "MidiThread.h"
 #include "MidiPrivatePCH.h"

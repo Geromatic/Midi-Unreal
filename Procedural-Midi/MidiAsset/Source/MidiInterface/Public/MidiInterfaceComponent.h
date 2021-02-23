@@ -1,4 +1,4 @@
-// RtMidi: Copyright (c) 2003-2016 Gary P. Scavone
+// Credit -> Scott Bishel
 
 #pragma once
 
