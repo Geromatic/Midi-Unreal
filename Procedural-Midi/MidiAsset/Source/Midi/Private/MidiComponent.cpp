@@ -220,23 +220,16 @@ void UMidiComponent::handleCallback(MidiEvent* _event, long ms, int trackID)
 		TArray<uint8> data;
 		string * ptr = sysExEvent->getData();
 
-		// multi-packet event
-		bool isDivided = false;
-
 		// Add 0xF0 SysEX Start
-		if(midi_type == 0xF0)
-			data.Add(midi_type);
-		// multi-packet check
-		else if (midi_type == 0xF7 && ptr->size() > 3) {
+		if(midi_type == 0xF0 || (midi_type == 0xF7 && ptr->size() > 3) ) {
 			data.Add((uint8)0xF0);
-			isDivided = true;
 		}
 
 		// Add <sysex_dat>
 		data.Append((uint8*)ptr->c_str(), ptr->size());
 
-		// add 0xF7 SysEx End on Divided
-		if (isDivided) {
+		// add 0xF7 SysEx End 
+		if (data[0] == 0xF0) {
 			// close message
 			if (data.Last() != 0xF7)
 				data.Add((uint8)0xF7);
